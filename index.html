@@ -11,6 +11,10 @@
             --biru-muda: #eff6ff;
             --biru-pudar: #dbeafe;
             --teks-gelap: #1e293b;
+            --hijau-sukses: #10b981;
+            --merah-gagal: #ef4444;
+            --merah-peringatan: #fef2f2; 
+            --merah-border: #fca5a5;
         }
 
         * {
@@ -123,7 +127,6 @@
             border-color: var(--biru-utama);
         }
 
-        /* Area Tombol Admin di Atas */
         .admin-panel-atas {
             display: flex;
             flex-direction: column;
@@ -226,6 +229,14 @@
             background-color: var(--biru-pudar); 
         }
 
+        tr.peringatan-tunggakan {
+            background-color: var(--merah-peringatan) !important;
+        }
+        tr.peringatan-tunggakan td.nama-siswa {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
         .nama-siswa { 
             text-align: left; 
             padding-left: 12px; 
@@ -257,6 +268,145 @@
 
         .hidden { display: none; }
 
+        /* ========================================================
+           CSS TOAST NOTIFICATION
+           ======================================================== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: calc(100% - 40px);
+            max-width: 350px;
+        }
+
+        .toast {
+            background-color: white;
+            color: var(--teks-gelap);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 6px solid var(--biru-utama);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast.show { transform: translateX(0); }
+        .toast.sukses { border-left-color: var(--hijau-sukses); }
+        .toast.gagal { border-left-color: var(--merah-gagal); }
+        .toast-ikon { font-size: 1.2rem; }
+
+        /* ========================================================
+           CSS MODAL KODE ADMIN
+           ======================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 400px;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+            text-align: center;
+        }
+
+        .modal-overlay.show .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            color: var(--biru-gelap);
+        }
+
+        .modal-box p {
+            margin: 0 0 20px 0;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .input-password-custom {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 2px solid var(--biru-pudar);
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .input-password-custom:focus {
+            border-color: var(--biru-utama);
+        }
+
+        .modal-tombol-grup {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-modal {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex: 1;
+        }
+
+        .btn-modal-batal {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-modal-batal:hover { background-color: #cbd5e1; }
+
+        .btn-modal-submit {
+            background-color: var(--biru-utama);
+            color: white;
+        }
+
+        .btn-modal-submit:hover { background-color: #2563eb; }
+
         @media (min-width: 768px) {
             .header { padding: 35px 20px; }
             .header h1 { font-size: 2.3rem; }
@@ -269,7 +419,13 @@
             }
             .filter-grup { flex-direction: row; align-items: center; width: auto; }
             .filter-item { flex-direction: row; align-items: center; gap: 10px; }
-            select { width: 180px; }
+            
+            /* LEBAR SAYA SET AUTO & MIN-WIDTH BIAR GA POTONG LAGI */
+            select { 
+                width: auto; 
+                min-width: 180px;
+            }
+            
             .admin-panel-atas { 
                 flex-direction: row-reverse; 
                 align-items: center;
@@ -284,6 +440,20 @@
     </style>
 </head>
 <body>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <div id="modal-admin-overlay" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Verifikasi Bendahara</h2>
+            <p>Masukkan password untuk mengakses fitur edit data kas kelas.</p>
+            <input type="password" id="input-pass-admin" class="input-password-custom" placeholder="••••••••" onkeydown="cekEnterPassword(event)">
+            <div class="modal-tombol-grup">
+                <button class="btn-modal btn-modal-batal" onclick="tutupModalAdmin()">Batal</button>
+                <button class="btn-modal btn-modal-submit" onclick="submitPasswordAdmin()">Masuk</button>
+            </div>
+        </div>
+    </div>
 
     <div class="header">
         <h1 id="judul-utama">SISTEM KAS KELAS XI RPL 2</h1>
@@ -327,7 +497,7 @@
             </div>
 
             <div class="admin-panel-atas">
-                <button id="btn-admin" class="btn-admin" onclick="loginAdmin()">Masuk Mode Admin</button>
+                <button id="btn-admin" class="btn-admin" onclick="kendaliLoginAdmin()">Masuk Mode Admin</button>
                 <div id="badge-admin" class="badge-admin">🔒 MODE ADMIN AKTIF</div>
             </div>
         </div>
@@ -402,6 +572,74 @@
             muatUlangData();
         }
 
+        function tampilNotif(pesan, tipe = "sukses") {
+            const wadah = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let ikon = "ℹ️";
+            if(tipe === "sukses") ikon = "✅";
+            if(tipe === "gagal") ikon = "❌";
+
+            toast.className = `toast ${tipe}`;
+            toast.innerHTML = `<span class="toast-ikon">${ikon}</span> <span>${pesan}</span>`;
+            
+            wadah.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 3500);
+        }
+
+        function kendaliLoginAdmin() {
+            if (!isAdmin) {
+                const overlay = document.getElementById('modal-admin-overlay');
+                const inputPass = document.getElementById('input-pass-admin');
+                inputPass.value = "";
+                overlay.classList.add('show');
+                inputPass.focus();
+            } else {
+                isAdmin = false;
+                document.getElementById('badge-admin').style.display = 'none';
+                document.getElementById('btn-admin').innerText = "Masuk Mode Admin";
+                document.getElementById('btn-admin').style.backgroundColor = "#3b82f6";
+                aturStatusEditTabel(false);
+                tampilNotif("Mode Admin Dimatikan. Data aman terkunci.", "sukses");
+            }
+        }
+
+        function tutupModalAdmin() {
+            document.getElementById('modal-admin-overlay').classList.remove('show');
+        }
+
+        function submitPasswordAdmin() {
+            const inputPass = document.getElementById('input-pass-admin').value;
+            if (inputPass === PASSWORD_ADMIN) {
+                isAdmin = true;
+                document.getElementById('badge-admin').style.display = 'inline-block';
+                document.getElementById('btn-admin').innerText = "Keluar Mode Admin";
+                document.getElementById('btn-admin').style.backgroundColor = "#475569";
+                aturStatusEditTabel(true);
+                tutupModalAdmin();
+                tampilNotif("Mode Admin Aktif! Silakan edit nominal tabel.", "sukses");
+            } else {
+                tampilNotif("Password Salah! Akses ditolak.", "gagal");
+                document.getElementById('input-pass-admin').select();
+            }
+        }
+
+        function cekEnterPassword(event) {
+            if (event.key === "Enter") {
+                submitPasswordAdmin();
+            }
+        }
+
         function buatStrukturTabelBulanan() {
             const tbody = document.getElementById('tabel-siswa-body');
             tbody.innerHTML = "";
@@ -425,6 +663,7 @@
             let tahunTerpilih = document.getElementById('tahun-select').value;
             document.getElementById('judul-utama').innerText = `SISTEM KAS KELAS ${tahunTerpilih} RPL 2`;
             muatUlangData();
+            tampilNotif(`Menampilkan data kas Kelas ${tahunTerpilih}`, "sukses");
         }
 
         function gantiHalaman(target) {
@@ -445,28 +684,6 @@
                 document.getElementById('btn-admin').classList.add('hidden');
             }
             muatUlangData();
-        }
-
-        function loginAdmin() {
-            if (!isAdmin) {
-                let isiPassword = prompt("Masukkan Password Bendahara:");
-                if (isiPassword === PASSWORD_ADMIN) {
-                    isAdmin = true;
-                    document.getElementById('badge-admin').style.display = 'inline-block';
-                    document.getElementById('btn-admin').innerText = "Keluar Mode Admin";
-                    document.getElementById('btn-admin').style.backgroundColor = "#475569";
-                    aturStatusEditTabel(true);
-                    alert("Mode Admin Aktif! Klik pada angka untuk mengedit data.");
-                } else {
-                    alert("Password Salah!");
-                }
-            } else {
-                isAdmin = false;
-                document.getElementById('badge-admin').style.display = 'none';
-                document.getElementById('btn-admin').innerText = "Masuk Mode Admin";
-                document.getElementById('btn-admin').style.backgroundColor = "#3b82f6";
-                aturStatusEditTabel(false);
-            }
         }
 
         function aturStatusEditTabel(aktif) {
@@ -546,6 +763,36 @@
                         baris.querySelector('.m4').innerText = '0';
                     });
                 }
+
+                let indeksBulanIni = DAFTAR_BULAN.indexOf(bulanTerpilih);
+                semuaBaris.forEach(baris => {
+                    baris.classList.remove('peringatan-tunggakan');
+                    
+                    if (indeksBulanIni > 0) {
+                        let bulanLalu = DAFTAR_BULAN[indeksBulanIni - 1];
+                        let dataBulanLalu = localStorage.getItem(`Kas_${tahunTerpilih}_${bulanLalu}`);
+                        let idSiswa = baris.getAttribute('data-id');
+
+                        if (dataBulanLalu) {
+                            let parsedBulanLalu = JSON.parse(dataBulanLalu);
+                            if (parsedBulanLalu[idSiswa]) {
+                                let totalBulanLalu = (parsedBulanLalu[idSiswa].m1 || 0) + 
+                                                     (parsedBulanLalu[idSiswa].m2 || 0) + 
+                                                     (parsedBulanLalu[idSiswa].m3 || 0) + 
+                                                     (parsedBulanLalu[idSiswa].m4 || 0);
+                                
+                                if (totalBulanLalu < TARGET_BULANAN) {
+                                    baris.classList.add('peringatan-tunggakan');
+                                }
+                            } else {
+                                baris.classList.add('peringatan-tunggakan');
+                            }
+                        } else {
+                            baris.classList.add('peringatan-tunggakan');
+                        }
+                    }
+                });
+
                 aturStatusEditTabel(isAdmin);
                 
                 let statusAdminSebelumnya = isAdmin;
@@ -572,7 +819,7 @@
                             if (dataParsed[idSiswa]) {
                                 let m1 = dataParsed[idSiswa].m1 || 0;
                                 let m2 = dataParsed[idSiswa].m2 || 0;
-                                let m3 = dataParsed[idSiswa].m3 || 0;
+                                	let m3 = dataParsed[idSiswa].m3 || 0;
                                 let m4 = dataParsed[idSiswa].m4 || 0;
                                 let totalBulanIni = m1 + m2 + m3 + m4;
                                 
