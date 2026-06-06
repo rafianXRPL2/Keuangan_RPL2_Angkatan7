@@ -3,10 +3,609 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang di Website Saya</title>
+    <title>Sistem Kas Kelas RPL 2</title>
+    <style>
+        :root {
+            --biru-gelap: #1e3a8a;
+            --biru-utama: #3b82f6;
+            --biru-muda: #eff6ff;
+            --biru-pudar: #dbeafe;
+            --teks-gelap: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: var(--biru-muda);
+            color: var(--teks-gelap);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: var(--biru-gelap);
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 15px auto;
+            padding: 0 12px;
+        }
+
+        .nav-tampilan {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .btn-nav {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            color: var(--teks-gelap);
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-nav.aktif {
+            background-color: var(--biru-utama);
+            color: white;
+        }
+
+        .kontrol-box {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .filter-grup {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-item label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        select {
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 2px solid var(--biru-pudar);
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--biru-gelap);
+            background-color: white;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--biru-utama);
+        }
+
+        /* Area Tombol Admin di Atas */
+        .admin-panel-atas {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-admin {
+            background-color: var(--biru-utama);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.2s;
+        }
+        
+        .badge-admin {
+            background-color: #e11d48;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .ringkasan-box {
+            background-color: white;
+            border-left: 5px solid var(--biru-utama);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .info-item { 
+            text-align: center; 
+            padding: 5px 0;
+        }
+        
+        .info-item:first-child {
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        
+        .info-item h3 { 
+            margin: 0; 
+            font-size: 0.8rem; 
+            color: #64748b; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+        
+        .info-item p { 
+            margin: 4px 0 0 0; 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            color: var(--biru-gelap); 
+        }
+
+        .tabel-kontainer {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            margin-bottom: 30px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            min-width: 650px; 
+        }
+        
+        th { 
+            background-color: var(--biru-gelap); 
+            color: white; 
+            padding: 12px 10px; 
+            font-size: 0.9rem;
+        }
+        
+        td { 
+            padding: 12px 10px; 
+            border-bottom: 1px solid #e2e8f0; 
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        tr:nth-child(even) { 
+            background-color: var(--biru-pudar); 
+        }
+
+        .nama-siswa { 
+            text-align: left; 
+            padding-left: 12px; 
+            font-weight: 500; 
+            min-width: 180px; 
+        }
+
+        .bisa-diedit.aktif {
+            background-color: #fffdec;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .bisa-diedit.aktif:focus {
+            background-color: #fffa9e;
+            outline: 2px solid var(--biru-utama);
+        }
+
+        .status { 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            display: inline-block; 
+        }
+        
+        .lunas { background-color: #dcfce7; color: #15803d; }
+        .nunggak { background-color: #fee2e2; color: #b91c1c; }
+
+        .hidden { display: none; }
+
+        @media (min-width: 768px) {
+            .header { padding: 35px 20px; }
+            .header h1 { font-size: 2.3rem; }
+            .nav-tampilan { flex-direction: row; }
+            .kontrol-box { 
+                flex-direction: row; 
+                padding: 15px 20px; 
+                justify-content: space-between;
+                align-items: center;
+            }
+            .filter-grup { flex-direction: row; align-items: center; width: auto; }
+            .filter-item { flex-direction: row; align-items: center; gap: 10px; }
+            select { width: 180px; }
+            .admin-panel-atas { 
+                flex-direction: row-reverse; 
+                align-items: center;
+                width: auto; 
+            }
+            .btn-admin { width: auto; }
+            .badge-admin { width: auto; }
+            .ringkasan-box { flex-direction: row; justify-content: space-around; align-items: center; }
+            .info-item { flex: 1; }
+            .info-item:first-child { border-bottom: none; border-right: 1px dashed #e2e8f0; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Halo PUKI</h1>
-    <p>IAKHIRNYA GUA BISA PUBLISH WEB GUAAAAA. DUKUNG GUA TRUSSS YAAAAAA</p>
+
+    <div class="header">
+        <h1 id="judul-utama">SISTEM KAS KELAS XI RPL 2</h1>
+        <p>Aplikasi Resmi Pencatatan Uang Kas - Target Bulanan Rp 20.000</p>
+    </div>
+
+    <div class="container">
+        
+        <div class="nav-tampilan">
+            <button id="nav-bulanan" class="btn-nav aktif" onclick="gantiHalaman('bulanan')">📊 Pencatatan Bulanan</button>
+            <button id="nav-rekap" class="btn-nav" onclick="gantiHalaman('rekap')">📋 Halaman Rekap Semua Bulan</button>
+        </div>
+
+        <div class="kontrol-box">
+            <div class="filter-grup">
+                <div class="filter-item">
+                    <label for="tahun-select">🏫 Tingkat Kelas</label>
+                    <select id="tahun-select" onchange="gantiTahunAjaran()">
+                        <option value="XI">Kelas XI (Tahun Pertama)</option>
+                        <option value="XII">Kelas XII (Tahun Kedua)</option>
+                    </select>
+                </div>
+
+                <div id="filter-bulan-kontainer" class="filter-item">
+                    <label for="bulan-select">📅 Pilih Bulan</label>
+                    <select id="bulan-select" onchange="muatUlangData()">
+                        <option value="Agustus">Agustus</option>
+                        <option value="September">September</option>
+                        <option value="Oktober">Oktober</option>
+                        <option value="November">November</option>
+                        <option value="Desember">Desember</option>
+                        <option value="Januari">Januari</option>
+                        <option value="Februari">Februari</option>
+                        <option value="Maret">Maret</option>
+                        <option value="April">April</option>
+                        <option value="Mei">Mei</option>
+                        <option value="Juni">Juni</option>
+                        <option value="Juli">Juli</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-panel-atas">
+                <button id="btn-admin" class="btn-admin" onclick="loginAdmin()">Masuk Mode Admin</button>
+                <div id="badge-admin" class="badge-admin">🔒 MODE ADMIN AKTIF</div>
+            </div>
+        </div>
+
+        <div class="ringkasan-box">
+            <div class="info-item">
+                <h3>Kategori Tampilan</h3>
+                <p id="label-status-tampilan">Agustus</p>
+            </div>
+            <div class="info-item">
+                <h3>Total Dana Terkumpul</h3>
+                <p id="total-kas">Rp 0</p>
+            </div>
+        </div>
+
+        <div id="halaman-bulanan" class="tabel-kontainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Siswa</th>
+                        <th>Minggu 1</th>
+                        <th>Minggu 2</th>
+                        <th>Minggu 3</th>
+                        <th>Minggu 4</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel-siswa-body">
+                    </tbody>
+            </table>
+        </div>
+
+        <div id="halaman-rekap" class="tabel-kontainer hidden">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Siswa</th>
+                        <th>Total Setor (1 Tahun Ini)</th>
+                        <th>Status Akumulasi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel-rekap-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const PASSWORD_ADMIN = "rpl2keren";
+        const TARGET_BULANAN = 20000;
+        let isAdmin = false;
+        let halamanAktif = "bulanan";
+
+        const DAFTAR_SISWA = [
+            "Aditia Jun Maulana", "Akbar Wijaya", "Alfian Aziz Afrizal", "Alifia Junianty",
+            "Alma Nurul Azkiya", "Cantika Putri Kanaya", "Dhenia Natalia Shalju", "Dinda Azahra",
+            "Fabian Fatir Ramadhan", "Faizah Keisha Felianzah", "Fajar Tri Nugroho", "Fakhri Arya Dzaki",
+            "Ima Shabira", "Kral Magnus Assajid Faisal", "Leni Oktaviani", "Luthfi Mubarok",
+            "Mitha Nurfitri", "Muhammad Akbar Hafiz Zain", "Muhammad Akmal Faishal", "Muhammad Favian Gunawan",
+            "Muhammad Irbah Taqiy", "Muhammad Raffa Arfiansyah", "Nadilla Safira", "Nadin Putri Raihani",
+            "Nadirah Aprilia Putri", "Naurah Syava", "Nikita Puspita Dewi", "Putri Anastasia",
+            "Rafriel Raditya Widodo", "Rasya Naufal Hidayat", "Reifan Syahputra Ramadhan", "Rifqi Ariansyah",
+            "Siti Rosidah", "Syifa Aulia", "Zahra Citra Karina Hasani", "Zivanna Zahidan"
+        ];
+
+        const DAFTAR_BULAN = ["Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli"];
+
+        function init() {
+            buatStrukturTabelBulanan();
+            muatUlangData();
+        }
+
+        function buatStrukturTabelBulanan() {
+            const tbody = document.getElementById('tabel-siswa-body');
+            tbody.innerHTML = "";
+            DAFTAR_SISWA.forEach((nama, indeks) => {
+                let idSiswa = indeks + 1;
+                let baris = `<tr class="baris-siswa" data-id="${idSiswa}">
+                    <td>${idSiswa}</td>
+                    <td class="nama-siswa">${nama}</td>
+                    <td class="bisa-diedit uang m1">0</td>
+                    <td class="bisa-diedit uang m2">0</td>
+                    <td class="bisa-diedit uang m3">0</td>
+                    <td class="bisa-diedit uang m4">0</td>
+                    <td><span class="status"></span></td>
+                </tr>`;
+                tbody.innerHTML += baris;
+            });
+            document.getElementById('tabel-siswa-body').addEventListener('input', prosesDanSimpanKas);
+        }
+
+        function gantiTahunAjaran() {
+            let tahunTerpilih = document.getElementById('tahun-select').value;
+            document.getElementById('judul-utama').innerText = `SISTEM KAS KELAS ${tahunTerpilih} RPL 2`;
+            muatUlangData();
+        }
+
+        function gantiHalaman(target) {
+            halamanAktif = target;
+            document.getElementById('nav-bulanan').classList.remove('aktif');
+            document.getElementById('nav-rekap').classList.remove('aktif');
+            document.getElementById(`nav-${target}`).classList.add('aktif');
+
+            if (target === 'bulanan') {
+                document.getElementById('halaman-bulanan').classList.remove('hidden');
+                document.getElementById('halaman-rekap').classList.add('hidden');
+                document.getElementById('filter-bulan-kontainer').classList.remove('hidden');
+                document.getElementById('btn-admin').classList.remove('hidden');
+            } else {
+                document.getElementById('halaman-bulanan').classList.add('hidden');
+                document.getElementById('halaman-rekap').classList.remove('hidden');
+                document.getElementById('filter-bulan-kontainer').classList.add('hidden');
+                document.getElementById('btn-admin').classList.add('hidden');
+            }
+            muatUlangData();
+        }
+
+        function loginAdmin() {
+            if (!isAdmin) {
+                let isiPassword = prompt("Masukkan Password Bendahara:");
+                if (isiPassword === PASSWORD_ADMIN) {
+                    isAdmin = true;
+                    document.getElementById('badge-admin').style.display = 'inline-block';
+                    document.getElementById('btn-admin').innerText = "Keluar Mode Admin";
+                    document.getElementById('btn-admin').style.backgroundColor = "#475569";
+                    aturStatusEditTabel(true);
+                    alert("Mode Admin Aktif! Klik pada angka untuk mengedit data.");
+                } else {
+                    alert("Password Salah!");
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('badge-admin').style.display = 'none';
+                document.getElementById('btn-admin').innerText = "Masuk Mode Admin";
+                document.getElementById('btn-admin').style.backgroundColor = "#3b82f6";
+                aturStatusEditTabel(false);
+            }
+        }
+
+        function aturStatusEditTabel(aktif) {
+            document.querySelectorAll('.bisa-diedit').forEach(kotak => {
+                if (aktif) {
+                    kotak.setAttribute('contenteditable', 'true');
+                    kotak.classList.add('aktif');
+                } else {
+                    kotak.removeAttribute('contenteditable');
+                    kotak.classList.remove('aktif');
+                }
+            });
+        }
+
+        function prosesDanSimpanKas() {
+            let tahunTerpilih = document.getElementById('tahun-select').value;
+            let bulanTerpilih = document.getElementById('bulan-select').value;
+            let totalKasBulanIni = 0;
+            let dataSatuBulan = {};
+
+            const semuaBaris = document.querySelectorAll('.baris-siswa');
+            semuaBaris.forEach(baris => {
+                let idSiswa = baris.getAttribute('data-id');
+                let m1 = parseInt(baris.querySelector('.m1').innerText) || 0;
+                let m2 = parseInt(baris.querySelector('.m2').innerText) || 0;
+                let m3 = parseInt(baris.querySelector('.m3').innerText) || 0;
+                let m4 = parseInt(baris.querySelector('.m4').innerText) || 0;
+
+                let totalSetorBulanIni = m1 + m2 + m3 + m4;
+                totalKasBulanIni += totalSetorBulanIni;
+
+                const labelStatus = baris.querySelector('.status');
+                if (totalSetorBulanIni < TARGET_BULANAN) {
+                    labelStatus.innerText = "Nunggak";
+                    labelStatus.className = "status nunggak";
+                } else {
+                    labelStatus.innerText = "Lunas";
+                    labelStatus.className = "status lunas";
+                }
+
+                dataSatuBulan[idSiswa] = { m1, m2, m3, m4 };
+            });
+
+            document.getElementById('total-kas').innerText = 'Rp ' + totalKasBulanIni.toLocaleString('id-ID');
+
+            if (isAdmin && halamanAktif === 'bulanan') {
+                localStorage.setItem(`Kas_${tahunTerpilih}_${bulanTerpilih}`, JSON.stringify(dataSatuBulan));
+            }
+        }
+
+        function muatUlangData() {
+            let tahunTerpilih = document.getElementById('tahun-select').value;
+
+            if (halamanAktif === 'bulanan') {
+                let bulanTerpilih = document.getElementById('bulan-select').value;
+                document.getElementById('label-status-tampilan').innerText = `${bulanTerpilih} (Kelas ${tahunTerpilih})`;
+
+                let dataLama = localStorage.getItem(`Kas_${tahunTerpilih}_${bulanTerpilih}`);
+                const semuaBaris = document.querySelectorAll('.baris-siswa');
+
+                if (dataLama) {
+                    let dataParsed = JSON.parse(dataLama);
+                    semuaBaris.forEach(baris => {
+                        let idSiswa = baris.getAttribute('data-id');
+                        if (dataParsed[idSiswa]) {
+                            baris.querySelector('.m1').innerText = dataParsed[idSiswa].m1;
+                            baris.querySelector('.m2').innerText = dataParsed[idSiswa].m2;
+                            baris.querySelector('.m3').innerText = dataParsed[idSiswa].m3;
+                            baris.querySelector('.m4').innerText = dataParsed[idSiswa].m4;
+                        }
+                    });
+                } else {
+                    semuaBaris.forEach(baris => {
+                        baris.querySelector('.m1').innerText = '0';
+                        baris.querySelector('.m2').innerText = '0';
+                        baris.querySelector('.m3').innerText = '0';
+                        baris.querySelector('.m4').innerText = '0';
+                    });
+                }
+                aturStatusEditTabel(isAdmin);
+                
+                let statusAdminSebelumnya = isAdmin;
+                isAdmin = true; 
+                prosesDanSimpanKas();
+                isAdmin = statusAdminSebelumnya;
+
+            } else {
+                document.getElementById('label-status-tampilan').innerText = `Rekap Total Kelas ${tahunTerpilih}`;
+                const tbodyRekap = document.getElementById('tabel-rekap-body');
+                tbodyRekap.innerHTML = "";
+
+                let totalKasSatuTahunKolektif = 0;
+
+                DAFTAR_SISWA.forEach((nama, indeks) => {
+                    let idSiswa = indeks + 1;
+                    let totalSetorSiswaSatuTahun = 0;
+                    let adaNunggak = false;
+
+                    DAFTAR_BULAN.forEach(bulan => {
+                        let dataBulan = localStorage.getItem(`Kas_${tahunTerpilih}_${bulan}`);
+                        if (dataBulan) {
+                            let dataParsed = JSON.parse(dataBulan);
+                            if (dataParsed[idSiswa]) {
+                                let m1 = dataParsed[idSiswa].m1 || 0;
+                                let m2 = dataParsed[idSiswa].m2 || 0;
+                                let m3 = dataParsed[idSiswa].m3 || 0;
+                                let m4 = dataParsed[idSiswa].m4 || 0;
+                                let totalBulanIni = m1 + m2 + m3 + m4;
+                                
+                                totalSetorSiswaSatuTahun += totalBulanIni;
+
+                                if(totalBulanIni < TARGET_BULANAN) {
+                                    adaNunggak = true;
+                                }
+                            } else {
+                                adaNunggak = true;
+                            }
+                        } else {
+                            adaNunggak = true;
+                        }
+                    });
+
+                    totalKasSatuTahunKolektif += totalSetorSiswaSatuTahun;
+                    let statusAman = adaNunggak ? `<span class="status nunggak">Ada Tunggakan</span>` : `<span class="status lunas">Aman 1 Tahun</span>`;
+
+                    let barisRekap = `<tr>
+                        <td>${idSiswa}</td>
+                        <td class="nama-siswa">${nama}</td>
+                        <td><b>Rp ${totalSetorSiswaSatuTahun.toLocaleString('id-ID')}</b></td>
+                        <td>${statusAman}</td>
+                    </tr>`;
+                    tbodyRekap.innerHTML += barisRekap;
+                });
+
+                document.getElementById('total-kas').innerText = 'Rp ' + totalKasSatuTahunKolektif.toLocaleString('id-ID');
+            }
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
