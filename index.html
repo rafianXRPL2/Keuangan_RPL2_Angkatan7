@@ -285,9 +285,7 @@
 
         .hidden { display: none !important; }
 
-        /* ========================================================
-           CSS TOAST NOTIFICATION (VERSI HALUS & SMOOTH)
-           ======================================================== */
+        /* CSS TOAST NOTIFICATION REALTIME SMOOTH */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -314,30 +312,18 @@
             font-size: 0.9rem;
             font-weight: 500;
             pointer-events: auto;
-            
-            /* Animasi Berbasis GPU (Mulus) */
             opacity: 0;
             transform: translateX(50px); 
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
 
-        .toast.show { 
-            opacity: 1;
-            transform: translateX(0); 
-        }
-
-        .toast.hide {
-            opacity: 0;
-            transform: translateX(100px);
-        }
-
+        .toast.show { opacity: 1; transform: translateX(0); }
+        .toast.hide { opacity: 0; transform: translateX(100px); }
         .toast.sukses { border-left-color: var(--hijau-sukses); }
         .toast.gagal { border-left-color: var(--merah-gagal); }
         .toast-ikon { font-size: 1.2rem; }
 
-        /* ========================================================
-           CSS MODAL (UMUM & QRIS)
-           ======================================================== */
+        /* CSS MODAL */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -357,16 +343,12 @@
             padding: 20px;
         }
 
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
         .modal-box {
             background-color: white;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             transform: scale(0.9);
@@ -374,121 +356,32 @@
             text-align: center;
         }
 
-        .modal-overlay.show .modal-box {
-            transform: scale(1);
-        }
-
-        .modal-box h2 {
-            margin: 0 0 10px 0;
-            font-size: 1.4rem;
-            color: var(--biru-gelap);
-        }
-
-        .modal-box p {
-            margin: 0 0 20px 0;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-
-        .qris-img {
-            width: 250px;
-            height: 250px;
-            margin: 10px auto 20px auto;
-            border: 3px solid var(--biru-pudar);
-            border-radius: 8px;
-            display: block;
-        }
-
-        .petunjuk-qris {
-            text-align: left;
-            background-color: var(--biru-muda);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-        }
-
-        .petunjuk-qris ol {
-            margin: 5px 0 0 0;
-            padding-left: 20px;
-        }
-
-        .input-password-custom {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 8px;
-            border: 2px solid var(--biru-pudar);
-            font-size: 1.1rem;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-            transition: border-color 0.2s;
-            margin-bottom: 20px;
-        }
-
-        .input-password-custom:focus {
-            border-color: var(--biru-utama);
-        }
-
-        .modal-tombol-grup {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .btn-modal {
-            padding: 10px 20px;
-            border-radius: 6px;
-            border: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            flex: 1;
-        }
-
-        .btn-modal-batal {
-            background-color: #e2e8f0;
-            color: #475569;
-        }
+        .modal-overlay.show .modal-box { transform: scale(1); }
+        .modal-box h2 { margin: 0 0 10px 0; font-size: 1.4rem; color: var(--biru-gelap); }
+        .modal-box p { margin: 0 0 20px 0; font-size: 0.9rem; color: #64748b; }
+        .qris-img { width: 250px; height: 250px; margin: 10px auto 20px auto; border: 3px solid var(--biru-pudar); border-radius: 8px; display: block; }
+        .petunjuk-qris { text-align: left; background-color: var(--biru-muda); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px; }
+        .petunjuk-qris ol { margin: 5px 0 0 0; padding-left: 20px; }
+        .input-password-custom { width: 100%; padding: 12px 16px; border-radius: 8px; border: 2px solid var(--biru-pudar); font-size: 1.1rem; text-align: center; letter-spacing: 2px; outline: none; transition: border-color 0.2s; margin-bottom: 20px; }
+        .input-password-custom:focus { border-color: var(--biru-utama); }
+        .modal-tombol-grup { display: flex; gap: 10px; justify-content: center; }
+        .btn-modal { padding: 10px 20px; border-radius: 6px; border: none; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: background-color 0.2s; flex: 1; }
+        .btn-modal-batal { background-color: #e2e8f0; color: #475569; }
         .btn-modal-batal:hover { background-color: #cbd5e1; }
-
-        .btn-modal-submit {
-            background-color: var(--biru-utama);
-            color: white;
-        }
+        .btn-modal-submit { background-color: var(--biru-utama); color: white; }
         .btn-modal-submit:hover { background-color: #2563eb; }
-
-        .btn-modal-qris-tutup {
-            background-color: #10b981;
-            color: white;
-        }
+        .btn-modal-qris-tutup { background-color: #10b981; color: white; }
         .btn-modal-qris-tutup:hover { background-color: #059669; }
 
         @media (min-width: 768px) {
             .header { padding: 35px 20px; }
             .header h1 { font-size: 2.3rem; }
             .nav-tampilan { flex-direction: row; }
-            .kontrol-box { 
-                flex-direction: row; 
-                padding: 15px 20px; 
-                justify-content: space-between;
-                align-items: center;
-            }
+            .kontrol-box { flex-direction: row; padding: 15px 20px; justify-content: space-between; align-items: center; }
             .filter-grup { flex-direction: row; align-items: center; width: auto; }
             .filter-item { flex-direction: row; align-items: center; gap: 10px; }
-            
-            select { 
-                width: auto; 
-                min-width: 180px;
-            }
-            
-            .admin-panel-atas { 
-                flex-direction: row-reverse; 
-                align-items: center;
-                width: auto; 
-                gap: 10px;
-            }
+            select { width: auto; min-width: 180px; }
+            .admin-panel-atas { flex-direction: row-reverse; align-items: center; width: auto; gap: 10px; }
             .btn-admin { width: auto; }
             .btn-qris-nav { width: auto; }
             .badge-admin { width: auto; }
@@ -497,6 +390,36 @@
             .info-item:first-child { border-bottom: none; border-right: 1px dashed #e2e8f0; }
         }
     </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Konfigurasi Web App Firebase asli milikmu
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcSM503poiTpJ5222Nihp-PeSaeH1Z2VE",
+            authDomain: "keuangan-rpl2-angkatan7.firebaseapp.com",
+            projectId: "keuangan-rpl2-angkatan7",
+            storageBucket: "keuangan-rpl2-angkatan7.firebasestorage.app",
+            messagingSenderId: "279828699723",
+            appId: "1:279828699723:web:9ba1ba3e74f77fd22e0bce",
+            measurementId: "G-1HHFWCWJ6X"
+        };
+
+        // Konek ke Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Ekspor ke window global agar fungsi JS biasa di bawah bisa panggil Firebase
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbOnValue = onValue;
+        window.database = database;
+        
+        // Picu render pertama setelah firebase siap
+        window.firebaseSiap = true;
+        if(window.initAplikasi) window.initAplikasi();
+    </script>
 </head>
 <body>
 
@@ -584,7 +507,7 @@
         <div class="ringkasan-box">
             <div class="info-item">
                 <h3>Kategori Tampilan</h3>
-                <p id="label-status-tampilan">Agustus</p>
+                <p id="label-status-tampilan">Mencari Koneksi Database...</p>
             </div>
             <div class="info-item">
                 <h3>Total Dana Terkumpul</h3>
@@ -605,8 +528,7 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="tabel-siswa-body">
-                    </tbody>
+                <tbody id="tabel-siswa-body"></tbody>
             </table>
         </div>
 
@@ -620,8 +542,7 @@
                         <th>Status Akumulasi</th>
                     </tr>
                 </thead>
-                <tbody id="tabel-rekap-body">
-                    </tbody>
+                <tbody id="tabel-rekap-body"></tbody>
             </table>
         </div>
     </div>
@@ -631,6 +552,7 @@
         const TARGET_BULANAN = 20000;
         let isAdmin = false;
         let halamanAktif = "bulanan";
+        let cacheDataSatuTahun = {}; 
 
         const DAFTAR_SISWA = [
             "Aditia Jun Maulana", "Akbar Wijaya", "Alfian Aziz Afrizal", "Alifia Junianty",
@@ -646,47 +568,34 @@
 
         const DAFTAR_BULAN = ["Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli"];
 
-        function init() {
+        window.initAplikasi = function() {
+            if (!window.firebaseSiap) return;
             buatStrukturTabelBulanan();
-            muatUlangData();
+            dengarkanDataSemuaBulan(); 
         }
 
-        function bukaModalQRIS() {
-            document.getElementById('modal-qris-overlay').classList.add('show');
+        function muatUlangData() {
+            hitungDanRenderTampilan();
         }
 
-        function tutupModalQRIS() {
-            document.getElementById('modal-qris-overlay').classList.remove('show');
-        }
+        function bukaModalQRIS() { document.getElementById('modal-qris-overlay').classList.add('show'); }
+        function tutupModalQRIS() { document.getElementById('modal-qris-overlay').classList.remove('show'); }
 
-        // FUNGSI NOTIFIKASI VERSI HALUS (ANTI PATAH-PATAH)
         function tampilNotif(pesan, tipe = "sukses") {
             const wadah = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
-            let ikon = "ℹ️";
-            if(tipe === "sukses") ikon = "✅";
-            if(tipe === "gagal") ikon = "❌";
+            let ikon = tipe === "sukses" ? "✅" : (tipe === "gagal" ? "❌" : "ℹ️");
 
             toast.className = `toast ${tipe}`;
             toast.innerHTML = `<span class="toast-ikon">${ikon}</span> <span>${pesan}</span>`;
-            
             wadah.appendChild(toast);
 
-            // requestAnimationFrame ganda memastikan browser siap merender animasi dengan smooth
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    toast.classList.add('show');
-                });
-            });
+            requestAnimationFrame(() => { requestAnimationFrame(() => { toast.classList.add('show'); }); });
 
             setTimeout(() => {
                 toast.classList.remove('show');
                 toast.classList.add('hide');
-                
-                setTimeout(() => {
-                    toast.remove();
-                }, 400);
+                setTimeout(() => { toast.remove(); }, 400);
             }, 3000);
         }
 
@@ -703,42 +612,36 @@
                 document.getElementById('btn-admin').innerText = "Masuk Mode Admin";
                 document.getElementById('btn-admin').style.backgroundColor = "#3b82f6";
                 aturStatusEditTabel(false);
-                tampilNotif("Mode Admin Dimatikan. Data aman terkunci.", "sukses");
+                tampilNotif("Mode Admin Dimatikan. Data terproteksi online.", "sukses");
             }
         }
 
-        function tutupModalAdmin() {
-            document.getElementById('modal-admin-overlay').classList.remove('show');
-        }
+        function tutupModalAdmin() { document.getElementById('modal-admin-overlay').classList.remove('show'); }
 
         function submitPasswordAdmin() {
-            const inputPass = document.getElementById('input-pass-admin').value;
-            if (inputPass === PASSWORD_ADMIN) {
+            if (document.getElementById('input-pass-admin').value === PASSWORD_ADMIN) {
                 isAdmin = true;
                 document.getElementById('badge-admin').style.display = 'inline-block';
                 document.getElementById('btn-admin').innerText = "Keluar Mode Admin";
                 document.getElementById('btn-admin').style.backgroundColor = "#475569";
                 aturStatusEditTabel(true);
                 tutupModalAdmin();
-                tampilNotif("Mode Admin Aktif! Silakan edit nominal tabel.", "sukses");
+                tampilNotif("Mode Admin Aktif! Perubahan otomatis disinkronkan ke Cloud.", "sukses");
             } else {
-                tampilNotif("Password Salah! Akses ditolak.", "gagal");
+                tampilNotif("Password Salah!", "gagal");
                 document.getElementById('input-pass-admin').select();
             }
         }
 
-        function cekEnterPassword(event) {
-            if (event.key === "Enter") {
-                submitPasswordAdmin();
-            }
-        }
+        function cekEnterPassword(e) { if (e.key === "Enter") submitPasswordAdmin(); }
 
+        /* MEMBUAT STRUKTUR TABEL */
         function buatStrukturTabelBulanan() {
             const tbody = document.getElementById('tabel-siswa-body');
             tbody.innerHTML = "";
             DAFTAR_SISWA.forEach((nama, indeks) => {
                 let idSiswa = indeks + 1;
-                let baris = `<tr class="baris-siswa" data-id="${idSiswa}">
+                tbody.innerHTML += `<tr class="baris-siswa" data-id="${idSiswa}">
                     <td>${idSiswa}</td>
                     <td class="nama-siswa">${nama}</td>
                     <td class="bisa-diedit uang m1">0</td>
@@ -747,16 +650,15 @@
                     <td class="bisa-diedit uang m4">0</td>
                     <td><span class="status"></span></td>
                 </tr>`;
-                tbody.innerHTML += baris;
             });
-            document.getElementById('tabel-siswa-body').addEventListener('input', prosesDanSimpanKas);
+            tbody.addEventListener('input', kirimDataKeFirebase);
         }
 
         function gantiTahunAjaran() {
-            let tahunTerpilih = document.getElementById('tahun-select').value;
-            document.getElementById('judul-utama').innerText = `SISTEM KAS KELAS ${tahunTerpilih} RPL 2`;
-            muatUlangData();
-            tampilNotif(`Menampilkan data kas Kelas ${tahunTerpilih}`, "sukses");
+            let tahun = document.getElementById('tahun-select').value;
+            document.getElementById('judul-utama').innerText = `SISTEM KAS KELAS ${tahun} RPL 2`;
+            dengarkanDataSemuaBulan();
+            tampilNotif(`Memuat database Kelas ${tahun}...`, "sukses");
         }
 
         function gantiHalaman(target) {
@@ -770,6 +672,7 @@
                 document.getElementById('halaman-rekap').classList.add('hidden');
                 document.getElementById('filter-bulan-kontainer').classList.remove('hidden');
                 document.getElementById('btn-admin').classList.remove('hidden');
+                document.getElementById('btn-qris-buka').classList.remove('hidden');
             } else {
                 document.getElementById('halaman-bulanan').classList.add('hidden');
                 document.getElementById('halaman-rekap').classList.remove('hidden');
@@ -777,184 +680,142 @@
                 document.getElementById('btn-admin').classList.add('hidden');
                 document.getElementById('btn-qris-buka').classList.add('hidden');
             }
-            muatUlangData();
+            hitungDanRenderTampilan();
         }
 
         function aturStatusEditTabel(aktif) {
             document.querySelectorAll('.bisa-diedit').forEach(kotak => {
-                if (aktif) {
-                    kotak.setAttribute('contenteditable', 'true');
-                    kotak.classList.add('aktif');
-                } else {
-                    kotak.removeAttribute('contenteditable');
-                    kotak.classList.remove('aktif');
-                }
+                if (aktif) { kotak.setAttribute('contenteditable', 'true'); kotak.classList.add('aktif'); }
+                else { kotak.removeAttribute('contenteditable'); kotak.classList.remove('aktif'); }
             });
         }
 
-        function prosesDanSimpanKas() {
-            let tahunTerpilih = document.getElementById('tahun-select').value;
-            let bulanTerpilih = document.getElementById('bulan-select').value;
-            let totalKasBulanIni = 0;
+        function dengarkanDataSemuaBulan() {
+            if (!window.firebaseSiap) return;
+            let tahun = document.getElementById('tahun-select').value;
+            
+            const starCountRef = window.dbRef(window.database, `Kas_${tahun}`);
+            window.dbOnValue(starCountRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                cacheDataSatuTahun = data; 
+                hitungDanRenderTampilan();
+            });
+        }
+
+        function kirimDataKeFirebase() {
+            if (!isAdmin || halamanAktif !== 'bulanan') return;
+            let tahun = document.getElementById('tahun-select').value;
+            let bulan = document.getElementById('bulan-select').value;
             let dataSatuBulan = {};
 
-            const semuaBaris = document.querySelectorAll('.baris-siswa');
-            semuaBaris.forEach(baris => {
+            document.querySelectorAll('.baris-siswa').forEach(baris => {
                 let idSiswa = baris.getAttribute('data-id');
                 let m1 = parseInt(baris.querySelector('.m1').innerText) || 0;
                 let m2 = parseInt(baris.querySelector('.m2').innerText) || 0;
                 let m3 = parseInt(baris.querySelector('.m3').innerText) || 0;
                 let m4 = parseInt(baris.querySelector('.m4').innerText) || 0;
-
-                let totalSetorBulanIni = m1 + m2 + m3 + m4;
-                totalKasBulanIni += totalSetorBulanIni;
-
-                const labelStatus = baris.querySelector('.status');
-                if (totalSetorBulanIni < TARGET_BULANAN) {
-                    labelStatus.innerText = "Nunggak";
-                    labelStatus.className = "status nunggak";
-                } else {
-                    labelStatus.innerText = "Lunas";
-                    labelStatus.className = "status lunas";
-                }
-
                 dataSatuBulan[idSiswa] = { m1, m2, m3, m4 };
             });
 
-            document.getElementById('total-kas').innerText = 'Rp ' + totalKasBulanIni.toLocaleString('id-ID');
-
-            if (isAdmin && halamanAktif === 'bulanan') {
-                localStorage.setItem(`Kas_${tahunTerpilih}_${bulanTerpilih}`, JSON.stringify(dataSatuBulan));
-            }
+            window.dbSet(window.dbRef(window.database, `Kas_${tahun}/${bulan}`), dataSatuBulan);
         }
 
-        function muatUlangData() {
-            let tahunTerpilih = document.getElementById('tahun-select').value;
+        /* LOGIKA HITUNG & TAMPILAN */
+        function hitungDanRenderTampilan() {
+            let tahun = document.getElementById('tahun-select').value;
 
             if (halamanAktif === 'bulanan') {
-                let bulanTerpilih = document.getElementById('bulan-select').value;
-                document.getElementById('label-status-tampilan').innerText = `${bulanTerpilih} (Kelas ${tahunTerpilih})`;
+                let bulan = document.getElementById('bulan-select').value;
+                document.getElementById('label-status-tampilan').innerText = `${bulan} (Kelas ${tahun})`;
 
-                // Menyembunyikan tombol QRIS di bulan Agustus, September, dan Oktober
                 const btnQris = document.getElementById('btn-qris-buka');
-                if (bulanTerpilih === "Agustus" || bulanTerpilih === "September" || bulanTerpilih === "Oktober") {
-                    btnQris.classList.add('hidden');
-                } else {
-                    btnQris.classList.remove('hidden');
-                }
+                if (["Agustus", "September", "Oktober"].includes(bulan)) { btnQris.classList.add('hidden'); }
+                else { btnQris.classList.remove('hidden'); }
 
-                let dataLama = localStorage.getItem(`Kas_${tahunTerpilih}_${bulanTerpilih}`);
+                let dataBulanIni = cacheDataSatuTahun[bulan] || {};
+                let totalKasBulanIni = 0;
                 const semuaBaris = document.querySelectorAll('.baris-siswa');
 
-                if (dataLama) {
-                    let dataParsed = JSON.parse(dataLama);
-                    semuaBaris.forEach(baris => {
-                        let idSiswa = baris.getAttribute('data-id');
-                        if (dataParsed[idSiswa]) {
-                            baris.querySelector('.m1').innerText = dataParsed[idSiswa].m1;
-                            baris.querySelector('.m2').innerText = dataParsed[idSiswa].m2;
-                            baris.querySelector('.m3').innerText = dataParsed[idSiswa].m3;
-                            baris.querySelector('.m4').innerText = dataParsed[idSiswa].m4;
-                        }
-                    });
-                } else {
-                    semuaBaris.forEach(baris => {
-                        baris.querySelector('.m1').innerText = '0';
-                        baris.querySelector('.m2').innerText = '0';
-                        baris.querySelector('.m3').innerText = '0';
-                        baris.querySelector('.m4').innerText = '0';
-                    });
-                }
-
-                let indeksBulanIni = DAFTAR_BULAN.indexOf(bulanTerpilih);
                 semuaBaris.forEach(baris => {
-                    baris.classList.remove('peringatan-tunggakan');
-                    
-                    if (indeksBulanIni > 0) {
-                        let bulanLalu = DAFTAR_BULAN[indeksBulanIni - 1];
-                        let dataBulanLalu = localStorage.getItem(`Kas_${tahunTerpilih}_${bulanLalu}`);
-                        let idSiswa = baris.getAttribute('data-id');
+                    let idSiswa = baris.getAttribute('data-id');
+                    let sData = dataBulanIni[idSiswa] || { m1: 0, m2: 0, m3: 0, m4: 0 };
 
-                        if (dataBulanLalu) {
-                            let parsedBulanLalu = JSON.parse(dataBulanLalu);
-                            if (parsedBulanLalu[idSiswa]) {
-                                let totalBulanLalu = (parsedBulanLalu[idSiswa].m1 || 0) + 
-                                                     (parsedBulanLalu[idSiswa].m2 || 0) + 
-                                                     (parsedBulanLalu[idSiswa].m3 || 0) + 
-                                                     (parsedBulanLalu[idSiswa].m4 || 0);
-                                
-                                if (totalBulanLalu < TARGET_BULANAN) {
-                                    baris.classList.add('peringatan-tunggakan');
-                                }
-                            } else {
-                                baris.classList.add('peringatan-tunggakan');
-                            }
-                        } else {
-                            baris.classList.add('peringatan-tunggakan');
-                        }
+                    if (document.activeElement.parentElement !== baris) {
+                        baris.querySelector('.m1').innerText = sData.m1;
+                        baris.querySelector('.m2').innerText = sData.m2;
+                        baris.querySelector('.m3').innerText = sData.m3;
+                        baris.querySelector('.m4').innerText = sData.m4;
                     }
+
+                    let totalSetor = (parseInt(baris.querySelector('.m1').innerText) || 0) +
+                                     (parseInt(baris.querySelector('.m2').innerText) || 0) +
+                                     (parseInt(baris.querySelector('.m3').innerText) || 0) +
+                                     (parseInt(baris.querySelector('.m4').innerText) || 0);
+                    
+                    totalKasBulanIni += totalSetor;
+
+                    const lbl = baris.querySelector('.status');
+                    if (totalSetor < TARGET_BULANAN) { lbl.innerText = "Nunggak"; lbl.className = "status nunggak"; }
+                    else { lbl.innerText = "Lunas"; lbl.className = "status lunas"; }
                 });
 
+                document.getElementById('total-kas').innerText = 'Rp ' + totalKasBulanIni.toLocaleString('id-ID');
+
+                let indeksBulanIni = DAFTAR_BULAN.indexOf(bulan);
+                semuaBaris.forEach(baris => {
+                    baris.classList.remove('peringatan-tunggakan');
+                    if (indeksBulanIni > 0) {
+                        let bulanLalu = DAFTAR_BULAN[indeksBulanIni - 1];
+                        let dataBulanLalu = cacheDataSatuTahun[bulanLalu] || {};
+                        let idSiswa = baris.getAttribute('data-id');
+                        let sDataLalu = dataBulanLalu[idSiswa] || { m1: 0, m2: 0, m3: 0, m4: 0 };
+                        let totalLalu = (sDataLalu.m1 || 0) + (sDataLalu.m2 || 0) + (sDataLalu.m3 || 0) + (sDataLalu.m4 || 0);
+                        
+                        if (totalLalu < TARGET_BULANAN) baris.classList.add('peringatan-tunggakan');
+                    }
+                });
                 aturStatusEditTabel(isAdmin);
-                
-                let statusAdminSebelumnya = isAdmin;
-                isAdmin = true; 
-                prosesDanSimpanKas();
-                isAdmin = statusAdminSebelumnya;
 
             } else {
-                document.getElementById('label-status-tampilan').innerText = `Rekap Total Kelas ${tahunTerpilih}`;
+                /* REKAP HALAMAN TOTAL */
+                document.getElementById('label-status-tampilan').innerText = `Rekap Total Kelas ${tahun}`;
                 const tbodyRekap = document.getElementById('tabel-rekap-body');
                 tbodyRekap.innerHTML = "";
-
                 let totalKasSatuTahunKolektif = 0;
 
                 DAFTAR_SISWA.forEach((nama, indeks) => {
                     let idSiswa = indeks + 1;
-                    let totalSetorSiswaSatuTahun = 0;
-                    let adaNunggak = false;
+                    let totalSetorSatuTahun = 0;
+                    let jumlahBulanLunas = 0;
 
-                    DAFTAR_BULAN.forEach(bulan => {
-                        let dataBulan = localStorage.getItem(`Kas_${tahunTerpilih}_${bulan}`);
-                        if (dataBulan) {
-                            let dataParsed = JSON.parse(dataBulan);
-                            if (dataParsed[idSiswa]) {
-                                let m1 = dataParsed[idSiswa].m1 || 0;
-                                let m2 = dataParsed[idSiswa].m2 || 0;
-                                let m3 = dataParsed[idSiswa].m3 || 0;
-                                let m4 = dataParsed[idSiswa].m4 || 0;
-                                let totalBulanIni = m1 + m2 + m3 + m4;
-                                
-                                totalSetorSiswaSatuTahun += totalBulanIni;
-
-                                if(totalBulanIni < TARGET_BULANAN) {
-                                    adaNunggak = true;
-                                }
-                            } else {
-                                adaNunggak = true;
-                            }
-                        } else {
-                            adaNunggak = true;
-                        }
+                    DAFTAR_BULAN.forEach(b => {
+                        let dataBulan = cacheDataSatuTahun[b] || {};
+                        let sData = dataBulan[idSiswa] || { m1: 0, m2: 0, m3: 0, m4: 0 };
+                        let totalBulanIni = (sData.m1 || 0) + (sData.m2 || 0) + (sData.m3 || 0) + (sData.m4 || 0);
+                        totalSetorSatuTahun += totalBulanIni;
+                        if (totalBulanIni >= TARGET_BULANAN) jumlahBulanLunas++;
                     });
 
-                    totalKasSatuTahunKolektif += totalSetorSiswaSatuTahun;
-                    let statusAman = adaNunggak ? `<span class="status nunggak">Ada Tunggakan</span>` : `<span class="status lunas">Aman 1 Tahun</span>`;
+                    totalKasSatuTahunKolektif += totalSetorSatuTahun;
 
-                    let barisRekap = `<tr>
+                    let statusAkumulasi = "";
+                    if (jumlahBulanLunas === DAFTAR_BULAN.length) {
+                        statusAkumulasi = `<span class="status lunas">🌟 AMAN (Lunas Semua)</span>`;
+                    } else {
+                        statusAkumulasi = `<span class="status nunggak">⚠️ Nunggak ${DAFTAR_BULAN.length - jumlahBulanLunas} Bulan</span>`;
+                    }
+
+                    tbodyRekap.innerHTML += `<tr>
                         <td>${idSiswa}</td>
                         <td class="nama-siswa">${nama}</td>
-                        <td><b>Rp ${totalSetorSiswaSatuTahun.toLocaleString('id-ID')}</b></td>
-                        <td>${statusAman}</td>
+                        <td>Rp ${totalSetorSatuTahun.toLocaleString('id-ID')}</td>
+                        <td>${statusAkumulasi}</td>
                     </tr>`;
-                    tbodyRekap.innerHTML += barisRekap;
                 });
 
                 document.getElementById('total-kas').innerText = 'Rp ' + totalKasSatuTahunKolektif.toLocaleString('id-ID');
             }
         }
-
-        window.onload = init;
     </script>
 </body>
 </html>
