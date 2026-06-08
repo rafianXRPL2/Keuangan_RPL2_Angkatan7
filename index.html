@@ -53,6 +53,7 @@
 
         .menu-zona {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 20px;
         }
@@ -67,13 +68,16 @@
             font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
-        .btn-tab { background-color: var(--surface); color: var(--text-main); box-shadow: 0 1px 3px rgba(0,0,0,0.1); flex: 1; }
+        .btn-tab { background-color: var(--surface); color: var(--text-main); box-shadow: 0 1px 3px rgba(0,0,0,0.1); flex: 1; min-width: 140px; }
         .btn-tab.aktif { background-color: var(--primary); color: white; }
         .btn-admin { background-color: #475569; color: white; }
         .btn-admin.aktif { background-color: var(--danger); }
+        .btn-qris { background-color: #10b981; color: white; }
+        .btn-qris:hover { background-color: #059669; }
 
         /* ==================== 3. KONTROL FILTER & PANEL INFO ==================== */
         .panel-kontrol {
@@ -132,6 +136,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table { width: 100%; border-collapse: collapse; text-align: center; min-width: 600px; }
@@ -140,19 +145,72 @@
         
         .kolom-nama { text-align: left; font-weight: 600; color: #1e293b; padding-left: 20px; }
         
-        /* Indikator cell yang bisa diedit oleh admin */
         .editable { transition: background-color 0.2s; }
         .editable.aktif { background-color: #fffbeb; cursor: pointer; font-weight: 600; }
         .editable.aktif:focus { background-color: #fef08a; outline: 2px solid var(--primary); }
 
-        /* Badge Status */
         .badge { padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
         .badge-lunas { background-color: #dcfce7; color: #15803d; }
         .badge-nunggak { background-color: #fee2e2; color: #b91c1c; }
 
-        /* Baris warning jika bulan sebelumnya menunggak */
         tr.baris-warning { background-color: var(--warning-bg); }
         tr.baris-warning .kolom-nama { color: #b91c1c; }
+
+        /* ==================== 5. DESAIN POP-UP (MODAL) QRIS ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        
+        .modal-box {
+            background-color: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            width: 100%; max-width: 400px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.show .modal-box { transform: scale(1); }
+        
+        .modal-box h2 { font-size: 1.3rem; color: #1e293b; margin-bottom: 6px; }
+        .modal-box p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        
+        .qris-img {
+            width: 240px; height: 240px;
+            margin: 0 auto 16px auto;
+            border: 4px solid #f1f5f9;
+            border-radius: 12px;
+            display: block;
+        }
+        
+        .petunjuk-bayar {
+            text-align: left;
+            background-color: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #334155;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        .petunjuk-bayar ol { padding-left: 16px; margin-top: 4px; }
+        
+        .btn-tutup-modal {
+            width: 100%;
+            background-color: #f1f5f9;
+            color: #334155;
+        }
+        .btn-tutup-modal:hover { background-color: #e2e8f0; }
 
         .hidden { display: none !important; }
     </style>
@@ -161,7 +219,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Konfigurasi Proyek Firebase Kelasmu (Mengarah ke server Singapore)
         const firebaseConfig = {
             apiKey: "AIzaSyCcSM503poiTpJ5222Nihp-PeSaeH1Z2VE",
             authDomain: "keuangan-rpl2-angkatan7.firebaseapp.com",
@@ -173,7 +230,6 @@
             databaseURL: "https://keuangan-rpl2-angkatan7-default-rtdb.asia-southeast1.firebasedatabase.app"
         };
 
-        // Konek & Lempar ke Window Global agar fungsi lokal bisa menggunakan
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
@@ -182,12 +238,30 @@
         window.fbOnValue = onValue;
         window.fbDatabase = database;
 
-        // Nyalakan aplikasi saat koneksi siap
         window.aplikasiSiap = true;
         if(window.initSistem) window.initSistem();
     </script>
 </head>
 <body>
+
+    <div id="modal-qris" class="modal-overlay">
+        <div class="modal-box">
+            <h2>QRIS Pembayaran Kas</h2>
+            <p>Scan menggunakan e-wallet (DANA, GoPay, dll) atau M-Banking</p>
+            
+            <img class="qris-img" src="https://via.placeholder.com/240x240.png?text=QRIS+KAS+RPL2" alt="QRIS Kelas">
+            
+            <div class="petunjuk-bayar">
+                <b>📌 Cara Bayar:</b>
+                <ol>
+                    <li>Scan QRIS di atas sesuai nominal tunggakanmu.</li>
+                    <li>Simpan bukti bayar / screenshot transfer.</li>
+                    <li><b>Kirim bukti ke Bendahara</b> agar datamu langsung diubah ke Lunas di web ini.</li>
+                </ol>
+            </div>
+            <button class="btn btn-tutup-modal" onclick="tutupQRIS()">Tutup Halaman</button>
+        </div>
+    </div>
 
     <header>
         <h1>SISTEM MONITORING KAS XI RPL 2</h1>
@@ -199,6 +273,7 @@
         <div class="menu-zona">
             <button id="tab-bulanan" class="btn btn-tab aktif" onclick="pindahHalaman('bulanan')">📊 Pencatatan Bulanan</button>
             <button id="tab-rekap" class="btn btn-tab" onclick="pindahHalaman('rekap')">📋 Rekap Akumulasi</button>
+            <button id="btn-qris-toggle" class="btn btn-qris" onclick="bukaQRIS()">📱 Bayar via QRIS</button>
             <button id="btn-admin-toggle" class="btn btn-admin" onclick="aksesAdmin()">🔒 Mode Bendahara</button>
         </div>
 
@@ -253,9 +328,7 @@
     </div>
 
     <script>
-        // --- DATA UTAMA APLIKASI ---
         const WAJIB_BAYAR = 20000;
-        // Password asli: "rpl2keren" -> Di-encode ke base64 agar aman dari inspect element dasar
         const KEY_VALIDASI = "cnBsMmtlcmVu"; 
         
         let statusAdmin = false;
@@ -276,20 +349,19 @@
 
         const URUTAN_BULAN = ["Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli"];
 
-        // --- 1. INISIALISASI AWAL ---
         window.initSistem = function() {
             if(!window.aplikasiSiap) return;
             
-            // Siapkan dropdown bulan otomatis
             const selectBulan = document.getElementById('select-bulan');
             URUTAN_BULAN.forEach(b => { selectBulan.innerHTML += `<option value="${b}">${b}</option>`; });
             
-            // Buat baris kosong tabel biar tidak ngeblank saat nunggu database
             bangunStrukturTabel();
-            
-            // Dengarkan Firebase secara Realtime Cloud stream
             hubungkanKeFirebaseRealtime();
         }
+
+        /* FUNGSI KONTROL MODAL QRIS */
+        function bukaQRIS() { document.getElementById('modal-qris').classList.add('show'); }
+        function tutupQRIS() { document.getElementById('modal-qris').classList.remove('show'); }
 
         function bangunStrukturTabel() {
             const bodyBulanan = document.getElementById('body-tabel-bulanan');
@@ -309,27 +381,19 @@
                 `;
             });
 
-            // Deteksi pengetikan angka jika admin melakukan perubahan data kas
             bodyBulanan.addEventListener('input', (e) => {
                 if(!statusAdmin || !e.target.classList.contains('editable')) return;
                 simpanDataKeCloud();
             });
         }
 
-        // --- 2. LOGIKA KONEKSI REALTIME CLOUD ---
         function hubungkanKeFirebaseRealtime() {
             const dbNode = window.fbRef(window.fbDatabase, "Kas_XI_RPL2");
-            
-            // Fungsi onValue ini berjalan real-time. Jika device lain merubah data, fungsi ini langsung terpicu otomatis.
             window.fbOnValue(dbNode, (snapshot) => {
                 masterDataCloud = snapshot.val() || {};
-                
-                // Ubah indikator cloud menjadi hijau menandakan sinkronisasi lancar
                 const ind = document.getElementById('indikator-cloud');
                 ind.innerText = "⚡ Terhubung & Live Sync";
                 ind.classList.add('online');
-
-                // Render ulang data tabel agar sesuai dengan data paling fresh dari cloud
                 renderSesuaiKonteks();
             });
         }
@@ -348,17 +412,12 @@
                 dataSatuBulan[idSiswa] = { m1, m2, m3, m4 };
             });
 
-            // Push langsung ke database tujuan node bulan terkait
             window.fbSet(window.fbRef(window.fbDatabase, `Kas_XI_RPL2/${bulanAktif}`), dataSatuBulan);
         }
 
-        // --- 3. PEMROSESAN DATA & TAMPILAN (RENDER) ---
         function renderSesuaiKonteks() {
-            if(halamanSekarang === "bulanan") {
-                renderHalamanBulanan();
-            } else {
-                renderHalamanRekap();
-            }
+            if(halamanSekarang === "bulanan") renderHalamanBulanan();
+            else renderHalamanRekap();
         }
 
         function renderHalamanBulanan() {
@@ -372,7 +431,6 @@
                 let idSiswa = row.getAttribute('data-id');
                 let sData = dataBulanIni[idSiswa] || { m1: 0, m2: 0, m3: 0, m4: 0 };
 
-                // Update text kolom jika user tersebut tidak sedang mengetik aktif di dalamnya
                 if (document.activeElement.parentElement !== row) {
                     row.querySelector('.m1').innerText = sData.m1;
                     row.querySelector('.m2').innerText = sData.m2;
@@ -387,7 +445,6 @@
                 
                 totalKasBulanIni += totalSetor;
 
-                // Set status badge lunas/nunggak bulanan
                 const badge = row.querySelector('.badge');
                 if(totalSetor >= WAJIB_BAYAR) {
                     badge.innerText = "Lunas";
@@ -397,7 +454,6 @@
                     badge.className = "badge badge-nunggak";
                 }
 
-                // Logika Warning: Warnai merah jika bulan sebelumnya nunggak kas
                 row.classList.remove('baris-warning');
                 let indeksBulan = URUTAN_BULAN.indexOf(bulanAktif);
                 if(indeksBulan > 0) {
@@ -451,7 +507,6 @@
             document.getElementById('summary-money').innerText = "Rp " + totalKolektifSatuTahun.toLocaleString('id-ID');
         }
 
-        // --- 4. NAVIGASI HALAMAN & VALIDASI AKSES ---
         function pindahHalaman(target) {
             halamanSekarang = target;
             document.getElementById('tab-bulanan').classList.remove('aktif');
@@ -502,7 +557,6 @@
             });
         }
 
-        // Jalankan inisialisasi jika dipicu manual di awal
         if(window.aplikasiSiap) window.initSistem();
     </script>
 </body>
