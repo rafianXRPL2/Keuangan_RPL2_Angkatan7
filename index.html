@@ -52,6 +52,73 @@
             --fc-page-bg-color: #1e293b;
         }
 
+        /* ==================== PILIHAN TEMA WARNA CUSTOM PERANGKAT ==================== */
+        [data-theme="rose"] {
+            --primary: #ec4899;
+            --primary-dark: #be185d;
+            --bg-main: #fdf2f8;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #fbcfe8;
+            --table-header: #fce7f3;
+        }
+
+        [data-theme="purple"] {
+            --primary: #a855f7;
+            --primary-dark: #7e22ce;
+            --bg-main: #faf5ff;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e9d5ff;
+            --table-header: #f3e8ff;
+        }
+
+        [data-theme="mint"] {
+            --primary: #10b981;
+            --primary-dark: #047857;
+            --bg-main: #f0fdf4;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #bbf7d0;
+            --table-header: #dcfce7;
+        }
+
+        [data-theme="peach"] {
+            --primary: #f97316;
+            --primary-dark: #c2410c;
+            --bg-main: #fff7ed;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #fed7aa;
+            --table-header: #ffedd5;
+        }
+
+        [data-theme="yellow"] {
+            --primary: #eab308;
+            --primary-dark: #a16207;
+            --bg-main: #fefce8;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #fef08a;
+            --table-header: #fef9c3;
+        }
+
+        [data-theme="red"] {
+            --primary: #f43f5e;
+            --primary-dark: #be123c;
+            --bg-main: #fff1f2;
+            --surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #fecdd3;
+            --table-header: #ffe4e6;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -169,7 +236,6 @@
         .btn-tab.aktif { background-color: var(--primary); color: white; }
         .btn-qris { border: 1px solid #10b981; color: #10b981; }
         .btn-qris:hover { background-color: #10b981; color: white; }
-        .btn-theme { border: 1px solid var(--border-color); }
         .btn-admin { border: 1px solid #475569; color: #475569; }
         [data-theme="dark"] .btn-admin { border-color: #94a3b8; color: #94a3b8; }
         .btn-admin.aktif { background-color: var(--danger) !important; color: white !important; border-color: var(--danger); }
@@ -330,6 +396,9 @@
             </button>
             
             <div class="menu-label">Keuangan & Alokasi</div>
+            <button id="tab-pemasukan-lain" class="btn btn-tab" onclick="pindahHalaman('pemasukan-lain')">
+                <i class="fa-solid fa-hand-holding-dollar"></i> Pemasukan Lain-lain
+            </button>
             <button id="tab-pengeluaran" class="btn btn-tab" onclick="pindahHalaman('pengeluaran')">
                 <i class="fa-solid fa-money-bill-wave"></i> Pengeluaran & Nota
             </button>
@@ -347,9 +416,20 @@
             <button id="tab-saran" class="btn btn-tab" onclick="pindahHalaman('saran')">
                 <i class="fa-solid fa-envelope-open-text"></i> Kotak Suara Anonim
             </button>
-            <button class="btn btn-theme" onclick="toggleTemaManual()">
-                <i class="fa-solid fa-circle-half-stroke"></i> Ganti Mode Layar
-            </button>
+            
+            <div class="menu-label">Pengaturan Tampilan</div>
+            <div style="padding: 0 12px; margin-bottom: 10px;">
+                <select id="select-tema-kustom" onchange="gantiTemaPerangkat(this.value)" style="width: 100%; padding: 8px; border-radius: 8px; font-weight: 600; outline: none;">
+                    <option value="light">☀️ Light Mode (Standard)</option>
+                    <option value="dark">🌙 Dark Mode (Default)</option>
+                    <option value="rose">🌸 Rose Sakura (Pink)</option>
+                    <option value="purple">🍇 Purple Orchid (Ungu)</option>
+                    <option value="mint">🍃 Mint Fresh (Hijau)</option>
+                    <option value="peach">🍑 Peach Sunset (Oren)</option>
+                    <option value="yellow">💛 Sunny Yellow (Kuning)</option>
+                    <option value="red">❤️ Red Crimson (Merah)</option>
+                </select>
+            </div>
             
             <div class="menu-label" style="margin-top: auto;">Otoritas</div>
             <button id="btn-admin-toggle" class="btn btn-admin" onclick="bukaModalLoginAdmin()">
@@ -425,6 +505,30 @@
                         </tr>
                     </thead>
                     <tbody id="body-tabel-rekap"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="halaman-pemasukan-lain" class="hidden">
+            <div id="admin-form-pemasukan-lain" class="form-box hidden">
+                <h3><i class="fa-solid fa-circle-dollar-to-slot"></i> Input Pemasukan Tak Terduga / Lain-lain (Bendahara)</h3>
+                <div class="form-grid">
+                    <input type="text" id="in-sumber" placeholder="Contoh: Hadiah Juara Futsal / Sisa Dana Dana Usaha">
+                    <input type="number" id="in-nominal" placeholder="Nominal (Rupiah)">
+                </div>
+                <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahPemasukanLainCloud()">Simpan Pemasukan</button>
+            </div>
+            <div class="wrapper-tabel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Sumber / Detail Pemasukan</th>
+                            <th>Nominal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body-tabel-pemasukan-lain"></tbody>
                 </table>
             </div>
         </div>
@@ -516,7 +620,7 @@
         <div class="modal-box">
             <h2><i class="fa-solid fa-qrcode"></i> QRIS Pembayaran Kas</h2>
             <p style="color:var(--text-muted); margin: 6px 0 14px 0;">Scan via DANA, GoPay, OVO, ShopeePay, dll</p>
-            <img style="width:200px; height:200px; border-radius:8px; margin-bottom:12px;" src="https://via.placeholder.com/240x240.png?text=QRIS+KAS+RPL2" alt="QRIS">
+            <img style="width:200px; height:200px; border-radius:8px; margin-bottom:12px;" src="WhatsApp Image 2026-06-08 at 18.51.44.jpeg" alt="QRIS">
             <div style="text-align:left; font-size:0.85rem; background:var(--table-header); padding:12px; border-radius:8px; margin-bottom:14px; border:1px solid var(--border-color);">
                 <b>📌 Instruksi:</b>
                 <ol style="margin-left:16px; margin-top:4px;">
@@ -559,6 +663,7 @@
         let dataPengeluaranCloud = {};
         let dataAnggaranCloud = {};
         let dataAgendaKalenderCloud = {};
+        let dataPemasukanLainCloud = {};
 
         const DAFTAR_SISWA = [
             "Aditia Jun Maulana", "Akbar Wijaya", "Alfian Aziz Afrizal", "Alifia Junianty",
@@ -580,9 +685,11 @@
         window.initSistem = function() {
             if(!window.aplikasiSiap) return;
 
-            const temaDisimpan = localStorage.getItem('theme');
-            const hpPakeDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.setAttribute('data-theme', temaDisimpan || (hpPakeDarkMode ? 'dark' : 'light'));
+            const temaDisimpan = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', temaDisimpan);
+            
+            const rdrTema = document.getElementById('select-tema-kustom');
+            if(rdrTema) rdrTema.value = temaDisimpan;
 
             const selectBulan = document.getElementById('select-bulan');
             URUTAN_BULAN.forEach(b => { 
@@ -600,25 +707,21 @@
             document.getElementById('sidebar-overlay').classList.toggle('buka');
         }
 
-        function toggleTemaManual() {
-            const temaSekarang = document.documentElement.getAttribute('data-theme');
-            let temaBaru = temaSekarang === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', temaBaru);
-            localStorage.setItem('theme', temaBaru);
+        function gantiTemaPerangkat(namaTema) {
+            document.documentElement.setAttribute('data-theme', namaTema);
+            localStorage.setItem('theme', namaTema);
             if(kalenderInstansi) kalenderInstansi.render();
         }
 
+        document.getElementById('modal-qris');
         function bukaQRIS() { 
             document.getElementById('modal-qris').classList.add('show'); 
             if(window.innerWidth <= 768) toggleSidebarMobile();
         }
         function tutupQRIS() { document.getElementById('modal-qris').classList.remove('show'); }
 
-        /* ==================== FITUR BARU: MODAL LOGIN AMAN (TIDAK BISA DIINTIP) ==================== */
         function bukaModalLoginAdmin() {
             if (window.innerWidth <= 768) toggleSidebarMobile();
-            
-            // Jika sedang aktif admin, klik tombol ini langsung me-logoff/keluar (tidak perlu masukkin password lagi)
             if (statusAdmin) {
                 eksekusiLogoutAdmin();
             } else {
@@ -633,29 +736,23 @@
         }
 
         function deteksiEnterLogin(e) {
-            if (e.key === "Enter") {
-                prosesVerifikasiLoginAdmin();
-            }
+            if (e.key === "Enter") prosesVerifikasiLoginAdmin();
         }
 
         function prosesVerifikasiLoginAdmin() {
             let pwInput = document.getElementById('input-password-bendahara').value;
-            
             if (pwInput && btoa(pwInput) === KEY_VALIDASI) {
                 statusAdmin = true;
                 tutupModalLoginAdmin();
-
                 document.getElementById('btn-admin-toggle').innerHTML = `<i class="fa-solid fa-lock-open"></i> Keluar Admin`;
                 document.getElementById('btn-admin-toggle').classList.add('aktif');
-                
                 document.getElementById('admin-form-pengeluaran').classList.remove('hidden');
                 document.getElementById('admin-form-anggaran').classList.remove('hidden');
                 document.getElementById('admin-form-kalender').classList.remove('hidden');
                 document.getElementById('admin-view-saran').classList.remove('hidden');
-
+                document.getElementById('admin-form-pemasukan-lain').classList.remove('hidden');
                 document.querySelectorAll('.editable').forEach(td => td.classList.add('aktif'));
                 document.querySelectorAll('.editable').forEach(td => td.contentEditable = "true");
-                
                 alert("Akses Admin Diterima! Mode Edit Aktif.");
                 renderSesuaiKonteks();
                 hubungkanKeFirebaseRealtime();
@@ -668,20 +765,17 @@
             statusAdmin = false;
             document.getElementById('btn-admin-toggle').innerHTML = `<i class="fa-solid fa-lock"></i> Mode Bendahara`;
             document.getElementById('btn-admin-toggle').classList.remove('aktif');
-
             document.getElementById('admin-form-pengeluaran').classList.add('hidden');
             document.getElementById('admin-form-anggaran').classList.add('hidden');
             document.getElementById('admin-form-kalender').classList.add('hidden');
             document.getElementById('admin-view-saran').classList.add('hidden');
-
+            document.getElementById('admin-form-pemasukan-lain').classList.add('hidden');
             document.querySelectorAll('.editable').forEach(td => td.classList.remove('aktif'));
             document.querySelectorAll('.editable').forEach(td => td.contentEditable = "false");
-            
             alert("Mode Bendahara Dinonaktifkan.");
             renderSesuaiKonteks();
             hubungkanKeFirebaseRealtime();
         }
-        /* ==================== BATESAN FITUR MODAL AMAN ==================== */
 
         function bangunStrukturTabel() {
             const bodyBulanan = document.getElementById('body-tabel-bulanan');
@@ -730,6 +824,12 @@
                 if(kalenderInstansi) renderUlangDataKalender();
             });
 
+            window.fbOnValue(window.fbRef(window.fbDatabase, "Pemasukan_Lain_Kas"), (snapshot) => {
+                dataPemasukanLainCloud = snapshot.val() || {};
+                hitungKalkulasiKeuanganGlobal();
+                if(halamanSekarang === 'pemasukan-lain') renderHalamanPemasukanLain();
+            });
+
             window.fbOnValue(window.fbRef(window.fbDatabase, "Saran_Kelas"), (snapshot) => {
                 let dataSaran = snapshot.val() || {};
                 const box = document.getElementById('list-saran-box');
@@ -757,6 +857,10 @@
                     let s = dataBulan[id] || {};
                     totalKasMasuk += (s.m1||0) + (s.m2||0) + (s.m3||0) + (s.m4||0);
                 });
+            });
+
+            Object.keys(dataPemasukanLainCloud).forEach(k => {
+                totalKasMasuk += parseInt(dataPemasukanLainCloud[k].nominal) || 0;
             });
 
             let totalKasKeluar = 0;
@@ -788,17 +892,32 @@
             window.fbSet(window.fbRef(window.fbDatabase, `Kas_XI_RPL2/${bulanAktif}`), dataSatuBulan);
         }
 
+        function tambahPemasukanLainCloud() {
+            let sumber = document.getElementById('in-sumber').value;
+            let nominal = parseInt(document.getElementById('in-nominal').value);
+            if(!sumber || !nominal) return alert("Lengkapi Form Pemasukan!");
+            let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+            let nodeRef = window.fbRef(window.fbDatabase, "Pemasukan_Lain_Kas");
+            window.fbPush(nodeRef, { tanggal: tgl, sumber, nominal });
+            document.getElementById('in-sumber').value = "";
+            document.getElementById('in-nominal').value = "";
+        }
+
+        function hapusPemasukanLain(key) {
+            if(!statusAdmin) return;
+            if(confirm("Hapus data pemasukan luar ini?")) {
+                window.fbSet(window.fbRef(window.fbDatabase, `Pemasukan_Lain_Kas/${key}`), null);
+            }
+        }
+
         function tambahPengeluaranCloud() {
             let keperluan = document.getElementById('out-keperluan').value;
             let nominal = parseInt(document.getElementById('out-nominal').value);
             let nota = document.getElementById('out-nota').value || "#";
-
             if(!keperluan || !nominal) return alert("Lengkapi Form Pengeluaran!");
-            
             let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
             let nodeRef = window.fbRef(window.fbDatabase, "Pengeluaran_Kas");
             window.fbPush(nodeRef, { tanggal: tgl, keperluan, nominal, nota });
-
             document.getElementById('out-keperluan').value = "";
             document.getElementById('out-nominal').value = "";
             document.getElementById('out-nota').value = "";
@@ -808,10 +927,8 @@
             let kegiatan = document.getElementById('plan-kegiatan').value;
             let estimasi = parseInt(document.getElementById('plan-estimasi').value);
             if(!kegiatan || !estimasi) return alert("Lengkapi data anggaran!");
-
             let nodeRef = window.fbRef(window.fbDatabase, "Anggaran_Kas");
             window.fbPush(nodeRef, { kegiatan, estimasi });
-
             document.getElementById('plan-kegiatan').value = "";
             document.getElementById('plan-estimasi').value = "";
         }
@@ -831,16 +948,9 @@
             let tanggal = document.getElementById('cal-tanggal').value;
             let namaKegiatan = document.getElementById('cal-nama').value;
             let warna = document.getElementById('cal-warna').value;
-
             if(!tanggal || !namaKegiatan.trim()) return alert("Pilih tanggal dan isi nama kegiatannya dahulu!");
-
             let nodeRef = window.fbRef(window.fbDatabase, "Agenda_Kalender");
-            window.fbPush(nodeRef, {
-                title: namaKegiatan,
-                start: tanggal,
-                backgroundColor: warna
-            });
-
+            window.fbPush(nodeRef, { title: namaKegiatan, start: tanggal, backgroundColor: warna });
             alert("Agenda kas berhasil ditambahkan ke kalender kelas!");
             document.getElementById('cal-nama').value = "";
             document.getElementById('cal-tanggal').value = "";
@@ -854,7 +964,7 @@
             if(confirm(`Apakah kamu (Bendahara) ingin menghapus penanda agenda:\n"${info.event.title}" dari kalender?`)) {
                 let eventIdInFirebase = info.event.id;
                 window.fbSet(window.fbRef(window.fbDatabase, `Agenda_Kalender/${eventIdInFirebase}`), null);
-                alert("Agenda berhasil deleted!");
+                alert("Agenda berhasil didelete!");
             }
         }
 
@@ -939,88 +1049,144 @@
             else if(halamanSekarang === "rekap") renderHalamanRekap();
             else if(halamanSekarang === "pengeluaran") renderHalamanPengeluaran();
             else if(halamanSekarang === "anggaran") renderHalamanAnggaran();
+            else if(halamanSekarang === "pemasukan-lain") renderHalamanPemasukanLain();
             else if(halamanSekarang === "kalender" && kalenderInstansi) {
                 setTimeout(() => { kalenderInstansi.updateSize(); }, 50);
             }
         }
 
         function renderHalamanBulanan() {
-            let bulanAktif = document.getElementById('select-bulan').value;
-            let dataBulanIni = masterDataCloud[bulanAktif] || {};
+    let bulanAktif = document.getElementById('select-bulan').value;
+    let indeksBulanAktif = URUTAN_BULAN.indexOf(bulanAktif);
 
-            document.querySelectorAll('.row-siswa').forEach(row => {
-                let idSiswa = row.getAttribute('data-id');
-                let sData = dataBulanIni[idSiswa] || { m1: 0, m2: 0, m3: 0, m4: 0 };
-
-                if (document.activeElement.parentElement !== row) {
-                    row.querySelector('.m1').innerText = sData.m1;
-                    row.querySelector('.m2').innerText = sData.m2;
-                    row.querySelector('.m3').innerText = sData.m3;
-                    row.querySelector('.m4').innerText = sData.m4;
-                }
-
-                let totalSetor = (parseInt(row.querySelector('.m1').innerText) || 0) +
-                                 (parseInt(row.querySelector('.m2').innerText) || 0) +
-                                 (parseInt(row.querySelector('.m3').innerText) || 0) +
-                                 (parseInt(row.querySelector('.m4').innerText) || 0);
-
-                let badge = row.querySelector('.badge');
-                if(totalSetor >= WAJIB_BAYAR) {
-                    badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Lunas`;
-                    badge.className = "badge badge-lunas";
-                    row.classList.remove('baris-warning');
-                } else {
-                    badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Nunggak`;
-                    badge.className = "badge badge-nunggak";
-                    if(statusAdmin) row.classList.add('baris-warning');
-                }
-            });
+    document.querySelectorAll('.row-siswa').forEach(row => {
+        let idSiswa = row.getAttribute('data-id');
+        
+        // 1. Tampilkan data nominal minggu ini ke tabel jika user tidak sedang mengetik
+        let dataBulanIni = (masterDataCloud[bulanAktif] && masterDataCloud[bulanAktif][idSiswa]) || { m1: 0, m2: 0, m3: 0, m4: 0 };
+        if (document.activeElement.parentElement !== row) {
+            row.querySelector('.m1').innerText = dataBulanIni.m1;
+            row.querySelector('.m2').innerText = dataBulanIni.m2;
+            row.querySelector('.m3').innerText = dataBulanIni.m3;
+            row.querySelector('.m4').innerText = dataBulanIni.m4;
         }
 
-        function renderHalamanRekap() {
-            let bodyRekap = document.getElementById('body-tabel-rekap');
-            bodyRekap.innerHTML = "";
-            let dataSiswaKolektif = [];
-
-            DAFTAR_SISWA.forEach((nama, i) => {
-                let idSiswa = i + 1;
-                let totalSatuTahun = 0;
-
-                URUTAN_BULAN.forEach(b => {
-                    let dataBulan = masterDataCloud[b] || {};
-                    let s = dataBulan[idSiswa] || {};
-                    totalSatuTahun += (s.m1||0) + (s.m2||0) + (s.m3||0) + (s.m4||0);
-                });
-                dataSiswaKolektif.push({ id: idSiswa, nama, total: totalSatuTahun });
-            });
-
-            let urutanSultan = [...dataSiswaKolektif].sort((a,b) => b.total - a.total);
-            const boxSultan = document.getElementById('container-sultan-kas');
-            boxSultan.innerHTML = "";
-            for(let i=0; i<Math.min(3, urutanSultan.length); i++) {
-                if(urutanSultan[i].total > 0) {
-                    boxSultan.innerHTML += `
-                        <div class="sultan-item">
-                            <span><b>#${i+1}</b> ${urutanSultan[i].nama}</span>
-                            <span class="badge badge-sultan"><i class="fa-solid fa-award"></i> Rp ${urutanSultan[i].total.toLocaleString('id-ID')}</span>
-                        </div>
-                    `;
-                }
+        // 2. Cek apakah ada bulan-bulan SEBELUMNYA yang nunggak
+        let adaHutangBulanLalu = false;
+        for (let i = 0; i < indeksBulanAktif; i++) {
+            let bulanLalu = URUTAN_BULAN[i];
+            let dataBulanLalu = (masterDataCloud[bulanLalu] && masterDataCloud[bulanLalu][idSiswa]) || { m1: 0, m2: 0, m3: 0, m4: 0 };
+            let totalBulanLalu = (dataBulanLalu.m1||0) + (dataBulanLalu.m2||0) + (dataBulanLalu.m3||0) + (dataBulanLalu.m4||0);
+            
+            if (totalBulanLalu < WAJIB_BAYAR) {
+                adaHutangBulanLalu = true;
+                break; // Ketemu satu saja yang nunggak, langsung stop
             }
-            if(boxSultan.innerHTML === "") boxSultan.innerHTML = "<p style='font-size:0.85rem; color:var(--text-muted);'>Belum ada data setoran kas masuk.</p>";
+        }
 
-            dataSiswaKolektif.forEach((s, idx) => {
-                let statusGlobal = s.total >= (WAJIB_BAYAR * URUTAN_BULAN.length) ? 
-                    `<span class="badge badge-lunas"><i class="fa-solid fa-fire"></i> AMAN</span>` : `<span class="badge badge-nunggak"><i class="fa-solid fa-triangle-exclamation"></i> KURANG</span>`;
-                bodyRekap.innerHTML += `
+        // 3. Hitung total bayar bulan aktif saat ini
+        let totalBulanIni = (parseInt(row.querySelector('.m1').innerText) || 0) +
+                             (parseInt(row.querySelector('.m2').innerText) || 0) +
+                             (parseInt(row.querySelector('.m3').innerText) || 0) +
+                             (parseInt(row.querySelector('.m4').innerText) || 0);
+
+        let badge = row.querySelector('.badge');
+        
+        // Logika Baru: Dianggap Lunas bulan ini HANYA JIKA bulan ini cukup DAN bulan lalu tidak ada tunggakan
+        if (totalBulanIni >= WAJIB_BAYAR && !adaHutangBulanLalu) {
+            badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Lunas`;
+            badge.className = "badge badge-lunas";
+            row.classList.remove('baris-warning');
+        } else {
+            // Jika dia bayar di bulan ini tapi bulan lalu nunggak, kasih text pengingat hutang
+            if (adaHutangBulanLalu) {
+                badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Nunggak`;
+            } else {
+                badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Nunggak`;
+            }
+            badge.className = "badge badge-nunggak";
+            if(statusAdmin) row.classList.add('baris-warning');
+        }
+    });
+}
+        /* ==================== UPDATE LOGIKA VALIDASI BULANAN REKAP ==================== */
+        function renderHalamanRekap() {
+    let bodyRekap = document.getElementById('body-tabel-rekap');
+    bodyRekap.innerHTML = "";
+    let dataSiswaKolektif = [];
+
+    DAFTAR_SISWA.forEach((nama, i) => {
+        let idSiswa = i + 1;
+        let totalSatuTahun = 0;
+        let adaBulanBolong = false; 
+
+        URUTAN_BULAN.forEach(b => {
+            let dataBulan = masterDataCloud[b] || {};
+            let s = dataBulan[idSiswa] || {};
+            let totalBulanIni = (s.m1||0) + (s.m2||0) + (s.m3||0) + (s.m4||0);
+            
+            totalSatuTahun += totalBulanIni;
+
+            if (totalBulanIni < WAJIB_BAYAR) {
+                adaBulanBolong = true;
+            }
+        });
+        
+        dataSiswaKolektif.push({ 
+            id: idSiswa, 
+            nama, 
+            total: totalSatuTahun, 
+            isNunggakKronis: adaBulanBolong 
+        });
+    });
+
+    let urutanSultan = [...dataSiswaKolektif].sort((a,b) => b.total - a.total);
+    const boxSultan = document.getElementById('container-sultan-kas');
+    boxSultan.innerHTML = "";
+    for(let i=0; i<Math.min(3, urutanSultan.length); i++) {
+        if(urutanSultan[i].total > 0) {
+            boxSultan.innerHTML += `
+                <div class="sultan-item">
+                    <span><b>#${i+1}</b> ${urutanSultan[i].nama}</span>
+                    <span class="badge badge-sultan"><i class="fa-solid fa-award"></i> Rp ${urutanSultan[i].total.toLocaleString('id-ID')}</span>
+                </div>
+            `;
+        }
+    }
+    if(boxSultan.innerHTML === "") boxSultan.innerHTML = "<p style='font-size:0.85rem; color:var(--text-muted);'>Belum ada data setoran kas masuk.</p>";
+
+    dataSiswaKolektif.forEach((s, idx) => {
+        let statusGlobal = (s.isNunggakKronis) ? 
+            `<span class="badge badge-nunggak"><i class="fa-solid fa-triangle-exclamation"></i> KURANG</span>` : 
+            `<span class="badge badge-lunas"><i class="fa-solid fa-fire"></i> AMAN</span>`;
+            
+        bodyRekap.innerHTML += `
+            <tr>
+                <td>${idx+1}</td>
+                <td class="kolom-nama">${s.nama}</td>
+                <td><b>Rp ${s.total.toLocaleString('id-ID')}</b></td>
+                <td>${statusGlobal}</td>
+            </tr>
+        `;
+    });
+}
+
+        function renderHalamanPemasukanLain() {
+            let bodyPemasukanLain = document.getElementById('body-tabel-pemasukan-lain');
+            bodyPemasukanLain.innerHTML = "";
+            Object.keys(dataPemasukanLainCloud).forEach(k => {
+                let item = dataPemasukanLainCloud[k];
+                let btnHapusAction = statusAdmin ? `<button onclick="hapusPemasukanLain('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:0.75rem;">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
+                bodyPemasukanLain.innerHTML += `
                     <tr>
-                        <td>${idx+1}</td>
-                        <td class="kolom-nama">${s.nama}</td>
-                        <td><b>Rp ${s.total.toLocaleString('id-ID')}</b></td>
-                        <td>${statusGlobal}</td>
+                        <td>${item.tanggal}</td>
+                        <td style="text-align:left; font-weight:600;">💰 ${item.sumber}</td>
+                        <td class="total-masuk" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
+                        <td>${btnHapusAction}</td>
                     </tr>
                 `;
             });
+            if(bodyPemasukanLain.innerHTML === "") bodyPemasukanLain.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted);">Belum ada riwayat pemasukan tak terduga luar.</td></tr>`;
         }
 
         function renderHalamanPengeluaran() {
@@ -1062,14 +1228,13 @@
             halamanSekarang = target;
             document.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('aktif'));
             document.getElementById(`tab-${target}`).classList.add('aktif');
-
             document.getElementById('halaman-bulanan').classList.add('hidden');
             document.getElementById('halaman-rekap').classList.add('hidden');
             document.getElementById('halaman-pengeluaran').classList.add('hidden');
             document.getElementById('halaman-anggaran').classList.add('hidden');
             document.getElementById('halaman-kalender').classList.add('hidden');
             document.getElementById('halaman-saran').classList.add('hidden');
-
+            document.getElementById('halaman-pemasukan-lain').classList.add('hidden');
             document.getElementById(`halaman-${target}`).classList.remove('hidden');
             if(window.innerWidth <= 768) toggleSidebarMobile();
             renderSesuaiKonteks();
