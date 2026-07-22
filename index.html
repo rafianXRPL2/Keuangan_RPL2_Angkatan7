@@ -6,6 +6,7 @@
     <title>Sistem Kas Realtime - RPL 2</title>
     
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/locales/id.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -458,6 +459,49 @@
         .btn-nota { padding: 5px 10px; font-size: 0.75rem; background-color: var(--table-header); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--primary); font-weight: bold; display: inline-flex; align-items: center; gap: 4px; transition: all .15s ease; }
         .btn-nota:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
 
+        /* ---- Toast Notification (pengganti alert()) ---- */
+        .toast-container {
+            position: fixed; top: 20px; right: 20px; z-index: 10000;
+            display: flex; flex-direction: column; gap: 10px; max-width: 340px; width: 100%;
+        }
+        .toast {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: var(--surface); color: var(--text-main);
+            border: 1px solid var(--border-color); border-left: 4px solid var(--primary);
+            border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-lg);
+            font-size: 0.85rem; font-weight: 600; line-height: 1.4;
+            animation: toastMasuk 0.3s ease;
+            opacity: 1; transition: opacity .25s ease, transform .25s ease;
+        }
+        .toast.hide { opacity: 0; transform: translateX(30px); }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.info { border-left-color: var(--primary); }
+        .toast-icon { font-size: 1.05rem; margin-top: 1px; flex-shrink: 0; }
+        .toast.success .toast-icon { color: var(--success); }
+        .toast.error .toast-icon { color: var(--danger); }
+        .toast.info .toast-icon { color: var(--primary); }
+        .toast-close { margin-left: auto; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; padding: 0; flex-shrink: 0; }
+        @keyframes toastMasuk {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @media (max-width: 768px) {
+            .toast-container { top: auto; bottom: 92px; right: 16px; left: 16px; max-width: none; }
+        }
+
+        /* ---- Modal Konfirmasi & Info (pengganti confirm()/alert()) ---- */
+        .modal-icon-circle {
+            width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; margin: 0 auto 14px; font-size: 1.3rem;
+        }
+        .modal-icon-circle.danger { background: var(--danger-light); color: var(--danger); }
+        .modal-icon-circle.info { background: var(--primary-light); color: var(--primary); }
+        .modal-pesan-utama { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+        .modal-pesan-sub { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 18px; }
+        .modal-btn-grup { display: flex; gap: 10px; }
+        .modal-btn-grup .btn { justify-content: center; }
+
         /* ---- Kartu QRIS ---- */
         .qris-card { background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #eef0f3; box-shadow: var(--shadow-sm); text-align: left; }
         .qris-card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #f1f2f4; }
@@ -869,6 +913,28 @@
         </div>
     </div>
 
+    <div id="modal-konfirmasi" class="modal-overlay">
+        <div class="modal-box" style="max-width: 340px;">
+            <div class="modal-icon-circle danger"><i class="fa-solid fa-trash-can"></i></div>
+            <p id="konfirmasi-pesan" class="modal-pesan-utama">-</p>
+            <p class="modal-pesan-sub">Tindakan ini tidak bisa dibatalkan.</p>
+            <div class="modal-btn-grup">
+                <button class="btn" style="background:var(--table-header); color:var(--text-main);" onclick="prosesKonfirmasi(false)">Batal</button>
+                <button class="btn" style="background:var(--danger); color:white;" onclick="prosesKonfirmasi(true)">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-info-agenda" class="modal-overlay">
+        <div class="modal-box" style="max-width: 340px;">
+            <div class="modal-icon-circle info"><i class="fa-solid fa-calendar-day"></i></div>
+            <p style="font-size:0.68rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.4px;">Kegiatan Kelas</p>
+            <p id="info-agenda-judul" style="font-weight:800; font-size:1.05rem; margin:6px 0 4px;">-</p>
+            <p id="info-agenda-tanggal" class="modal-pesan-sub" style="margin-bottom:16px;">-</p>
+            <button class="btn" style="background:var(--primary); color:white; justify-content:center;" onclick="document.getElementById('modal-info-agenda').classList.remove('show')">Tutup</button>
+        </div>
+    </div>
+
     <div id="modal-login-admin" class="modal-overlay">
         <div class="modal-box" style="max-width: 400px; text-align: left;">
             <h2 style="font-size: 1.25rem; display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
@@ -935,7 +1001,6 @@
             
             bangunStrukturTabel();
             hubungkanKeFirebaseRealtime();
-            inisialisasiObjekKalender();
         }
 
         function toggleSidebarMobile() {
@@ -1025,6 +1090,40 @@
             document.getElementById('fab-main').classList.toggle('aktif');
         }
 
+        /* ---- Toast Notification (pengganti alert()) ---- */
+        function tampilkanToast(pesan, tipe = 'info', durasi = 3800) {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const ikon = tipe === 'success' ? 'fa-circle-check' : (tipe === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info');
+            const el = document.createElement('div');
+            el.className = `toast ${tipe}`;
+            el.innerHTML = `<i class="fa-solid ${ikon} toast-icon"></i><span>${pesan}</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.classList.add('hide');
+                setTimeout(() => el.remove(), 300);
+            }, durasi);
+        }
+
+        /* ---- Modal Konfirmasi (pengganti confirm()) ---- */
+        let resolveKonfirmasi = null;
+        function tampilkanKonfirmasi(pesan) {
+            document.getElementById('konfirmasi-pesan').innerText = pesan;
+            document.getElementById('modal-konfirmasi').classList.add('show');
+            return new Promise((resolve) => { resolveKonfirmasi = resolve; });
+        }
+        function prosesKonfirmasi(hasil) {
+            document.getElementById('modal-konfirmasi').classList.remove('show');
+            if(resolveKonfirmasi) { resolveKonfirmasi(hasil); resolveKonfirmasi = null; }
+        }
+
+        /* ---- Modal Info Agenda (pengganti alert() detail kegiatan) ---- */
+        function tampilkanInfoAgenda(judul, tanggal) {
+            document.getElementById('info-agenda-judul').innerText = judul;
+            document.getElementById('info-agenda-tanggal').innerText = "Tanggal: " + tanggal;
+            document.getElementById('modal-info-agenda').classList.add('show');
+        }
+
         function bukaModalLoginAdmin() {
             if (window.innerWidth <= 768) toggleSidebarMobile();
             if (statusAdmin) {
@@ -1058,11 +1157,11 @@
                 document.getElementById('admin-form-pemasukan-lain').classList.remove('hidden');
                 document.querySelectorAll('.editable').forEach(td => td.classList.add('aktif'));
                 document.querySelectorAll('.editable').forEach(td => td.contentEditable = "true");
-                alert("Akses Admin Diterima! Mode Edit Aktif.");
+                tampilkanToast("Akses admin diterima! Mode edit aktif.", "success");
                 renderSesuaiKonteks();
                 hubungkanKeFirebaseRealtime();
             } else {
-                alert("Password Bendahara Salah / Ditolak!");
+                tampilkanToast("Password bendahara salah / ditolak!", "error");
             }
         }
 
@@ -1077,7 +1176,7 @@
             document.getElementById('admin-form-pemasukan-lain').classList.add('hidden');
             document.querySelectorAll('.editable').forEach(td => td.classList.remove('aktif'));
             document.querySelectorAll('.editable').forEach(td => td.contentEditable = "false");
-            alert("Mode Bendahara Dinonaktifkan.");
+            tampilkanToast("Mode bendahara dinonaktifkan.", "info");
             renderSesuaiKonteks();
             hubungkanKeFirebaseRealtime();
         }
@@ -1200,18 +1299,20 @@
         function tambahPemasukanLainCloud() {
             let sumber = document.getElementById('in-sumber').value;
             let nominal = parseInt(document.getElementById('in-nominal').value);
-            if(!sumber || !nominal) return alert("Lengkapi Form Pemasukan!");
+            if(!sumber || !nominal) return tampilkanToast("Lengkapi form pemasukan dulu ya!", "error");
             let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
             let nodeRef = window.fbRef(window.fbDatabase, "Pemasukan_Lain_Kas");
             window.fbPush(nodeRef, { tanggal: tgl, sumber, nominal });
             document.getElementById('in-sumber').value = "";
             document.getElementById('in-nominal').value = "";
+            tampilkanToast("Pemasukan luar berhasil ditambahkan!", "success");
         }
 
-        function hapusPemasukanLain(key) {
+        async function hapusPemasukanLain(key) {
             if(!statusAdmin) return;
-            if(confirm("Hapus data pemasukan luar ini?")) {
+            if(await tampilkanKonfirmasi("Hapus data pemasukan luar ini?")) {
                 window.fbSet(window.fbRef(window.fbDatabase, `Pemasukan_Lain_Kas/${key}`), null);
+                tampilkanToast("Data pemasukan berhasil dihapus.", "success");
             }
         }
 
@@ -1219,33 +1320,36 @@
             let keperluan = document.getElementById('out-keperluan').value;
             let nominal = parseInt(document.getElementById('out-nominal').value);
             let nota = document.getElementById('out-nota').value || "#";
-            if(!keperluan || !nominal) return alert("Lengkapi Form Pengeluaran!");
+            if(!keperluan || !nominal) return tampilkanToast("Lengkapi form pengeluaran dulu ya!", "error");
             let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
             let nodeRef = window.fbRef(window.fbDatabase, "Pengeluaran_Kas");
             window.fbPush(nodeRef, { tanggal: tgl, keperluan, nominal, nota });
             document.getElementById('out-keperluan').value = "";
             document.getElementById('out-nominal').value = "";
             document.getElementById('out-nota').value = "";
+            tampilkanToast("Pengeluaran berhasil dicatat!", "success");
         }
 
         function tambahAnggaranCloud() {
             let kegiatan = document.getElementById('plan-kegiatan').value;
             let estimasi = parseInt(document.getElementById('plan-estimasi').value);
-            if(!kegiatan || !estimasi) return alert("Lengkapi data anggaran!");
+            if(!kegiatan || !estimasi) return tampilkanToast("Lengkapi data anggaran dulu ya!", "error");
             let nodeRef = window.fbRef(window.fbDatabase, "Anggaran_Kas");
             window.fbPush(nodeRef, { kegiatan, estimasi });
             document.getElementById('plan-kegiatan').value = "";
             document.getElementById('plan-estimasi').value = "";
+            tampilkanToast("Rencana anggaran berhasil ditambahkan!", "success");
         }
 
         function htmlEscape(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        function hapusAnggaran(key) {
+        async function hapusAnggaran(key) {
             if(!statusAdmin) return;
-            if(confirm("Hapus rencana anggaran ini?")) {
+            if(await tampilkanKonfirmasi("Hapus rencana anggaran ini?")) {
                 window.fbSet(window.fbRef(window.fbDatabase, `Anggaran_Kas/${key}`), null);
+                tampilkanToast("Rencana anggaran berhasil dihapus.", "success");
             }
         }
 
@@ -1253,23 +1357,23 @@
             let tanggal = document.getElementById('cal-tanggal').value;
             let namaKegiatan = document.getElementById('cal-nama').value;
             let warna = document.getElementById('cal-warna').value;
-            if(!tanggal || !namaKegiatan.trim()) return alert("Pilih tanggal dan isi nama kegiatannya dahulu!");
+            if(!tanggal || !namaKegiatan.trim()) return tampilkanToast("Pilih tanggal dan isi nama kegiatannya dahulu!", "error");
             let nodeRef = window.fbRef(window.fbDatabase, "Agenda_Kalender");
             window.fbPush(nodeRef, { title: namaKegiatan, start: tanggal, backgroundColor: warna });
-            alert("Agenda kas berhasil ditambahkan ke kalender kelas!");
+            tampilkanToast("Agenda kas berhasil ditambahkan ke kalender kelas!", "success");
             document.getElementById('cal-nama').value = "";
             document.getElementById('cal-tanggal').value = "";
         }
 
-        function aksiKlikEventKalender(info) {
+        async function aksiKlikEventKalender(info) {
             if(!statusAdmin) {
-                alert(`📌 Kegiatan Kelas:\n"${info.event.title}"\nTanggal: ${info.event.startStr}`);
+                tampilkanInfoAgenda(info.event.title, info.event.startStr);
                 return;
             }
-            if(confirm(`Apakah kamu (Bendahara) ingin menghapus penanda agenda:\n"${info.event.title}" dari kalender?`)) {
+            if(await tampilkanKonfirmasi(`Hapus penanda agenda "${info.event.title}" dari kalender?`)) {
                 let eventIdInFirebase = info.event.id;
                 window.fbSet(window.fbRef(window.fbDatabase, `Agenda_Kalender/${eventIdInFirebase}`), null);
-                alert("Agenda berhasil didelete!");
+                tampilkanToast("Agenda berhasil dihapus!", "success");
             }
         }
 
@@ -1298,17 +1402,18 @@
 
         function kirimSaranCloud() {
             let teks = document.getElementById('saran-teks').value;
-            if(!teks.trim()) return alert("Tulis dulu saran kamu!");
+            if(!teks.trim()) return tampilkanToast("Tulis dulu saran kamu!", "error");
             let nodeRef = window.fbRef(window.fbDatabase, "Saran_Kelas");
             window.fbPush(nodeRef, htmlEscape(teks));
-            alert("Aspirasi berhasil dikirim secara anonim! Terima kasih.");
+            tampilkanToast("Aspirasi berhasil dikirim secara anonim! Terima kasih.", "success");
             document.getElementById('saran-teks').value = "";
         }
 
-        function hapusSaranCloud(key) {
+        async function hapusSaranCloud(key) {
             if(!statusAdmin) return;
-            if(confirm("Apakah kamu yakin ingin menghapus saran/kritik ini karena kurang bagus?")) {
+            if(await tampilkanKonfirmasi("Hapus saran/kritik ini karena kurang bagus?")) {
                 window.fbSet(window.fbRef(window.fbDatabase, `Saran_Kelas/${key}`), null);
+                tampilkanToast("Saran berhasil dihapus.", "success");
             }
         }
 
@@ -1346,7 +1451,7 @@
             teksKolektif += `\n-------------------------------------------\nDemikian informasi ini kami sampaikan. Atas perhatian, kesadaran, dan kerja sama dari rekan-rekan sekalian, kami ucapkan terima kasih.\n\n*Wassalamu'alaikum Wr. Wb.*\n_- Bendahara XI RPL 2 _`;
 
             navigator.clipboard.writeText(teksKolektif);
-            alert("Teks broadcast tagihan WhatsApp berhasil disalin ke clipboard! Tinggal paste ke grup kelas.");
+            tampilkanToast("Teks broadcast tagihan WhatsApp berhasil disalin! Tinggal paste ke grup kelas.", "success");
         }
 
         function renderSesuaiKonteks() {
@@ -1355,8 +1460,13 @@
             else if(halamanSekarang === "pengeluaran") renderHalamanPengeluaran();
             else if(halamanSekarang === "anggaran") renderHalamanAnggaran();
             else if(halamanSekarang === "pemasukan-lain") renderHalamanPemasukanLain();
-            else if(halamanSekarang === "kalender" && kalenderInstansi) {
-                setTimeout(() => { kalenderInstansi.updateSize(); }, 50);
+            else if(halamanSekarang === "kalender") {
+                if(!kalenderInstansi) {
+                    inisialisasiObjekKalender();
+                    renderUlangDataKalender();
+                } else {
+                    setTimeout(() => { kalenderInstansi.updateSize(); }, 50);
+                }
             }
         }
 
@@ -1627,6 +1737,8 @@
             renderSesuaiKonteks();
         }
     </script>
+    <div class="toast-container" id="toast-container"></div>
+
     <div class="fab-container">
         <div class="fab-menu" id="fab-menu">
             <button class="fab-item" onclick="bukaQRIS(); toggleFabMenu()"><span>Scan QRIS</span> <i class="fa-solid fa-qrcode"></i></button>
