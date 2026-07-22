@@ -539,26 +539,26 @@
             .halaman-header h1 { font-size: 1.15rem; }
             .halaman-header p { margin-left: 0; }
 
-            /* ---- Tabel jadi kartu di layar kecil ---- */
+            /* ---- Tabel jadi kartu di layar kecil (khusus tabel kas, JANGAN kena tabel internal FullCalendar) ---- */
             .wrapper-tabel { overflow: visible; background: transparent; border: none; box-shadow: none; }
-            table { min-width: 0; }
-            thead { display: none; }
-            table, tbody, tr, td { display: block; width: 100%; }
-            tbody tr {
+            .wrapper-tabel table { min-width: 0; }
+            .wrapper-tabel thead { display: none; }
+            .wrapper-tabel table, .wrapper-tabel tbody, .wrapper-tabel tr, .wrapper-tabel td { display: block; width: 100%; }
+            .wrapper-tabel tbody tr {
                 background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);
                 margin-bottom: 12px; padding: 4px 14px; box-shadow: var(--shadow-xs);
             }
-            tbody tr:hover { background: var(--surface); }
-            td { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border-color); text-align: right; }
-            tbody tr td:last-child { border-bottom: none; }
-            td::before { content: attr(data-label); font-weight: 700; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.4px; text-align: left; }
-            td.col-no { display: none; }
-            td.kolom-nama {
+            .wrapper-tabel tbody tr:hover { background: var(--surface); }
+            .wrapper-tabel td { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border-color); text-align: right; }
+            .wrapper-tabel tbody tr td:last-child { border-bottom: none; }
+            .wrapper-tabel td::before { content: attr(data-label); font-weight: 700; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.4px; text-align: left; }
+            .wrapper-tabel td.col-no { display: none; }
+            .wrapper-tabel td.kolom-nama {
                 font-size: 0.98rem; font-weight: 800; padding: 14px 0 10px; text-align: left;
                 justify-content: flex-start;
             }
-            td.kolom-nama::before { content: none; }
-            td.editable.aktif { padding: 8px 10px; }
+            .wrapper-tabel td.kolom-nama::before { content: none; }
+            .wrapper-tabel td.editable.aktif { padding: 8px 10px; }
 
             /* ---- Modal jadi bottom-sheet di HP ---- */
             .modal-overlay { align-items: flex-end; padding: 0; }
@@ -1426,7 +1426,7 @@
             teksKolektif += `Sisa Saldo Kas Kelas: *${document.getElementById('saldo-sisa').innerText}*\n`;
             teksKolektif += `-------------------------------------------\n\n`;
             teksKolektif += `Guys, buat cek rincian tagihan kas kalian masing-masing serta setor/bayar kas, langsung aja cek & scan QRIS di web ya: https://rafianxrpl2.github.io/Keuangan_RPL2_Angkatan7/\n`;
-            teksKolektif += `\n-------------------------------------------\nDemikian informasi ini kami sampaikan. Atas perhatian, kesadaran, dan kerja sama dari rekan-rekan sekalian, kami ucapkan terima kasih.\n\n*Wassalamu'alaikum Wr. Wb.*`;
+            teksKolektif += `\n-------------------------------------------\nDemikian informasi ini kami sampaikan. Atas perhatian, kesadaran, dan kerja sama dari rekan-rekan sekalian, kami ucapkan terima kasih.\n\n*Wassalamu'alaikum Wr. Wb.*\n_- Bendahara XI RPL 2 _`;
 
             navigator.clipboard.writeText(teksKolektif);
             tampilkanToast("Teks broadcast tagihan WhatsApp berhasil disalin! Tinggal paste ke grup kelas.", "success");
