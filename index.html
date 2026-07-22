@@ -6,124 +6,80 @@
     <title>Sistem Kas Realtime - RPL 2</title>
     
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/locales/id.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         /* ==================== 1. VARIABEL & RESET STYLE ==================== */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg-main: #f8fafc;
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #e0e7ff;
+            --bg-main: #f4f6fb;
             --surface: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --success: #10b981;
+            --success-light: #d1fae5;
             --danger: #ef4444;
+            --danger-light: #fee2e2;
             --warning-bg: #fef2f2;
-            --border-color: #e2e8f0;
+            --border-color: #e6eaf1;
             --table-header: #f8fafc;
-            --sidebar-width: 260px;
-            
+            --sidebar-width: 264px;
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.14);
+
             /* Warna khusus kalender */
             --fc-border-color: #e2e8f0;
-            --fc-button-bg-color: #2563eb;
-            --fc-button-border-color: #2563eb;
-            --fc-button-hover-bg-color: #1e40af;
+            --fc-button-bg-color: #4f46e5;
+            --fc-button-border-color: #4f46e5;
+            --fc-button-hover-bg-color: #3730a3;
             --fc-page-bg-color: #ffffff;
         }
 
         [data-theme="dark"] {
-            --bg-main: #0f172a;
-            --surface: #1e293b;
+            --bg-main: #090d17;
+            --surface: #141b2d;
             --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary: #3b82f6;
-            --primary-dark: #1e3a8a;
+            --text-muted: #8b96ac;
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --primary-light: #241f4d;
             --warning-bg: #2d1e1e;
-            --border-color: #334155;
-            --table-header: #1e293b;
+            --border-color: #232c42;
+            --table-header: #1a2236;
+            --success-light: #0f2e24;
+            --danger-light: #34161c;
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.35);
+            --shadow-md: 0 10px 32px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.55);
             
             /* Warna khusus kalender dark mode */
-            --fc-border-color: #334155;
-            --fc-button-bg-color: #3b82f6;
-            --fc-button-border-color: #3b82f6;
-            --fc-button-hover-bg-color: #1e3a8a;
-            --fc-page-bg-color: #1e293b;
-        }
-
-        /* ==================== PILIHAN TEMA WARNA CUSTOM PERANGKAT ==================== */
-        [data-theme="rose"] {
-            --primary: #ec4899;
-            --primary-dark: #be185d;
-            --bg-main: #fdf2f8;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #fbcfe8;
-            --table-header: #fce7f3;
-        }
-
-        [data-theme="purple"] {
-            --primary: #a855f7;
-            --primary-dark: #7e22ce;
-            --bg-main: #faf5ff;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e9d5ff;
-            --table-header: #f3e8ff;
-        }
-
-        [data-theme="mint"] {
-            --primary: #10b981;
-            --primary-dark: #047857;
-            --bg-main: #f0fdf4;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #bbf7d0;
-            --table-header: #dcfce7;
-        }
-
-        [data-theme="peach"] {
-            --primary: #f97316;
-            --primary-dark: #c2410c;
-            --bg-main: #fff7ed;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #fed7aa;
-            --table-header: #ffedd5;
-        }
-
-        [data-theme="yellow"] {
-            --primary: #eab308;
-            --primary-dark: #a16207;
-            --bg-main: #fefce8;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #fef08a;
-            --table-header: #fef9c3;
-        }
-
-        [data-theme="red"] {
-            --primary: #f43f5e;
-            --primary-dark: #be123c;
-            --bg-main: #fff1f2;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #fecdd3;
-            --table-header: #ffe4e6;
+            --fc-border-color: #232c42;
+            --fc-button-bg-color: #6366f1;
+            --fc-button-border-color: #6366f1;
+            --fc-button-hover-bg-color: #4338ca;
+            --fc-page-bg-color: #141b2d;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
@@ -132,7 +88,11 @@
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            -webkit-font-smoothing: antialiased;
         }
+
+        h1, h2, h3, h4 { letter-spacing: -0.01em; }
 
         /* ==================== KUSTOMISASI SCROLLBAR SINKRON TEMA ==================== */
         ::-webkit-scrollbar {
@@ -177,53 +137,74 @@
             position: fixed;
             top: 0; bottom: 0; left: 0;
             z-index: 999;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.25s ease;
         }
 
         .sidebar-header {
-            padding: 20px 16px;
-            background-color: var(--primary-dark);
+            padding: 26px 18px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: white;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .sidebar-header h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
-        .sidebar-header p { font-size: 0.75rem; opacity: 0.8; }
+        .sidebar-header::after {
+            content: "";
+            position: absolute;
+            width: 140px; height: 140px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            top: -60px; right: -40px;
+        }
+        .sidebar-header-icon {
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.16);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.15rem;
+            position: relative; z-index: 1;
+        }
+        .sidebar-header h1 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; position: relative; z-index: 1; letter-spacing: 0.2px; }
+        .sidebar-header p { font-size: 0.72rem; opacity: 0.85; position: relative; z-index: 1; }
 
         .sidebar-menu {
             padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
             flex-grow: 1;
             overflow-y: auto;
         }
 
         .menu-label {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-top: 12px;
-            margin-bottom: 4px;
-            padding-left: 6px;
-            letter-spacing: 0.5px;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            padding-left: 10px;
+            letter-spacing: 0.6px;
+            opacity: 0.75;
         }
 
         .btn {
             width: 100%;
             padding: 10px 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-weight: 600;
             cursor: pointer;
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.2s;
+            transition: all 0.18s ease;
             text-align: left;
             background-color: transparent;
             color: var(--text-main);
+            position: relative;
         }
 
         .btn i {
@@ -232,13 +213,38 @@
             font-size: 1rem;
         }
 
-        .btn:hover { background-color: var(--table-header); }
-        .btn-tab.aktif { background-color: var(--primary); color: white; }
-        .btn-qris { border: 1px solid #10b981; color: #10b981; }
-        .btn-qris:hover { background-color: #10b981; color: white; }
+        .btn:hover { background-color: var(--table-header); transform: translateX(2px); }
+        .btn:active { transform: scale(0.97); }
+        .btn-tab.aktif {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-tab.aktif:hover { transform: none; }
+        .btn-qris { border: 1px solid var(--success); color: var(--success); font-weight: 700; }
+        .btn-qris:hover { background-color: var(--success); color: white; transform: translateX(2px); }
         .btn-admin { border: 1px solid #475569; color: #475569; }
         [data-theme="dark"] .btn-admin { border-color: #94a3b8; color: #94a3b8; }
         .btn-admin.aktif { background-color: var(--danger) !important; color: white !important; border-color: var(--danger); }
+
+        .theme-switch {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px; background: var(--table-header); border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color); cursor: pointer; transition: background .2s ease;
+        }
+        .theme-switch:hover { background: var(--primary-light); }
+        .theme-switch-label { font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .theme-switch-track {
+            width: 42px; height: 23px; border-radius: 20px; background: var(--border-color);
+            position: relative; transition: background .25s ease; flex-shrink: 0;
+        }
+        [data-theme="dark"] .theme-switch-track { background: var(--primary); }
+        .theme-switch-thumb {
+            position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; border-radius: 50%;
+            background: #fff; box-shadow: var(--shadow-xs); transition: transform .25s ease;
+            display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #f59e0b;
+        }
+        [data-theme="dark"] .theme-switch-thumb { transform: translateX(19px); color: var(--primary-dark); }
 
         /* ==================== 3. KONTROL & STRUKTUR UTAMA ==================== */
         main {
@@ -256,94 +262,323 @@
         .mobile-topbar h2 { font-size: 1rem; display: flex; align-items: center; gap: 8px; }
         .btn-toggle-sidebar { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
+        .halaman-header { margin-bottom: 20px; }
+        .halaman-header h1 {
+            font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 10px;
+            color: var(--text-main);
+        }
+        .halaman-header h1 i { color: var(--primary); font-size: 1.15rem; }
+        .halaman-header p { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; margin-left: 30px; }
+
         .panel-kontrol {
-            background-color: var(--surface); padding: 14px 16px; border-radius: 12px;
+            background-color: var(--surface); padding: 14px 16px; border-radius: var(--radius-md);
             margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-color); box-shadow: var(--shadow-xs); gap: 12px; flex-wrap: wrap;
         }
         .filter-grup { display: flex; gap: 8px; align-items: center; }
-        .filter-grup label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+        .filter-grup label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
         select, input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea {
-            padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color);
+            padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
             background-color: var(--surface); color: var(--text-main); font-weight: 600; font-size: 0.85rem; outline: none;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        .panel-summary {
-            background-color: var(--surface); border-left: 4px solid var(--primary);
-            padding: 16px; border-radius: 8px; margin-bottom: 20px;
-            border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+        .search-box {
+            display: flex; align-items: center; gap: 8px; background: var(--table-header);
+            border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 9px 12px;
+            flex: 1; min-width: 160px; max-width: 260px; transition: border-color .15s ease, box-shadow .15s ease;
         }
-        .sub-summary h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-        .sub-summary p { font-size: 1.25rem; font-weight: 700; margin-top: 2px; }
-        .total-sisa { color: var(--primary); }
+        .search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .search-box i { color: var(--text-muted); font-size: 0.82rem; }
+        .search-box input { border: none; background: transparent; padding: 0; width: 100%; font-weight: 600; font-size: 0.85rem; }
+        .search-box input:focus { box-shadow: none; }
+
+        .banner-notif {
+            display: flex; align-items: center; gap: 10px; background: var(--danger-light); color: #b91c1c;
+            border: 1px solid rgba(239,68,68,.25); padding: 12px 16px; border-radius: var(--radius-md);
+            margin-bottom: 16px; font-size: 0.85rem; font-weight: 700;
+        }
+        [data-theme="dark"] .banner-notif { color: #fca5a5; }
+        .banner-notif i { font-size: 1rem; }
+
+        .riwayat-stat-chip { flex: 1; background: var(--table-header); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+        .riwayat-stat-chip .label { font-size: 0.63rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.3px; }
+        .riwayat-stat-chip .value { font-size: 1rem; font-weight: 800; margin-top: 3px; }
+        .riwayat-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--surface); }
+        .riwayat-item .bulan { font-weight: 700; font-size: 0.85rem; }
+        .riwayat-item .nominal { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* ---- Floating Action Button ---- */
+        .fab-container { position: fixed; right: 22px; bottom: 22px; z-index: 500; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+        .fab-main {
+            width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff;
+            font-size: 1.25rem; box-shadow: var(--shadow-md); display: flex; align-items: center; justify-content: center;
+            transition: transform .25s ease;
+        }
+        .fab-main:active { transform: scale(0.92); }
+        .fab-main.aktif { transform: rotate(135deg); }
+        .fab-menu {
+            display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+            opacity: 0; pointer-events: none; transform: translateY(10px) scale(0.95); transition: all .2s ease;
+        }
+        .fab-menu.buka { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+        .fab-item {
+            display: flex; align-items: center; gap: 9px; background: var(--surface); border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm); border-radius: 30px; padding: 11px 18px; font-weight: 700; font-size: 0.82rem;
+            color: var(--text-main); cursor: pointer; white-space: nowrap;
+        }
+        .fab-item:hover { background: var(--table-header); transform: translateX(-2px); }
+        .fab-item i { color: var(--primary); }
+        @media (max-width: 768px) {
+            .fab-container { right: 16px; bottom: 16px; }
+        }
+
+        /* ---- Ringkasan Keuangan: Saldo Hero + Kartu Masuk/Keluar ---- */
+        .dashboard-ringkasan { margin-bottom: 20px; }
+        .saldo-hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 26px 28px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        .saldo-hero::before {
+            content: ""; position: absolute; width: 220px; height: 220px;
+            background: rgba(255,255,255,0.08); border-radius: 50%; top: -110px; right: -50px;
+        }
+        .saldo-hero::after {
+            content: ""; position: absolute; width: 130px; height: 130px;
+            background: rgba(255,255,255,0.06); border-radius: 50%; bottom: -70px; right: 60px;
+        }
+        .saldo-hero-pattern {
+            position: absolute; inset: 0; z-index: 0; opacity: 0.5;
+            background-image: radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px);
+            background-size: 16px 16px;
+            mask-image: linear-gradient(120deg, rgba(0,0,0,0.9), transparent 65%);
+            -webkit-mask-image: linear-gradient(120deg, rgba(0,0,0,0.9), transparent 65%);
+        }
+        .saldo-hero-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+        .saldo-hero-label { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 700; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; }
+        .saldo-hero-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .saldo-hero-value { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 800; margin-top: 10px; position: relative; z-index: 1; letter-spacing: -0.5px; }
+        .saldo-hero-sub { font-size: 0.78rem; opacity: 0.8; margin-top: 6px; position: relative; z-index: 1; }
+
+        .cards-ringkas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .card-ringkas {
+            background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+            box-shadow: var(--shadow-xs); transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .card-ringkas:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .card-ringkas-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+        .card-ringkas.masuk .card-ringkas-icon { background: var(--success-light); color: var(--success); }
+        .card-ringkas.keluar .card-ringkas-icon { background: var(--danger-light); color: var(--danger); }
+        .card-ringkas h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+        .card-ringkas p { font-size: 1.15rem; font-weight: 800; margin-top: 3px; }
+        .total-sisa { color: #ffffff; }
         .total-masuk { color: var(--success); }
         .total-keluar { color: var(--danger); }
 
         .form-box {
-            background-color: var(--surface); padding: 16px; border-radius: 12px;
-            border: 1px solid var(--border-color); margin-bottom: 16px;
+            background-color: var(--surface); padding: 18px; border-radius: var(--radius-md);
+            border: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: var(--shadow-xs);
         }
-        .form-box h3 { font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .form-box h3 { font-size: 1rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
         .form-box-saran {
-            background-color: var(--surface); padding: 16px; border-radius: 12px;
-            border: 1px solid var(--border-color); margin-bottom: 16px;
+            background-color: var(--surface); padding: 16px; border-radius: var(--radius-md);
+            border: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: var(--shadow-xs);
         }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
         .form-grid input, .form-grid select { width: 100%; }
 
         /* ==================== 4. DATA TABLES STYLE ==================== */
         .wrapper-tabel {
-            background-color: var(--surface); border-radius: 12px;
-            overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); margin-bottom: 20px;
+            background-color: var(--surface); border-radius: var(--radius-md);
+            overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color);
+            margin-bottom: 20px; box-shadow: var(--shadow-xs);
         }
         table { width: 100%; border-collapse: collapse; text-align: center; min-width: 560px; }
-        th { background-color: var(--table-header); color: var(--text-muted); padding: 12px; font-size: 0.8rem; font-weight: 700; border-bottom: 2px solid var(--border-color); text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        th { background-color: var(--table-header); color: var(--text-muted); padding: 13px 12px; font-size: 0.74rem; font-weight: 700; border-bottom: 2px solid var(--border-color); text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; }
+        th:first-child { border-top-left-radius: var(--radius-md); }
+        th:last-child { border-top-right-radius: var(--radius-md); }
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); font-size: 0.88rem; }
+        tbody tr { transition: background-color 0.15s ease; }
+        tbody tr:hover { background-color: var(--table-header); }
+        tbody tr:last-child td { border-bottom: none; }
         .kolom-nama { text-align: left; font-weight: 600; color: var(--text-main); padding-left: 16px; }
-        
-        .editable.aktif { background-color: #fffbeb; color: #0f172a; cursor: pointer; font-weight: 600; }
+        .nama-klik { cursor: pointer; transition: color .15s ease; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .nama-klik:hover { color: var(--primary); }
+        .nama-klik-icon { font-size: 0.7rem; color: var(--text-muted); opacity: 0.6; margin-left: auto; }
+        .nama-klik:hover .nama-klik-icon { color: var(--primary); opacity: 1; transform: translateX(2px); }
+
+        .editable.aktif { background-color: #fffbeb; color: #0f172a; cursor: pointer; font-weight: 600; border-radius: 6px; transition: box-shadow .15s ease; }
+        .editable.aktif:focus { box-shadow: inset 0 0 0 2px var(--primary); outline: none; }
         [data-theme="dark"] .editable.aktif { background-color: #453b17; color: #fef08a; }
 
-        .badge { padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
-        .badge-lunas, .badge-sultan { background-color: #dcfce7; color: #15803d; }
-        .badge-nunggak { background-color: #fee2e2; color: #b91c1c; }
-        [data-theme="dark"] .badge-lunas, [data-theme="dark"] .badge-sultan { background-color: #14532d; color: #4ade80; }
-        [data-theme="dark"] .badge-nunggak { background-color: #7f1d1d; color: #fca5a5; }
+        .badge { padding: 5px 11px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+        .badge-lunas, .badge-sultan { background-color: var(--success-light); color: #15803d; }
+        .badge-nunggak { background-color: var(--danger-light); color: #b91c1c; }
+        [data-theme="dark"] .badge-lunas, [data-theme="dark"] .badge-sultan { color: #4ade80; }
+        [data-theme="dark"] .badge-nunggak { color: #fca5a5; }
         
         tr.baris-warning { background-color: var(--warning-bg); }
         tr.baris-warning .kolom-nama { color: #ef4444; }
 
         /* Podiums / Cards */
         .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
-        .card-fitur { background-color: var(--surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; }
-        .card-fitur h3 { font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .card-fitur { background-color: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-xs); }
+        .card-fitur h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.3px; }
         
-        .sultan-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); }
+        .sultan-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--border-color); }
         .sultan-item:last-child { border: none; }
 
         /* Modals & Overlays */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 16px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(5px); z-index: 9999; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px;
         }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .modal-box { background-color: var(--surface); color: var(--text-main); padding: 20px; border-radius: 16px; width: 100%; max-width: 360px; border: 1px solid var(--border-color); text-align: center; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); z-index: 998; }
+        .modal-box {
+            background-color: var(--surface); color: var(--text-main); padding: 22px; border-radius: var(--radius-lg);
+            width: 100%; max-width: 360px; border: 1px solid var(--border-color); text-align: center;
+            box-shadow: var(--shadow-lg); transform: scale(0.94) translateY(8px); opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .modal-overlay.show .modal-box { transform: scale(1) translateY(0); opacity: 1; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.45); z-index: 998; }
 
         /* Link Nota Button */
-        .btn-nota { padding: 4px 8px; font-size: 0.75rem; background-color: var(--table-header); border: 1px solid var(--border-color); border-radius: 4px; text-decoration: none; color: var(--primary); font-weight: bold; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-nota { padding: 5px 10px; font-size: 0.75rem; background-color: var(--table-header); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--primary); font-weight: bold; display: inline-flex; align-items: center; gap: 4px; transition: all .15s ease; }
+        .btn-nota:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
+
+        /* ---- Toast Notification (pengganti alert()) ---- */
+        .toast-container {
+            position: fixed; top: 20px; right: 20px; z-index: 10000;
+            display: flex; flex-direction: column; gap: 10px; max-width: 340px; width: 100%;
+        }
+        .toast {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: var(--surface); color: var(--text-main);
+            border: 1px solid var(--border-color); border-left: 4px solid var(--primary);
+            border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-lg);
+            font-size: 0.85rem; font-weight: 600; line-height: 1.4;
+            animation: toastMasuk 0.3s ease;
+            opacity: 1; transition: opacity .25s ease, transform .25s ease;
+        }
+        .toast.hide { opacity: 0; transform: translateX(30px); }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.info { border-left-color: var(--primary); }
+        .toast-icon { font-size: 1.05rem; margin-top: 1px; flex-shrink: 0; }
+        .toast.success .toast-icon { color: var(--success); }
+        .toast.error .toast-icon { color: var(--danger); }
+        .toast.info .toast-icon { color: var(--primary); }
+        .toast-close { margin-left: auto; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; padding: 0; flex-shrink: 0; }
+        @keyframes toastMasuk {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @media (max-width: 768px) {
+            .toast-container { top: auto; bottom: 92px; right: 16px; left: 16px; max-width: none; }
+        }
+
+        /* ---- Modal Konfirmasi & Info (pengganti confirm()/alert()) ---- */
+        .modal-icon-circle {
+            width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; margin: 0 auto 14px; font-size: 1.3rem;
+        }
+        .modal-icon-circle.danger { background: var(--danger-light); color: var(--danger); }
+        .modal-icon-circle.info { background: var(--primary-light); color: var(--primary); }
+        .modal-pesan-utama { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+        .modal-pesan-sub { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 18px; }
+        .modal-btn-grup { display: flex; gap: 10px; }
+        .modal-btn-grup .btn { justify-content: center; }
+
+        /* ---- Kartu QRIS ---- */
+        .qris-card { background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #eef0f3; box-shadow: var(--shadow-sm); text-align: left; }
+        .qris-card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #f1f2f4; }
+        .qris-logo { font-weight: 900; font-size: 1.15rem; color: #0a0a0a; letter-spacing: -0.5px; line-height: 1; }
+        .qris-logo span { color: #e11d2e; }
+        .qris-logo small { display: block; font-size: 0.55rem; font-weight: 700; color: #6b7280; letter-spacing: 0.2px; margin-top: 2px; text-transform: none; }
+        .qris-gpn { font-weight: 800; color: #e11d2e; font-size: 0.85rem; letter-spacing: 0.5px; }
+        .qris-card-body { padding: 18px 16px; text-align: center; background: #fff; }
+        .qris-merchant-name { font-weight: 800; font-size: 0.95rem; color: #111; }
+        .qris-nmid { font-size: 0.7rem; color: #888; margin: 3px 0 14px; letter-spacing: 0.2px; }
+        .qris-img-wrap { border: 1px solid #eee; border-radius: 12px; padding: 10px; display: inline-block; background: #fff; }
+        .qris-img-wrap img { width: 210px; height: 210px; object-fit: contain; display: block; border-radius: 4px; }
+        .qris-tagline { margin-top: 14px; font-size: 0.72rem; color: #9ca3af; letter-spacing: 0.3px; }
+        .qris-nominal-chip { display: inline-flex; align-items: center; gap: 6px; background: #fef2f2; color: #b91c1c; font-weight: 800; font-size: 0.85rem; padding: 6px 14px; border-radius: 20px; margin-top: 14px; }
+        .qris-instruksi { text-align: left; font-size: 0.82rem; background: var(--table-header); padding: 12px 14px; border-radius: var(--radius-sm); margin: 14px 0; border: 1px solid var(--border-color); color: var(--text-main); }
+        .qris-instruksi ol { margin-left: 16px; margin-top: 4px; }
+
+        /* ---- Transisi Halaman ---- */
+        main > div:not(.hidden) { animation: fadeSlideIn 0.35s ease; }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* ==================== 5. RESPONSIVE (HP) ==================== */
         @media (max-width: 768px) {
             aside { transform: translateX(-100%); }
             aside.buka { transform: translateX(0); }
             .sidebar-overlay.buka { display: block; }
-            main { margin-left: 0; max-width: 100%; padding: 16px; padding-top: 70px; }
+            main { margin-left: 0; max-width: 100%; padding: 16px; padding-top: 74px; }
             .mobile-topbar { display: flex; }
             .panel-kontrol { flex-direction: column; align-items: stretch; gap: 10px; }
-            .panel-summary { grid-template-columns: 1fr; gap: 10px; }
+            .cards-ringkas { grid-template-columns: 1fr; gap: 10px; }
+            .saldo-hero { padding: 22px 20px; }
+            .halaman-header h1 { font-size: 1.15rem; }
+            .halaman-header p { margin-left: 0; }
+
+            /* ---- Tabel jadi kartu di layar kecil ---- */
+            .wrapper-tabel { overflow: visible; background: transparent; border: none; box-shadow: none; }
+            table { min-width: 0; }
+            thead { display: none; }
+            table, tbody, tr, td { display: block; width: 100%; }
+            tbody tr {
+                background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+                margin-bottom: 12px; padding: 4px 14px; box-shadow: var(--shadow-xs);
+            }
+            tbody tr:hover { background: var(--surface); }
+            td { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border-color); text-align: right; }
+            tbody tr td:last-child { border-bottom: none; }
+            td::before { content: attr(data-label); font-weight: 700; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.4px; text-align: left; }
+            td.col-no { display: none; }
+            td.kolom-nama {
+                font-size: 0.98rem; font-weight: 800; padding: 14px 0 10px; text-align: left;
+                justify-content: flex-start;
+            }
+            td.kolom-nama::before { content: none; }
+            td.editable.aktif { padding: 8px 10px; }
+
+            /* ---- Modal jadi bottom-sheet di HP ---- */
+            .modal-overlay { align-items: flex-end; padding: 0; }
+            .modal-box {
+                max-width: 100% !important;
+                width: 100%;
+                border-radius: 22px 22px 0 0 !important;
+                padding: 14px 20px calc(20px + env(safe-area-inset-bottom));
+                max-height: 85vh;
+                overflow-y: auto;
+                transform: translateY(100%);
+            }
+            .modal-box::before {
+                content: "";
+                display: block;
+                width: 38px; height: 4px;
+                background: var(--border-color);
+                border-radius: 3px;
+                margin: 0 auto 14px;
+            }
         }
 
         .hidden { display: none !important; }
@@ -374,7 +609,7 @@
 <body>
 
     <div class="mobile-topbar">
-        <h2><i class="fa-solid fa-wallet"></i> MANAGEMENT KAS v2.0</h2>
+        <h2><i class="fa-solid fa-wallet"></i> MANAGEMENT KAS</h2>
         <button class="btn-toggle-sidebar" onclick="toggleSidebarMobile()">☰</button>
     </div>
 
@@ -382,6 +617,7 @@
 
     <aside id="sidebar-konten">
         <div class="sidebar-header">
+            <div class="sidebar-header-icon"><i class="fa-solid fa-wallet"></i></div>
             <h1>XI RPL 2</h1>
             <p>Sistem Kas Terintegrasi</p>
         </div>
@@ -419,16 +655,10 @@
             
             <div class="menu-label">Pengaturan Tampilan</div>
             <div style="padding: 0 12px; margin-bottom: 10px;">
-                <select id="select-tema-kustom" onchange="gantiTemaPerangkat(this.value)" style="width: 100%; padding: 8px; border-radius: 8px; font-weight: 600; outline: none;">
-                    <option value="light">☀️ Light Mode (Standard)</option>
-                    <option value="dark">🌙 Dark Mode (Default)</option>
-                    <option value="rose">🌸 Rose Sakura (Pink)</option>
-                    <option value="purple">🍇 Purple Orchid (Ungu)</option>
-                    <option value="mint">🍃 Mint Fresh (Hijau)</option>
-                    <option value="peach">🍑 Peach Sunset (Oren)</option>
-                    <option value="yellow">💛 Sunny Yellow (Kuning)</option>
-                    <option value="red">❤️ Red Crimson (Merah)</option>
-                </select>
+                <div class="theme-switch" id="theme-switch" onclick="toggleTemaGelap()">
+                    <span class="theme-switch-label"><i class="fa-solid fa-circle-half-stroke"></i> <span id="theme-switch-text">Light Mode</span></span>
+                    <span class="theme-switch-track"><span class="theme-switch-thumb" id="theme-switch-thumb"><i class="fa-solid fa-sun"></i></span></span>
+                </div>
             </div>
             
             <div class="menu-label" style="margin-top: auto;">Otoritas</div>
@@ -439,23 +669,35 @@
     </aside>
 
     <main>
-        <div style="background-color: var(--primary-dark); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
-            <h1 style="font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px;">SISTEM MONITORING KAS XI RPL 2</h1>
-            <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Sinkronisasi Data Transparan & Realtime Cloud</p>
+        <div class="halaman-header">
+            <h1><i class="fa-solid fa-chart-line"></i> Sistem Monitoring Kas XI RPL 2</h1>
+            <p>Sinkronisasi data transparan &amp; realtime cloud</p>
         </div>
 
-        <div class="panel-summary">
-            <div class="sub-summary">
-                <h4>Sisa Saldo Kas Sekarang</h4>
-                <p class="total-sisa" id="saldo-sisa">Rp 0</p>
+        <div class="dashboard-ringkasan">
+            <div class="saldo-hero">
+                <div class="saldo-hero-pattern"></div>
+                <div class="saldo-hero-top">
+                    <div class="saldo-hero-label"><span class="saldo-hero-icon"><i class="fa-solid fa-wallet"></i></span> Sisa Saldo Kas Sekarang</div>
+                </div>
+                <div class="saldo-hero-value total-sisa" id="saldo-sisa">Rp 0</div>
+                <div class="saldo-hero-sub">Saldo bersih setelah dikurangi seluruh pengeluaran kelas</div>
             </div>
-            <div class="sub-summary">
-                <h4>Total Kas Masuk</h4>
-                <p class="total-masuk" id="saldo-masuk">Rp 0</p>
-            </div>
-            <div class="sub-summary">
-                <h4>Total Pengeluaran</h4>
-                <p class="total-keluar" id="saldo-keluar">Rp 0</p>
+            <div class="cards-ringkas">
+                <div class="card-ringkas masuk">
+                    <span class="card-ringkas-icon"><i class="fa-solid fa-arrow-down"></i></span>
+                    <div>
+                        <h4>Total Kas Masuk</h4>
+                        <p class="total-masuk" id="saldo-masuk">Rp 0</p>
+                    </div>
+                </div>
+                <div class="card-ringkas keluar">
+                    <span class="card-ringkas-icon"><i class="fa-solid fa-arrow-up"></i></span>
+                    <div>
+                        <h4>Total Pengeluaran</h4>
+                        <p class="total-keluar" id="saldo-keluar">Rp 0</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -465,9 +707,17 @@
                     <label>PILIH BULAN DATA: </label>
                     <select id="select-bulan" onchange="renderSesuaiKonteks()"></select>
                 </div>
-                <button class="btn" style="width:auto; background-color: #2563eb; color:white;" onclick="salinTagihanWhatsApp()">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="cari-siswa" placeholder="Cari nama siswa..." oninput="filterSiswaBulanan()">
+                </div>
+                <button class="btn" style="width:auto; background-color: var(--primary); color:white;" onclick="salinTagihanWhatsApp()">
                     <i class="fa-solid fa-bullhorn"></i> Salin Info Tagihan WA
                 </button>
+            </div>
+            <div id="banner-nunggak" class="banner-notif hidden">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="banner-nunggak-text"></span>
             </div>
             <div class="wrapper-tabel">
                 <table>
@@ -488,6 +738,12 @@
         </div>
 
         <div id="halaman-rekap" class="hidden">
+            <div class="card-fitur" style="margin-bottom:16px;">
+                <h3><i class="fa-solid fa-chart-column" style="color:var(--primary);"></i> Grafik Kas Masuk per Bulan</h3>
+                <div style="position:relative; height:220px;">
+                    <canvas id="chart-pemasukan-bulanan"></canvas>
+                </div>
+            </div>
             <div class="cards-container">
                 <div class="card-fitur">
                     <h3><i class="fa-solid fa-crown" style="color:#eab308;"></i> Lencana Sultan Kas (Ter-Rajin)</h3>
@@ -617,18 +873,66 @@
     </main>
 
     <div id="modal-qris" class="modal-overlay">
-        <div class="modal-box">
-            <h2><i class="fa-solid fa-qrcode"></i> QRIS Pembayaran Kas</h2>
-            <p style="color:var(--text-muted); margin: 6px 0 14px 0;">Scan via DANA, GoPay, OVO, ShopeePay, dll</p>
-            <img style="width:200px; height:200px; border-radius:8px; margin-bottom:12px; object-fit:contain;" src="https://imgur.com/a/QXQYJEM" alt="QRIS">
-            <div style="text-align:left; font-size:0.85rem; background:var(--table-header); padding:12px; border-radius:8px; margin-bottom:14px; border:1px solid var(--border-color);">
+        <div class="modal-box" style="max-width: 340px; padding: 16px;">
+            <div class="qris-card">
+                <div class="qris-card-header">
+                    <div class="qris-logo">QR<span>IS</span><small>Standar Pembayaran Nasional</small></div>
+                    <div class="qris-gpn">GPN</div>
+                </div>
+                <div class="qris-card-body">
+                    <div class="qris-merchant-name">Kas Kelas XI RPL 2</div>
+                    <div class="qris-nmid">Scan via DANA, GoPay, OVO, ShopeePay, m-Banking, dll</div>
+                    <div class="qris-img-wrap">
+                        <img src="qris.jpeg" alt="QRIS Kas Kelas">
+                    </div>
+                    <div class="qris-nominal-chip"><i class="fa-solid fa-tag"></i> Nominal Minimum Rp 1.000</div>
+                    <div class="qris-tagline">SATU QRIS UNTUK SEMUA</div>
+                </div>
+            </div>
+            <div class="qris-instruksi">
                 <b>📌 Instruksi:</b>
-                <ol style="margin-left:16px; margin-top:4px;">
-                    <li>Scan nominal wajib Rp20.000.</li>
+                <ol>
+                    <li>Scan nominal minimal Rp1.000.</li>
                     <li>Kirim SS bukti ke bendahara kelas biar status diubah ke Lunas di web ini.</li>
                 </ol>
             </div>
             <button class="btn" style="background:var(--danger); color:white; justify-content:center;" onclick="tutupQRIS()">Tutup</button>
+        </div>
+    </div>
+
+    <div id="modal-riwayat" class="modal-overlay">
+        <div class="modal-box" style="max-width: 400px; text-align: left; max-height: 82vh; display: flex; flex-direction: column;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px;">
+                <div>
+                    <h2 style="font-size: 1.1rem; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary);"></i> Riwayat Setoran</h2>
+                    <p id="riwayat-nama-siswa" style="font-size:0.85rem; color:var(--text-muted); margin-top:2px; font-weight:700;">-</p>
+                </div>
+                <button onclick="tutupRiwayat()" style="background:none; border:none; font-size:1.2rem; color:var(--text-muted); cursor:pointer; line-height:1;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="riwayat-ringkasan" style="display:flex; gap:10px; margin:12px 0;"></div>
+            <div id="riwayat-list-box" style="overflow-y:auto; flex-grow:1; display:flex; flex-direction:column; gap:6px; padding-right:2px;"></div>
+        </div>
+    </div>
+
+    <div id="modal-konfirmasi" class="modal-overlay">
+        <div class="modal-box" style="max-width: 340px;">
+            <div class="modal-icon-circle danger"><i class="fa-solid fa-trash-can"></i></div>
+            <p id="konfirmasi-pesan" class="modal-pesan-utama">-</p>
+            <p class="modal-pesan-sub">Tindakan ini tidak bisa dibatalkan.</p>
+            <div class="modal-btn-grup">
+                <button class="btn" style="background:var(--table-header); color:var(--text-main);" onclick="prosesKonfirmasi(false)">Batal</button>
+                <button class="btn" style="background:var(--danger); color:white;" onclick="prosesKonfirmasi(true)">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-info-agenda" class="modal-overlay">
+        <div class="modal-box" style="max-width: 340px;">
+            <div class="modal-icon-circle info"><i class="fa-solid fa-calendar-day"></i></div>
+            <p style="font-size:0.68rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.4px;">Kegiatan Kelas</p>
+            <p id="info-agenda-judul" style="font-weight:800; font-size:1.05rem; margin:6px 0 4px;">-</p>
+            <p id="info-agenda-tanggal" class="modal-pesan-sub" style="margin-bottom:16px;">-</p>
+            <button class="btn" style="background:var(--primary); color:white; justify-content:center;" onclick="document.getElementById('modal-info-agenda').classList.remove('show')">Tutup</button>
         </div>
     </div>
 
@@ -658,6 +962,7 @@
         let statusAdmin = false;
         let halamanSekarang = "bulanan";
         let kalenderInstansi = null;
+        let grafikPemasukanInstance = null;
         
         let masterDataCloud = {};
         let dataPengeluaranCloud = {};
@@ -687,9 +992,7 @@
 
             const temaDisimpan = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', temaDisimpan);
-            
-            const rdrTema = document.getElementById('select-tema-kustom');
-            if(rdrTema) rdrTema.value = temaDisimpan;
+            perbaruiTampilanSwitchTema(temaDisimpan);
 
             const selectBulan = document.getElementById('select-bulan');
             URUTAN_BULAN.forEach(b => { 
@@ -699,7 +1002,6 @@
             
             bangunStrukturTabel();
             hubungkanKeFirebaseRealtime();
-            inisialisasiObjekKalender();
         }
 
         function toggleSidebarMobile() {
@@ -713,12 +1015,115 @@
             if(kalenderInstansi) kalenderInstansi.render();
         }
 
+        function toggleTemaGelap() {
+            let temaSekarang = document.documentElement.getAttribute('data-theme') || 'light';
+            let temaBaru = temaSekarang === 'dark' ? 'light' : 'dark';
+            gantiTemaPerangkat(temaBaru);
+            perbaruiTampilanSwitchTema(temaBaru);
+        }
+
+        function perbaruiTampilanSwitchTema(tema) {
+            const teks = document.getElementById('theme-switch-text');
+            const thumb = document.getElementById('theme-switch-thumb');
+            if(!teks || !thumb) return;
+            if(tema === 'dark') {
+                teks.innerText = "Dark Mode";
+                thumb.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            } else {
+                teks.innerText = "Light Mode";
+                thumb.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        }
+
         document.getElementById('modal-qris');
         function bukaQRIS() { 
             document.getElementById('modal-qris').classList.add('show'); 
-            if(window.innerWidth <= 768) toggleSidebarMobile();
+            if(window.innerWidth <= 768 && document.getElementById('sidebar-konten').classList.contains('buka')) toggleSidebarMobile();
         }
         function tutupQRIS() { document.getElementById('modal-qris').classList.remove('show'); }
+
+        function bukaRiwayatSiswa(idSiswa) {
+            let nama = DAFTAR_SISWA[idSiswa - 1];
+            document.getElementById('riwayat-nama-siswa').innerText = nama;
+
+            let totalSetahun = 0;
+            let bulanLunas = 0;
+            let listHtml = "";
+
+            URUTAN_BULAN.forEach(b => {
+                let dataBulan = (masterDataCloud[b] && masterDataCloud[b][idSiswa]) || { m1: 0, m2: 0, m3: 0, m4: 0 };
+                let totalBulan = (dataBulan.m1||0) + (dataBulan.m2||0) + (dataBulan.m3||0) + (dataBulan.m4||0);
+                totalSetahun += totalBulan;
+                let namaBulanSaja = b.split(" ")[0];
+                let statusBadge;
+                if (totalBulan >= WAJIB_BAYAR) {
+                    statusBadge = `<span class="badge badge-lunas"><i class="fa-solid fa-circle-check"></i> Lunas</span>`;
+                    bulanLunas++;
+                } else if (totalBulan > 0) {
+                    statusBadge = `<span class="badge badge-nunggak"><i class="fa-solid fa-circle-exclamation"></i> Kurang</span>`;
+                } else {
+                    statusBadge = `<span class="badge badge-nunggak"><i class="fa-solid fa-circle-exclamation"></i> Belum Setor</span>`;
+                }
+
+                listHtml += `
+                    <div class="riwayat-item">
+                        <div>
+                            <div class="bulan">${namaBulanSaja}</div>
+                            <div class="nominal">Rp ${totalBulan.toLocaleString('id-ID')}</div>
+                        </div>
+                        ${statusBadge}
+                    </div>
+                `;
+            });
+
+            document.getElementById('riwayat-ringkasan').innerHTML = `
+                <div class="riwayat-stat-chip"><div class="label">Total Setor</div><div class="value" style="color:var(--primary);">Rp ${totalSetahun.toLocaleString('id-ID')}</div></div>
+                <div class="riwayat-stat-chip"><div class="label">Bulan Lunas</div><div class="value" style="color:var(--success);">${bulanLunas}/${URUTAN_BULAN.length}</div></div>
+            `;
+            document.getElementById('riwayat-list-box').innerHTML = listHtml;
+
+            document.getElementById('modal-riwayat').classList.add('show');
+        }
+        function tutupRiwayat() { document.getElementById('modal-riwayat').classList.remove('show'); }
+
+        function toggleFabMenu() {
+            document.getElementById('fab-menu').classList.toggle('buka');
+            document.getElementById('fab-main').classList.toggle('aktif');
+        }
+
+        /* ---- Toast Notification (pengganti alert()) ---- */
+        function tampilkanToast(pesan, tipe = 'info', durasi = 3800) {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const ikon = tipe === 'success' ? 'fa-circle-check' : (tipe === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info');
+            const el = document.createElement('div');
+            el.className = `toast ${tipe}`;
+            el.innerHTML = `<i class="fa-solid ${ikon} toast-icon"></i><span>${pesan}</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.classList.add('hide');
+                setTimeout(() => el.remove(), 300);
+            }, durasi);
+        }
+
+        /* ---- Modal Konfirmasi (pengganti confirm()) ---- */
+        let resolveKonfirmasi = null;
+        function tampilkanKonfirmasi(pesan) {
+            document.getElementById('konfirmasi-pesan').innerText = pesan;
+            document.getElementById('modal-konfirmasi').classList.add('show');
+            return new Promise((resolve) => { resolveKonfirmasi = resolve; });
+        }
+        function prosesKonfirmasi(hasil) {
+            document.getElementById('modal-konfirmasi').classList.remove('show');
+            if(resolveKonfirmasi) { resolveKonfirmasi(hasil); resolveKonfirmasi = null; }
+        }
+
+        /* ---- Modal Info Agenda (pengganti alert() detail kegiatan) ---- */
+        function tampilkanInfoAgenda(judul, tanggal) {
+            document.getElementById('info-agenda-judul').innerText = judul;
+            document.getElementById('info-agenda-tanggal').innerText = "Tanggal: " + tanggal;
+            document.getElementById('modal-info-agenda').classList.add('show');
+        }
 
         function bukaModalLoginAdmin() {
             if (window.innerWidth <= 768) toggleSidebarMobile();
@@ -753,11 +1158,11 @@
                 document.getElementById('admin-form-pemasukan-lain').classList.remove('hidden');
                 document.querySelectorAll('.editable').forEach(td => td.classList.add('aktif'));
                 document.querySelectorAll('.editable').forEach(td => td.contentEditable = "true");
-                alert("Akses Admin Diterima! Mode Edit Aktif.");
+                tampilkanToast("Akses admin diterima! Mode edit aktif.", "success");
                 renderSesuaiKonteks();
                 hubungkanKeFirebaseRealtime();
             } else {
-                alert("Password Bendahara Salah / Ditolak!");
+                tampilkanToast("Password bendahara salah / ditolak!", "error");
             }
         }
 
@@ -772,7 +1177,7 @@
             document.getElementById('admin-form-pemasukan-lain').classList.add('hidden');
             document.querySelectorAll('.editable').forEach(td => td.classList.remove('aktif'));
             document.querySelectorAll('.editable').forEach(td => td.contentEditable = "false");
-            alert("Mode Bendahara Dinonaktifkan.");
+            tampilkanToast("Mode bendahara dinonaktifkan.", "info");
             renderSesuaiKonteks();
             hubungkanKeFirebaseRealtime();
         }
@@ -784,13 +1189,13 @@
                 let idSiswa = i + 1;
                 bodyBulanan.innerHTML += `
                     <tr class="row-siswa" id="row-${idSiswa}" data-id="${idSiswa}">
-                        <td>${idSiswa}</td>
-                        <td class="kolom-nama">${nama}</td>
-                        <td class="editable m1" data-minggu="m1">0</td>
-                        <td class="editable m2" data-minggu="m2">0</td>
-                        <td class="editable m3" data-minggu="m3">0</td>
-                        <td class="editable m4" data-minggu="m4">0</td>
-                        <td><span class="badge" id="badge-${idSiswa}">-</span></td>
+                        <td class="col-no" data-label="No">${idSiswa}</td>
+                        <td class="kolom-nama nama-klik" data-label="Nama" onclick="bukaRiwayatSiswa(${idSiswa})">${nama} <i class="fa-solid fa-chevron-right nama-klik-icon"></i></td>
+                        <td class="editable m1" data-minggu="m1" data-label="Minggu 1">0</td>
+                        <td class="editable m2" data-minggu="m2" data-label="Minggu 2">0</td>
+                        <td class="editable m3" data-minggu="m3" data-label="Minggu 3">0</td>
+                        <td class="editable m4" data-minggu="m4" data-label="Minggu 4">0</td>
+                        <td data-label="Status"><span class="badge" id="badge-${idSiswa}">-</span></td>
                     </tr>
                 `;
             });
@@ -895,18 +1300,20 @@
         function tambahPemasukanLainCloud() {
             let sumber = document.getElementById('in-sumber').value;
             let nominal = parseInt(document.getElementById('in-nominal').value);
-            if(!sumber || !nominal) return alert("Lengkapi Form Pemasukan!");
+            if(!sumber || !nominal) return tampilkanToast("Lengkapi form pemasukan dulu ya!", "error");
             let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
             let nodeRef = window.fbRef(window.fbDatabase, "Pemasukan_Lain_Kas");
             window.fbPush(nodeRef, { tanggal: tgl, sumber, nominal });
             document.getElementById('in-sumber').value = "";
             document.getElementById('in-nominal').value = "";
+            tampilkanToast("Pemasukan luar berhasil ditambahkan!", "success");
         }
 
-        function hapusPemasukanLain(key) {
+        async function hapusPemasukanLain(key) {
             if(!statusAdmin) return;
-            if(confirm("Hapus data pemasukan luar ini?")) {
+            if(await tampilkanKonfirmasi("Hapus data pemasukan luar ini?")) {
                 window.fbSet(window.fbRef(window.fbDatabase, `Pemasukan_Lain_Kas/${key}`), null);
+                tampilkanToast("Data pemasukan berhasil dihapus.", "success");
             }
         }
 
@@ -914,33 +1321,36 @@
             let keperluan = document.getElementById('out-keperluan').value;
             let nominal = parseInt(document.getElementById('out-nominal').value);
             let nota = document.getElementById('out-nota').value || "#";
-            if(!keperluan || !nominal) return alert("Lengkapi Form Pengeluaran!");
+            if(!keperluan || !nominal) return tampilkanToast("Lengkapi form pengeluaran dulu ya!", "error");
             let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
             let nodeRef = window.fbRef(window.fbDatabase, "Pengeluaran_Kas");
             window.fbPush(nodeRef, { tanggal: tgl, keperluan, nominal, nota });
             document.getElementById('out-keperluan').value = "";
             document.getElementById('out-nominal').value = "";
             document.getElementById('out-nota').value = "";
+            tampilkanToast("Pengeluaran berhasil dicatat!", "success");
         }
 
         function tambahAnggaranCloud() {
             let kegiatan = document.getElementById('plan-kegiatan').value;
             let estimasi = parseInt(document.getElementById('plan-estimasi').value);
-            if(!kegiatan || !estimasi) return alert("Lengkapi data anggaran!");
+            if(!kegiatan || !estimasi) return tampilkanToast("Lengkapi data anggaran dulu ya!", "error");
             let nodeRef = window.fbRef(window.fbDatabase, "Anggaran_Kas");
             window.fbPush(nodeRef, { kegiatan, estimasi });
             document.getElementById('plan-kegiatan').value = "";
             document.getElementById('plan-estimasi').value = "";
+            tampilkanToast("Rencana anggaran berhasil ditambahkan!", "success");
         }
 
         function htmlEscape(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        function hapusAnggaran(key) {
+        async function hapusAnggaran(key) {
             if(!statusAdmin) return;
-            if(confirm("Hapus rencana anggaran ini?")) {
+            if(await tampilkanKonfirmasi("Hapus rencana anggaran ini?")) {
                 window.fbSet(window.fbRef(window.fbDatabase, `Anggaran_Kas/${key}`), null);
+                tampilkanToast("Rencana anggaran berhasil dihapus.", "success");
             }
         }
 
@@ -948,23 +1358,23 @@
             let tanggal = document.getElementById('cal-tanggal').value;
             let namaKegiatan = document.getElementById('cal-nama').value;
             let warna = document.getElementById('cal-warna').value;
-            if(!tanggal || !namaKegiatan.trim()) return alert("Pilih tanggal dan isi nama kegiatannya dahulu!");
+            if(!tanggal || !namaKegiatan.trim()) return tampilkanToast("Pilih tanggal dan isi nama kegiatannya dahulu!", "error");
             let nodeRef = window.fbRef(window.fbDatabase, "Agenda_Kalender");
             window.fbPush(nodeRef, { title: namaKegiatan, start: tanggal, backgroundColor: warna });
-            alert("Agenda kas berhasil ditambahkan ke kalender kelas!");
+            tampilkanToast("Agenda kas berhasil ditambahkan ke kalender kelas!", "success");
             document.getElementById('cal-nama').value = "";
             document.getElementById('cal-tanggal').value = "";
         }
 
-        function aksiKlikEventKalender(info) {
+        async function aksiKlikEventKalender(info) {
             if(!statusAdmin) {
-                alert(`📌 Kegiatan Kelas:\n"${info.event.title}"\nTanggal: ${info.event.startStr}`);
+                tampilkanInfoAgenda(info.event.title, info.event.startStr);
                 return;
             }
-            if(confirm(`Apakah kamu (Bendahara) ingin menghapus penanda agenda:\n"${info.event.title}" dari kalender?`)) {
+            if(await tampilkanKonfirmasi(`Hapus penanda agenda "${info.event.title}" dari kalender?`)) {
                 let eventIdInFirebase = info.event.id;
                 window.fbSet(window.fbRef(window.fbDatabase, `Agenda_Kalender/${eventIdInFirebase}`), null);
-                alert("Agenda berhasil didelete!");
+                tampilkanToast("Agenda berhasil dihapus!", "success");
             }
         }
 
@@ -993,17 +1403,18 @@
 
         function kirimSaranCloud() {
             let teks = document.getElementById('saran-teks').value;
-            if(!teks.trim()) return alert("Tulis dulu saran kamu!");
+            if(!teks.trim()) return tampilkanToast("Tulis dulu saran kamu!", "error");
             let nodeRef = window.fbRef(window.fbDatabase, "Saran_Kelas");
             window.fbPush(nodeRef, htmlEscape(teks));
-            alert("Aspirasi berhasil dikirim secara anonim! Terima kasih.");
+            tampilkanToast("Aspirasi berhasil dikirim secara anonim! Terima kasih.", "success");
             document.getElementById('saran-teks').value = "";
         }
 
-        function hapusSaranCloud(key) {
+        async function hapusSaranCloud(key) {
             if(!statusAdmin) return;
-            if(confirm("Apakah kamu yakin ingin menghapus saran/kritik ini karena kurang bagus?")) {
+            if(await tampilkanKonfirmasi("Hapus saran/kritik ini karena kurang bagus?")) {
                 window.fbSet(window.fbRef(window.fbDatabase, `Saran_Kelas/${key}`), null);
+                tampilkanToast("Saran berhasil dihapus.", "success");
             }
         }
 
@@ -1014,34 +1425,11 @@
             let teksKolektif = `*Assalamu'alaikum Wr. Wb.*\n\nSelamat pagi/siang rekan-rekan XI RPL 2, semoga selalu dalam keadaan sehat. Berikut kami lampirkan laporan pembukuan serta rincian tagihan kas untuk *Bulan ${namaBulanSaja.toUpperCase()}*.\n\n`;
             teksKolektif += `Sisa Saldo Kas Kelas: *${document.getElementById('saldo-sisa').innerText}*\n`;
             teksKolektif += `-------------------------------------------\n\n`;
-            teksKolektif += `Guys, yuk yang namanya masih ada di list di bawah ini, segera disetor ya uang kasnya biar program kerja kelas kita bisa jalan terus! 🚀\n\n`;
-
-            let adaPenunggak = false;
-            document.querySelectorAll('.row-siswa').forEach(row => {
-                let badge = row.querySelector('.badge');
-                if(badge && badge.innerText.includes("Nunggak")) {
-                    let nama = row.querySelector('.kolom-nama').innerText;
-                    let m1 = parseInt(row.querySelector('.m1').innerText) || 0;
-                    let m2 = parseInt(row.querySelector('.m2').innerText) || 0;
-                    let m3 = parseInt(row.querySelector('.m3').innerText) || 0;
-                    let m4 = parseInt(row.querySelector('.m4').innerText) || 0;
-                    let totalSetor = m1 + m2 + m3 + m4;
-                    let kekurangan = WAJIB_BAYAR - totalSetor;
-
-                    teksKolektif += `▪️ *${nama}* (Kurang: Rp ${kekurangan.toLocaleString('id-ID')})\n`;
-                    adaPenunggak = true;
-                }
-            });
-
-            if(!adaPenunggak) {
-                teksKolektif += `🎉 *Alhamdulillah, bulan ini semuanya sudah Lunas! Terima kasih banyak atas kerja samanya guys!*`;
-            } else {
-                teksKolektif += `\nBiar gampang, kalian bisa langsung scan QRIS kelas di web ya: rafianxrpl2.github.io/Keuangan_RPL2\n`;
-            }
-            teksKolektif += `\n-------------------------------------------\nDemikian informasi ini kami sampaikan. Atas perhatian, kesadaran, dan kerja sama dari rekan-rekan sekalian, kami ucapkan terima kasih.\n\n*Wassalamu'alaikum Wr. Wb.*\n_- Bendahara XI RPL 2 _`;
+            teksKolektif += `Guys, buat cek rincian tagihan kas kalian masing-masing serta setor/bayar kas, langsung aja cek & scan QRIS di web ya: https://rafianxrpl2.github.io/Keuangan_RPL2_Angkatan7/\n`;
+            teksKolektif += `\n-------------------------------------------\nDemikian informasi ini kami sampaikan. Atas perhatian, kesadaran, dan kerja sama dari rekan-rekan sekalian, kami ucapkan terima kasih.\n\n*Wassalamu'alaikum Wr. Wb.*`;
 
             navigator.clipboard.writeText(teksKolektif);
-            alert("Teks broadcast tagihan WhatsApp berhasil disalin ke clipboard! Tinggal paste ke grup kelas.");
+            tampilkanToast("Teks broadcast tagihan WhatsApp berhasil disalin! Tinggal paste ke grup kelas.", "success");
         }
 
         function renderSesuaiKonteks() {
@@ -1050,14 +1438,19 @@
             else if(halamanSekarang === "pengeluaran") renderHalamanPengeluaran();
             else if(halamanSekarang === "anggaran") renderHalamanAnggaran();
             else if(halamanSekarang === "pemasukan-lain") renderHalamanPemasukanLain();
-            else if(halamanSekarang === "kalender" && kalenderInstansi) {
-                setTimeout(() => { kalenderInstansi.updateSize(); }, 50);
+            else if(halamanSekarang === "kalender") {
+                if(!kalenderInstansi) {
+                    inisialisasiObjekKalender();
+                    renderUlangDataKalender();
+                }
+                setTimeout(() => { if(kalenderInstansi) kalenderInstansi.updateSize(); }, 60);
             }
         }
 
         function renderHalamanBulanan() {
     let bulanAktif = document.getElementById('select-bulan').value;
     let indeksBulanAktif = URUTAN_BULAN.indexOf(bulanAktif);
+    let jumlahNunggak = 0;
 
     document.querySelectorAll('.row-siswa').forEach(row => {
         let idSiswa = row.getAttribute('data-id');
@@ -1105,10 +1498,36 @@
                 badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Nunggak`;
             }
             badge.className = "badge badge-nunggak";
+            jumlahNunggak++;
             if(statusAdmin) row.classList.add('baris-warning');
         }
     });
+
+    perbaruiBannerNunggak(jumlahNunggak);
+    filterSiswaBulanan();
 }
+
+        function perbaruiBannerNunggak(jumlah) {
+            const banner = document.getElementById('banner-nunggak');
+            const teks = document.getElementById('banner-nunggak-text');
+            if(!banner || !teks) return;
+            if(jumlah > 0) {
+                teks.innerText = `${jumlah} siswa belum lunas kas bulan ini.`;
+                banner.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        function filterSiswaBulanan() {
+            const inputCari = document.getElementById('cari-siswa');
+            if(!inputCari) return;
+            let kataKunci = inputCari.value.trim().toLowerCase();
+            document.querySelectorAll('.row-siswa').forEach(row => {
+                let nama = row.querySelector('.kolom-nama').innerText.toLowerCase();
+                row.style.display = nama.includes(kataKunci) ? "" : "none";
+            });
+        }
         /* ==================== UPDATE LOGIKA VALIDASI BULANAN REKAP ==================== */
         function renderHalamanRekap() {
     let bodyRekap = document.getElementById('body-tabel-rekap');
@@ -1162,14 +1581,69 @@
             
         bodyRekap.innerHTML += `
             <tr>
-                <td>${idx+1}</td>
-                <td class="kolom-nama">${s.nama}</td>
-                <td><b>Rp ${s.total.toLocaleString('id-ID')}</b></td>
-                <td>${statusGlobal}</td>
+                <td class="col-no" data-label="No">${idx+1}</td>
+                <td class="kolom-nama" data-label="Nama">${s.nama}</td>
+                <td data-label="Total Setor"><b>Rp ${s.total.toLocaleString('id-ID')}</b></td>
+                <td data-label="Status">${statusGlobal}</td>
             </tr>
         `;
     });
+
+    // ---- Grafik total kas masuk per bulan ----
+    let labelBulanChart = URUTAN_BULAN.map(b => b.split(" ")[0]);
+    let dataPerBulan = URUTAN_BULAN.map(b => {
+        let dataBulan = masterDataCloud[b] || {};
+        let totalBulanIni = 0;
+        Object.keys(dataBulan).forEach(id => {
+            let s = dataBulan[id] || {};
+            totalBulanIni += (s.m1||0) + (s.m2||0) + (s.m3||0) + (s.m4||0);
+        });
+        return totalBulanIni;
+    });
+    renderGrafikPemasukan(labelBulanChart, dataPerBulan);
 }
+
+        function renderGrafikPemasukan(labels, data) {
+            const canvasEl = document.getElementById('chart-pemasukan-bulanan');
+            if(!canvasEl || typeof Chart === 'undefined') return;
+            const warnaPrimer = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#4f46e5';
+            const warnaTeks = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#64748b';
+            const warnaGrid = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#e6eaf1';
+
+            if(grafikPemasukanInstance) {
+                grafikPemasukanInstance.data.labels = labels;
+                grafikPemasukanInstance.data.datasets[0].data = data;
+                grafikPemasukanInstance.data.datasets[0].backgroundColor = warnaPrimer;
+                grafikPemasukanInstance.options.scales.x.ticks.color = warnaTeks;
+                grafikPemasukanInstance.options.scales.y.ticks.color = warnaTeks;
+                grafikPemasukanInstance.options.scales.y.grid.color = warnaGrid;
+                grafikPemasukanInstance.update();
+                return;
+            }
+
+            grafikPemasukanInstance = new Chart(canvasEl.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Kas Masuk',
+                        data: data,
+                        backgroundColor: warnaPrimer,
+                        borderRadius: 6,
+                        maxBarThickness: 34
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: warnaTeks, font: { size: 11 } } },
+                        y: { grid: { color: warnaGrid }, ticks: { color: warnaTeks, font: { size: 11 }, callback: v => 'Rp ' + (v/1000) + 'k' } }
+                    }
+                }
+            });
+        }
 
         function renderHalamanPemasukanLain() {
             let bodyPemasukanLain = document.getElementById('body-tabel-pemasukan-lain');
@@ -1179,10 +1653,10 @@
                 let btnHapusAction = statusAdmin ? `<button onclick="hapusPemasukanLain('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:0.75rem;">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
                 bodyPemasukanLain.innerHTML += `
                     <tr>
-                        <td>${item.tanggal}</td>
-                        <td style="text-align:left; font-weight:600;">💰 ${item.sumber}</td>
-                        <td class="total-masuk" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
-                        <td>${btnHapusAction}</td>
+                        <td data-label="Tanggal">${item.tanggal}</td>
+                        <td class="kolom-nama" data-label="Sumber">💰 ${item.sumber}</td>
+                        <td class="total-masuk" data-label="Nominal" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
+                        <td data-label="Aksi">${btnHapusAction}</td>
                     </tr>
                 `;
             });
@@ -1197,10 +1671,10 @@
                 let linkNota = item.nota !== "#" ? `<a href="${item.nota}" target="_blank" class="btn-nota"><i class="fa-solid fa-eye"></i> Nota</a>` : `<span style="color:var(--text-muted); font-size:0.8rem;">Tidak ada</span>`;
                 bodyPengeluaran.innerHTML += `
                     <tr>
-                        <td>${item.tanggal}</td>
-                        <td style="text-align:left; font-weight:600;">${item.keperluan}</td>
-                        <td class="total-keluar" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
-                        <td>${linkNota}</td>
+                        <td data-label="Tanggal">${item.tanggal}</td>
+                        <td class="kolom-nama" data-label="Keperluan">${item.keperluan}</td>
+                        <td class="total-keluar" data-label="Nominal" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
+                        <td data-label="Nota">${linkNota}</td>
                     </tr>
                 `;
             });
@@ -1215,9 +1689,9 @@
                 let btnHapusAction = statusAdmin ? `<button onclick="hapusAnggaran('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:0.75rem;">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
                 bodyAnggaran.innerHTML += `
                     <tr>
-                        <td style="text-align:left; font-weight:600;">📌 ${item.kegiatan}</td>
-                        <td style="font-weight:700; color:var(--primary);">Rp ${parseInt(item.estimasi).toLocaleString('id-ID')}</td>
-                        <td>${btnHapusAction}</td>
+                        <td class="kolom-nama" data-label="Kegiatan">📌 ${item.kegiatan}</td>
+                        <td data-label="Estimasi" style="font-weight:700; color:var(--primary);">Rp ${parseInt(item.estimasi).toLocaleString('id-ID')}</td>
+                        <td data-label="Aksi">${btnHapusAction}</td>
                     </tr>
                 `;
             });
@@ -1240,5 +1714,14 @@
             renderSesuaiKonteks();
         }
     </script>
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="fab-container">
+        <div class="fab-menu" id="fab-menu">
+            <button class="fab-item" onclick="bukaQRIS(); toggleFabMenu()"><span>Scan QRIS</span> <i class="fa-solid fa-qrcode"></i></button>
+            <button class="fab-item" onclick="salinTagihanWhatsApp(); toggleFabMenu()"><span>Broadcast WA</span> <i class="fa-solid fa-bullhorn"></i></button>
+        </div>
+        <button class="fab-main" id="fab-main" onclick="toggleFabMenu()"><i class="fa-solid fa-bolt"></i></button>
+    </div>
 </body>
 </html>
