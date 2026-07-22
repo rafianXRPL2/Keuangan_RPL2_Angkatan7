@@ -558,6 +558,7 @@
                 justify-content: flex-start;
             }
             td.kolom-nama::before { content: none; }
+            td.editable.aktif { padding: 8px 10px; }
 
             /* ---- Modal jadi bottom-sheet di HP ---- */
             .modal-overlay { align-items: flex-end; padding: 0; }
@@ -1424,30 +1425,7 @@
             let teksKolektif = `*Assalamu'alaikum Wr. Wb.*\n\nSelamat pagi/siang rekan-rekan XI RPL 2, semoga selalu dalam keadaan sehat. Berikut kami lampirkan laporan pembukuan serta rincian tagihan kas untuk *Bulan ${namaBulanSaja.toUpperCase()}*.\n\n`;
             teksKolektif += `Sisa Saldo Kas Kelas: *${document.getElementById('saldo-sisa').innerText}*\n`;
             teksKolektif += `-------------------------------------------\n\n`;
-            teksKolektif += `Guys, yuk yang namanya masih ada di list di bawah ini, segera disetor ya uang kasnya biar program kerja kelas kita bisa jalan terus! 🚀\n\n`;
-
-            let adaPenunggak = false;
-            document.querySelectorAll('.row-siswa').forEach(row => {
-                let badge = row.querySelector('.badge');
-                if(badge && badge.innerText.includes("Nunggak")) {
-                    let nama = row.querySelector('.kolom-nama').innerText;
-                    let m1 = parseInt(row.querySelector('.m1').innerText) || 0;
-                    let m2 = parseInt(row.querySelector('.m2').innerText) || 0;
-                    let m3 = parseInt(row.querySelector('.m3').innerText) || 0;
-                    let m4 = parseInt(row.querySelector('.m4').innerText) || 0;
-                    let totalSetor = m1 + m2 + m3 + m4;
-                    let kekurangan = WAJIB_BAYAR - totalSetor;
-
-                    teksKolektif += `▪️ *${nama}* (Kurang: Rp ${kekurangan.toLocaleString('id-ID')})\n`;
-                    adaPenunggak = true;
-                }
-            });
-
-            if(!adaPenunggak) {
-                teksKolektif += `🎉 *Alhamdulillah, bulan ini semuanya sudah Lunas! Terima kasih banyak atas kerja samanya guys!*`;
-            } else {
-                teksKolektif += `\nBiar gampang, kalian bisa langsung scan QRIS kelas di web ya: rafianxrpl2.github.io/Keuangan_RPL2\n`;
-            }
+            teksKolektif += `Guys, buat cek rincian tagihan kas kalian masing-masing serta setor/bayar kas, langsung aja cek & scan QRIS di web ya: https://rafianxrpl2.github.io/Keuangan_RPL2_Angkatan7/\n`;
             teksKolektif += `\n-------------------------------------------\nDemikian informasi ini kami sampaikan. Atas perhatian, kesadaran, dan kerja sama dari rekan-rekan sekalian, kami ucapkan terima kasih.\n\n*Wassalamu'alaikum Wr. Wb.*\n_- Bendahara XI RPL 2 _`;
 
             navigator.clipboard.writeText(teksKolektif);
@@ -1464,9 +1442,8 @@
                 if(!kalenderInstansi) {
                     inisialisasiObjekKalender();
                     renderUlangDataKalender();
-                } else {
-                    setTimeout(() => { kalenderInstansi.updateSize(); }, 50);
                 }
+                setTimeout(() => { if(kalenderInstansi) kalenderInstansi.updateSize(); }, 60);
             }
         }
 
