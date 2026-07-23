@@ -29,6 +29,9 @@
             --danger: #ef4444;
             --danger-light: #fee2e2;
             --warning-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --warning-text: #92400e;
             --border-color: #e6eaf1;
             --table-header: #f8fafc;
             --sidebar-width: 264px;
@@ -58,6 +61,9 @@
             --primary-dark: #4338ca;
             --primary-light: #241f4d;
             --warning-bg: #2d1e1e;
+            --warning: #f59e0b;
+            --warning-light: #3a2a10;
+            --warning-text: #fbbf24;
             --border-color: #232c42;
             --table-header: #1a2236;
             --success-light: #0f2e24;
@@ -241,6 +247,27 @@
         [data-theme="dark"] .btn-admin { border-color: #94a3b8; color: #94a3b8; }
         .btn-admin.aktif { background-color: var(--danger) !important; color: white !important; border-color: var(--danger); }
 
+        /* ---- Varian warna tombol (dipakai lewat class, bukan inline style) ---- */
+        .btn-auto { width: auto; }
+        .btn-primary, .btn-success, .btn-danger, .btn-neutral { justify-content: center; }
+        .btn-primary { background-color: var(--primary); color: #ffffff; }
+        .btn-success { background-color: var(--success); color: #ffffff; }
+        .btn-danger { background-color: var(--danger); color: #ffffff; }
+        .btn-neutral { background-color: var(--table-header); color: var(--text-main); }
+        .btn-primary:hover { background-color: var(--primary-dark); transform: none; }
+        .btn-success:hover { filter: brightness(0.93); transform: none; }
+        .btn-danger:hover { filter: brightness(0.93); transform: none; }
+        .btn-neutral:hover { background-color: var(--border-color); transform: none; }
+
+        .btn-hapus-sm {
+            background-color: var(--danger); color: #ffffff; border: none; padding: 5px 10px;
+            border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.75rem; transition: filter .15s ease;
+        }
+        .btn-hapus-sm:hover { filter: brightness(0.93); }
+
+        /* ---- Label form tetap (menggantikan pola placeholder-only) ---- */
+        .form-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
+
         .theme-switch {
             display: flex; align-items: center; justify-content: space-between;
             padding: 10px 12px; background: var(--table-header); border-radius: var(--radius-sm);
@@ -256,7 +283,7 @@
         .theme-switch-thumb {
             position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; border-radius: 50%;
             background: #fff; box-shadow: var(--shadow-xs); transition: transform .25s ease;
-            display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #f59e0b;
+            display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--warning);
         }
         [data-theme="dark"] .theme-switch-thumb { transform: translateX(19px); color: var(--primary-dark); }
 
@@ -265,7 +292,7 @@
             flex-grow: 1;
             margin-left: var(--sidebar-width);
             padding: 24px;
-            max-width: calc(100% - var(--sidebar-width));
+            max-width: min(1200px, calc(100% - var(--sidebar-width)));
         }
 
         .mobile-topbar {
@@ -321,10 +348,10 @@
 
         .riwayat-stat-chip { flex: 1; background: var(--table-header); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
         .riwayat-stat-chip .label { font-size: 0.63rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.3px; }
-        .riwayat-stat-chip .value { font-size: 1rem; font-weight: 800; margin-top: 3px; }
+        .riwayat-stat-chip .value { font-size: 1rem; font-weight: 800; margin-top: 3px; font-variant-numeric: tabular-nums; }
         .riwayat-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--surface); }
         .riwayat-item .bulan { font-weight: 700; font-size: 0.85rem; }
-        .riwayat-item .nominal { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .riwayat-item .nominal { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
 
         /* ---- Floating Action Button ---- */
         .fab-container { position: fixed; right: 22px; bottom: 22px; z-index: 500; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
@@ -382,7 +409,7 @@
         .saldo-hero-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
         .saldo-hero-label { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 700; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; }
         .saldo-hero-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-        .saldo-hero-value { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 800; margin-top: 10px; position: relative; z-index: 1; letter-spacing: -0.5px; }
+        .saldo-hero-value { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 800; margin-top: 10px; position: relative; z-index: 1; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
         .saldo-hero-sub { font-size: 0.78rem; opacity: 0.8; margin-top: 6px; position: relative; z-index: 1; }
 
         .cards-ringkas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
@@ -396,7 +423,7 @@
         .card-ringkas.masuk .card-ringkas-icon { background: var(--success-light); color: var(--success); }
         .card-ringkas.keluar .card-ringkas-icon { background: var(--danger-light); color: var(--danger); }
         .card-ringkas h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
-        .card-ringkas p { font-size: 1.15rem; font-weight: 800; margin-top: 3px; }
+        .card-ringkas p { font-size: 1.15rem; font-weight: 800; margin-top: 3px; font-variant-numeric: tabular-nums; }
         .total-sisa { color: #ffffff; }
         .total-masuk { color: var(--success); }
         .total-keluar { color: var(--danger); }
@@ -423,7 +450,7 @@
         .wrapper-tabel th { background-color: var(--table-header); color: var(--text-muted); padding: 13px 12px; font-size: 0.74rem; font-weight: 700; border-bottom: 2px solid var(--border-color); text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; }
         .wrapper-tabel th:first-child { border-top-left-radius: var(--radius-md); }
         .wrapper-tabel th:last-child { border-top-right-radius: var(--radius-md); }
-        .wrapper-tabel td { padding: 12px; border-bottom: 1px solid var(--border-color); font-size: 0.88rem; }
+        .wrapper-tabel td { padding: 12px; border-bottom: 1px solid var(--border-color); font-size: 0.88rem; font-variant-numeric: tabular-nums; }
         .wrapper-tabel tbody tr { transition: background-color 0.15s ease; }
         .wrapper-tabel tbody tr:hover { background-color: var(--table-header); }
         .wrapper-tabel tbody tr:last-child td { border-bottom: none; }
@@ -433,9 +460,8 @@
         .nama-klik-icon { font-size: 0.7rem; color: var(--text-muted); opacity: 0.6; margin-left: auto; }
         .nama-klik:hover .nama-klik-icon { color: var(--primary); opacity: 1; transform: translateX(2px); }
 
-        .editable.aktif { background-color: #fffbeb; color: #0f172a; cursor: pointer; font-weight: 600; border-radius: 6px; transition: box-shadow .15s ease; }
+        .editable.aktif { background-color: var(--warning-light); color: var(--warning-text); cursor: pointer; font-weight: 600; border-radius: 6px; transition: box-shadow .15s ease, background-color .25s ease, color .25s ease; }
         .editable.aktif:focus { box-shadow: inset 0 0 0 2px var(--primary); outline: none; }
-        [data-theme="dark"] .editable.aktif { background-color: #453b17; color: #fef08a; }
 
         .badge { padding: 5px 11px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
         .badge-lunas, .badge-sultan { background-color: var(--success-light); color: #15803d; }
@@ -529,7 +555,7 @@
         .qris-img-wrap { border: 1px solid #eee; border-radius: 12px; padding: 10px; display: inline-block; background: #fff; }
         .qris-img-wrap img { width: 210px; height: 210px; object-fit: contain; display: block; border-radius: 4px; }
         .qris-tagline { margin-top: 14px; font-size: 0.72rem; color: #9ca3af; letter-spacing: 0.3px; }
-        .qris-nominal-chip { display: inline-flex; align-items: center; gap: 6px; background: #fef2f2; color: #b91c1c; font-weight: 800; font-size: 0.85rem; padding: 6px 14px; border-radius: 20px; margin-top: 14px; }
+        .qris-nominal-chip { display: inline-flex; align-items: center; gap: 6px; background: #fef2f2; color: #b91c1c; font-weight: 800; font-size: 0.85rem; padding: 6px 14px; border-radius: 20px; margin-top: 14px; font-variant-numeric: tabular-nums; }
         .qris-instruksi { text-align: left; font-size: 0.82rem; background: var(--table-header); padding: 12px 14px; border-radius: var(--radius-sm); margin: 14px 0; border: 1px solid var(--border-color); color: var(--text-main); }
         .qris-instruksi ol { margin-left: 16px; margin-top: 4px; }
 
@@ -610,6 +636,22 @@
         }
 
         .hidden { display: none !important; }
+
+        /* ---- Overlay loading saat data Firebase pertama kali nyambung ---- */
+        .loading-overlay {
+            position: fixed; inset: 0; z-index: 20000;
+            background-color: var(--bg-main);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+            transition: opacity 0.3s ease;
+        }
+        .loading-spinner {
+            width: 38px; height: 38px; border-radius: 50%;
+            border: 3px solid var(--border-color); border-top-color: var(--primary);
+            animation: putarLoading 0.8s linear infinite;
+        }
+        .loading-overlay p { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        @keyframes putarLoading { to { transform: rotate(360deg); } }
+        .loading-overlay.loading-selesai { opacity: 0; pointer-events: none; }
     </style>
 
     <script type="module">
@@ -635,6 +677,11 @@
     </script>
 </head>
 <body>
+
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Menyambungkan ke data kas...</p>
+    </div>
 
     <div class="mobile-topbar">
         <h2><i class="fa-solid fa-wallet"></i> MANAGEMENT KAS</h2>
@@ -737,9 +784,9 @@
                 </div>
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="cari-siswa" placeholder="Cari nama siswa..." oninput="filterSiswaBulanan()">
+                    <input type="text" id="cari-siswa" placeholder="Cari nama siswa..." aria-label="Cari nama siswa" oninput="filterSiswaBulanan()">
                 </div>
-                <button class="btn" style="width:auto; background-color: var(--primary); color:white;" onclick="salinTagihanWhatsApp()">
+                <button class="btn btn-primary btn-auto" onclick="salinTagihanWhatsApp()">
                     <i class="fa-solid fa-bullhorn"></i> Salin Info Tagihan WA
                 </button>
             </div>
@@ -797,10 +844,16 @@
             <div id="admin-form-pemasukan-lain" class="form-box hidden">
                 <h3><i class="fa-solid fa-circle-dollar-to-slot"></i> Input Pemasukan Tak Terduga / Lain-lain (Bendahara)</h3>
                 <div class="form-grid">
-                    <input type="text" id="in-sumber" placeholder="Contoh: Hadiah Juara Futsal / Sisa Dana Dana Usaha">
-                    <input type="number" id="in-nominal" placeholder="Nominal (Rupiah)">
+                    <div>
+                        <label class="form-label" for="in-sumber">Sumber / Detail Pemasukan</label>
+                        <input type="text" id="in-sumber" placeholder="Contoh: Hadiah Juara Futsal / Sisa Dana Dana Usaha">
+                    </div>
+                    <div>
+                        <label class="form-label" for="in-nominal">Nominal (Rupiah)</label>
+                        <input type="number" id="in-nominal" placeholder="Nominal (Rupiah)">
+                    </div>
                 </div>
-                <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahPemasukanLainCloud()">Simpan Pemasukan</button>
+                <button class="btn btn-success btn-auto" onclick="tambahPemasukanLainCloud()">Simpan Pemasukan</button>
             </div>
             <div class="wrapper-tabel">
                 <table>
@@ -821,11 +874,20 @@
             <div id="admin-form-pengeluaran" class="form-box hidden">
                 <h3><i class="fa-solid fa-money-bill-transfer"></i> Input Pengeluaran Kas Baru (Bendahara)</h3>
                 <div class="form-grid">
-                    <input type="text" id="out-keperluan" placeholder="Contoh: Beli Spidol & Penghapus">
-                    <input type="number" id="out-nominal" placeholder="Nominal (Rupiah)">
-                    <input type="text" id="out-nota" placeholder="Link Foto Nota (Opsional)">
+                    <div>
+                        <label class="form-label" for="out-keperluan">Keperluan / Alokasi Belanja</label>
+                        <input type="text" id="out-keperluan" placeholder="Contoh: Beli Spidol & Penghapus">
+                    </div>
+                    <div>
+                        <label class="form-label" for="out-nominal">Nominal (Rupiah)</label>
+                        <input type="number" id="out-nominal" placeholder="Nominal (Rupiah)">
+                    </div>
+                    <div>
+                        <label class="form-label" for="out-nota">Link Foto Nota (Opsional)</label>
+                        <input type="text" id="out-nota" placeholder="Link Foto Nota (Opsional)">
+                    </div>
                 </div>
-                <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahPengeluaranCloud()">Simpan Transaksi</button>
+                <button class="btn btn-success btn-auto" onclick="tambahPengeluaranCloud()">Simpan Transaksi</button>
             </div>
 
             <div class="wrapper-tabel">
@@ -847,10 +909,16 @@
             <div id="admin-form-anggaran" class="form-box hidden">
                 <h3><i class="fa-solid fa-circle-plus"></i> Tambah Rencana Anggaran Kelas</h3>
                 <div class="form-grid">
-                    <input type="text" id="plan-kegiatan" placeholder="Contoh: Sewa Baju Karnaval">
-                    <input type="number" id="plan-estimasi" placeholder="Estimasi Biaya">
+                    <div>
+                        <label class="form-label" for="plan-kegiatan">Rencana Alokasi / Kegiatan Kelas</label>
+                        <input type="text" id="plan-kegiatan" placeholder="Contoh: Sewa Baju Karnaval">
+                    </div>
+                    <div>
+                        <label class="form-label" for="plan-estimasi">Estimasi Biaya</label>
+                        <input type="number" id="plan-estimasi" placeholder="Estimasi Biaya">
+                    </div>
                 </div>
-                <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahAnggaranCloud()">Tambah Rencana</button>
+                <button class="btn btn-success btn-auto" onclick="tambahAnggaranCloud()">Tambah Rencana</button>
             </div>
             <div class="wrapper-tabel">
                 <table>
@@ -875,16 +943,25 @@
                 <div class="kalender-form-konten">
                     <p style="font-size:0.8rem; color: var(--text-muted); margin:10px 0 12px;">Pilih tanggal, lalu masukkan detail agenda atau nominal kas kelas yang harus dibawa hari itu.</p>
                     <div class="form-grid">
-                        <input type="date" id="cal-tanggal">
-                        <input type="text" id="cal-nama" placeholder="Contoh: Bayar Kas Mingguan / Beli Kado Ultah Wali Kelas">
-                        <select id="cal-warna">
-                            <option value="#2563eb">🔵 Kas Mingguan (Biru)</option>
-                            <option value="#ef4444">🔴 Agenda Mendesak (Merah)</option>
-                            <option value="#10b981">🟢 Event Kelas / Iuran Khusus (Hijau)</option>
-                            <option value="#f59e0b">🟡 Pengumuman / Lainnya (Kuning)</option>
-                        </select>
+                        <div>
+                            <label class="form-label" for="cal-tanggal">Tanggal</label>
+                            <input type="date" id="cal-tanggal">
+                        </div>
+                        <div>
+                            <label class="form-label" for="cal-nama">Nama Kegiatan</label>
+                            <input type="text" id="cal-nama" placeholder="Contoh: Bayar Kas Mingguan / Beli Kado Ultah Wali Kelas">
+                        </div>
+                        <div>
+                            <label class="form-label" for="cal-warna">Kategori</label>
+                            <select id="cal-warna">
+                                <option value="#2563eb">🔵 Kas Mingguan (Biru)</option>
+                                <option value="#ef4444">🔴 Agenda Mendesak (Merah)</option>
+                                <option value="#10b981">🟢 Event Kelas / Iuran Khusus (Hijau)</option>
+                                <option value="#f59e0b">🟡 Pengumuman / Lainnya (Kuning)</option>
+                            </select>
+                        </div>
                     </div>
-                    <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahAgendaKalenderCloud()">Tandai Hari Kalender</button>
+                    <button class="btn btn-success btn-auto" onclick="tambahAgendaKalenderCloud()">Tandai Hari Kalender</button>
                 </div>
             </div>
             
@@ -895,8 +972,9 @@
             <div class="form-box">
                 <h3><i class="fa-solid fa-comment-slash"></i> Kotak Suara Anonim (Kritik & Saran Bebas)</h3>
                 <p style="font-size:0.8rem; color: var(--text-muted); margin-bottom: 12px;">Identitas kamu dirahasiakan total. Bendahara/anak lain cuma bisa baca isinya tanpa tahu siapa pengirimnya.</p>
+                <label class="form-label" for="saran-teks">Kritik & Saran</label>
                 <textarea id="saran-teks" rows="4" style="width:100%; margin-bottom:10px;" placeholder="Tulis masukan kamu di sini..."></textarea>
-                <button class="btn" style="background-color: var(--primary); color:white; width:auto;" onclick="kirimSaranCloud()">Kirim Suara Saya</button>
+                <button class="btn btn-primary btn-auto" onclick="kirimSaranCloud()">Kirim Suara Saya</button>
             </div>
             <div id="admin-view-saran" class="hidden">
                 <h3 style="margin-bottom:10px;"><i class="fa-solid fa-inbox"></i> Daftar Aspirasi Masuk (Hanya Bendahara):</h3>
@@ -929,7 +1007,7 @@
                     <li>Kirim SS bukti ke bendahara kelas biar status diubah ke Lunas di web ini.</li>
                 </ol>
             </div>
-            <button class="btn" style="background:var(--danger); color:white; justify-content:center;" onclick="tutupQRIS()">Tutup</button>
+            <button class="btn btn-danger" onclick="tutupQRIS()">Tutup</button>
         </div>
     </div>
 
@@ -953,8 +1031,8 @@
             <p id="konfirmasi-pesan" class="modal-pesan-utama">-</p>
             <p class="modal-pesan-sub">Tindakan ini tidak bisa dibatalkan.</p>
             <div class="modal-btn-grup">
-                <button class="btn" style="background:var(--table-header); color:var(--text-main);" onclick="prosesKonfirmasi(false)">Batal</button>
-                <button class="btn" style="background:var(--danger); color:white;" onclick="prosesKonfirmasi(true)">Ya, Hapus</button>
+                <button class="btn btn-neutral" onclick="prosesKonfirmasi(false)">Batal</button>
+                <button class="btn btn-danger" onclick="prosesKonfirmasi(true)">Ya, Hapus</button>
             </div>
         </div>
     </div>
@@ -965,7 +1043,7 @@
             <p style="font-size:0.68rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.4px;">Kegiatan Kelas</p>
             <p id="info-agenda-judul" style="font-weight:800; font-size:1.05rem; margin:6px 0 4px;">-</p>
             <p id="info-agenda-tanggal" class="modal-pesan-sub" style="margin-bottom:16px;">-</p>
-            <button class="btn" style="background:var(--primary); color:white; justify-content:center;" onclick="document.getElementById('modal-info-agenda').classList.remove('show')">Tutup</button>
+            <button class="btn btn-primary" onclick="document.getElementById('modal-info-agenda').classList.remove('show')">Tutup</button>
         </div>
     </div>
 
@@ -977,13 +1055,13 @@
             <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 16px;">Masukkan kode rahasia akses bendahara untuk mengaktifkan fitur edit data cloud.</p>
             
             <div style="margin-bottom: 16px;">
-                <label for="input-password-bendahara" style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted);">PASSWORD AKSES:</label>
+                <label for="input-password-bendahara" class="form-label">PASSWORD AKSES:</label>
                 <input type="password" id="input-password-bendahara" style="width: 100%; padding: 10px 14px; font-size: 1rem;" placeholder="••••••••" onkeyup="deteksiEnterLogin(event)">
             </div>
 
             <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn" style="background: var(--table-header); color: var(--text-main); width: auto; padding: 8px 16px;" onclick="tutupModalLoginAdmin()">Batal</button>
-                <button class="btn" style="background: var(--primary); color: white; width: auto; padding: 8px 20px;" onclick="prosesVerifikasiLoginAdmin()">Masuk Mode Edit</button>
+                <button class="btn btn-neutral btn-auto" style="padding: 8px 16px;" onclick="tutupModalLoginAdmin()">Batal</button>
+                <button class="btn btn-primary btn-auto" style="padding: 8px 20px;" onclick="prosesVerifikasiLoginAdmin()">Masuk Mode Edit</button>
             </div>
         </div>
     </div>
@@ -1002,6 +1080,7 @@
         let dataAnggaranCloud = {};
         let dataAgendaKalenderCloud = {};
         let dataPemasukanLainCloud = {};
+        let dataAwalDimuat = false;
 
         const DAFTAR_SISWA = [
             "Aditia Jun Maulana", "Akbar Wijaya", "Alfian Aziz Afrizal", "Alifia Junianty",
@@ -1239,11 +1318,22 @@
             });
         }
 
+        function sembunyikanLoadingAwal() {
+            if(dataAwalDimuat) return;
+            dataAwalDimuat = true;
+            const overlay = document.getElementById('loading-overlay');
+            if(overlay) {
+                overlay.classList.add('loading-selesai');
+                setTimeout(() => overlay.remove(), 320);
+            }
+        }
+
         function hubungkanKeFirebaseRealtime() {
             window.fbOnValue(window.fbRef(window.fbDatabase, "Kas_XI_RPL2"), (snapshot) => {
                 masterDataCloud = snapshot.val() || {};
                 hitungKalkulasiKeuanganGlobal();
                 renderSesuaiKonteks();
+                sembunyikanLoadingAwal();
             });
 
             window.fbOnValue(window.fbRef(window.fbDatabase, "Pengeluaran_Kas"), (snapshot) => {
@@ -1275,7 +1365,7 @@
                 
                 Object.keys(dataSaran).forEach(k => {
                     let btnHapusSaran = statusAdmin ? 
-                        `<button onclick="hapusSaranCloud('${k}')" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.75rem; font-weight:bold;">Hapus</button>` : '';
+                        `<button class="btn-hapus-sm" onclick="hapusSaranCloud('${k}')">Hapus</button>` : '';
                     
                     box.innerHTML += `
                         <div class="form-box-saran" style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
@@ -1446,13 +1536,26 @@
             });
         }
 
+        // Menghitung kecerahan warna latar & memilih warna teks gelap/terang otomatis biar kontras selalu cukup
+        function pilihWarnaTeksEvent(hexWarna) {
+            if(!hexWarna) return '#ffffff';
+            let hex = hexWarna.replace('#', '');
+            if(hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+            let r = parseInt(hex.substring(0, 2), 16);
+            let g = parseInt(hex.substring(2, 4), 16);
+            let b = parseInt(hex.substring(4, 6), 16);
+            let kecerahan = (r * 299 + g * 587 + b * 114) / 1000;
+            return kecerahan > 150 ? '#1f2937' : '#ffffff';
+        }
+
         function renderUlangDataKalender() {
             kalenderInstansi.removeAllEvents();
             Object.keys(dataAgendaKalenderCloud).forEach(key => {
                 let item = dataAgendaKalenderCloud[key];
                 kalenderInstansi.addEvent({
                     id: key, title: item.title, start: item.start,
-                    backgroundColor: item.backgroundColor, borderColor: item.backgroundColor
+                    backgroundColor: item.backgroundColor, borderColor: item.backgroundColor,
+                    textColor: pilihWarnaTeksEvent(item.backgroundColor)
                 });
             });
         }
@@ -1634,9 +1737,10 @@
         let statusGlobal = (s.isNunggakKronis) ? 
             `<span class="badge badge-nunggak"><i class="fa-solid fa-triangle-exclamation"></i> KURANG</span>` : 
             `<span class="badge badge-lunas"><i class="fa-solid fa-fire"></i> AMAN</span>`;
+        let kelasBarisWarning = (s.isNunggakKronis && statusAdmin) ? 'baris-warning' : '';
             
         bodyRekap.innerHTML += `
-            <tr>
+            <tr class="${kelasBarisWarning}">
                 <td class="col-no" data-label="No">${idx+1}</td>
                 <td class="kolom-nama" data-label="Nama">${s.nama}</td>
                 <td data-label="Total Setor"><b>Rp ${s.total.toLocaleString('id-ID')}</b></td>
@@ -1706,7 +1810,7 @@
             bodyPemasukanLain.innerHTML = "";
             Object.keys(dataPemasukanLainCloud).forEach(k => {
                 let item = dataPemasukanLainCloud[k];
-                let btnHapusAction = statusAdmin ? `<button onclick="hapusPemasukanLain('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:0.75rem;">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
+                let btnHapusAction = statusAdmin ? `<button class="btn-hapus-sm" onclick="hapusPemasukanLain('${k}')">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
                 bodyPemasukanLain.innerHTML += `
                     <tr>
                         <td data-label="Tanggal">${item.tanggal}</td>
@@ -1742,7 +1846,7 @@
             bodyAnggaran.innerHTML = "";
             Object.keys(dataAnggaranCloud).forEach(k => {
                 let item = dataAnggaranCloud[k];
-                let btnHapusAction = statusAdmin ? `<button onclick="hapusAnggaran('${k}')" style="background:var(--danger); color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:0.75rem;">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
+                let btnHapusAction = statusAdmin ? `<button class="btn-hapus-sm" onclick="hapusAnggaran('${k}')">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
                 bodyAnggaran.innerHTML += `
                     <tr>
                         <td class="kolom-nama" data-label="Kegiatan">📌 ${item.kegiatan}</td>
