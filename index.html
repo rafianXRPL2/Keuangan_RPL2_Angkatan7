@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* ==================== 1. VARIABEL & RESET STYLE ==================== */
@@ -36,6 +36,13 @@
             --table-header: #f8fafc;
             --sidebar-width: 264px;
 
+            --accent-cyan: #0891b2;
+            --glow-primary: 0 0 0 rgba(0, 0, 0, 0);
+            --glow-cyan: 0 0 0 rgba(0, 0, 0, 0);
+            --grid-line: rgba(15, 23, 42, 0.045);
+            --font-display: 'Space Grotesk', 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 18px;
@@ -53,30 +60,35 @@
         }
 
         [data-theme="dark"] {
-            --bg-main: #090d17;
-            --surface: #141b2d;
+            --bg-main: #04060d;
+            --surface: rgba(19, 25, 43, 0.72);
             --text-main: #f1f5f9;
             --text-muted: #8b96ac;
-            --primary: #6366f1;
+            --primary: #6d6af8;
             --primary-dark: #4338ca;
             --primary-light: #241f4d;
             --warning-bg: #2d1e1e;
             --warning: #f59e0b;
             --warning-light: #3a2a10;
             --warning-text: #fbbf24;
-            --border-color: #232c42;
-            --table-header: #1a2236;
+            --border-color: #232c4a;
+            --table-header: rgba(26, 34, 59, 0.75);
             --success-light: #0f2e24;
             --danger-light: #34161c;
             --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
             --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.35);
-            --shadow-md: 0 10px 32px rgba(0, 0, 0, 0.45);
-            --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.55);
-            
+            --shadow-md: 0 10px 32px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.6);
+
+            --accent-cyan: #22d3ee;
+            --glow-primary: 0 0 28px rgba(109, 106, 248, 0.4);
+            --glow-cyan: 0 0 22px rgba(34, 211, 238, 0.35);
+            --grid-line: rgba(148, 163, 255, 0.06);
+
             /* Warna khusus kalender dark mode */
-            --fc-border-color: #232c42;
-            --fc-button-bg-color: #6366f1;
-            --fc-button-border-color: #6366f1;
+            --fc-border-color: #232c4a;
+            --fc-button-bg-color: #6d6af8;
+            --fc-button-border-color: #6d6af8;
             --fc-button-hover-bg-color: #4338ca;
             --fc-page-bg-color: #141b2d;
         }
@@ -96,9 +108,43 @@
             overflow-x: hidden;
             transition: background-color 0.25s ease, color 0.25s ease;
             -webkit-font-smoothing: antialiased;
+            position: relative;
         }
 
-        h1, h2, h3, h4 { letter-spacing: -0.01em; }
+        /* ---- Lapisan ambient: grid halus + gradasi cahaya, murni dekoratif ---- */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 1px 1px, var(--grid-line) 1px, transparent 0);
+            background-size: 34px 34px;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(600px circle at 8% -5%, rgba(109, 106, 248, 0.16), transparent 60%),
+                radial-gradient(500px circle at 100% 15%, rgba(34, 211, 238, 0.10), transparent 55%),
+                radial-gradient(700px circle at 30% 120%, rgba(109, 106, 248, 0.10), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        [data-theme="dark"] body::after { opacity: 1; }
+        aside, main, .toast-container, .fab-container, .modal-overlay, .qris-zoom-overlay, .loading-overlay { position: relative; z-index: 1; }
+
+        h1, h2, h3, h4 { letter-spacing: -0.01em; font-family: var(--font-display); }
+
+        :focus-visible {
+            outline: 2px solid var(--accent-cyan);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
 
         /* ==================== KUSTOMISASI SCROLLBAR SINKRON TEMA ==================== */
         ::-webkit-scrollbar {
@@ -117,7 +163,7 @@
             background: #94a3b8;
         }
         [data-theme="dark"] ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: #3a3a8c;
             border: 2px solid var(--bg-main);
         }
         [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
@@ -158,15 +204,33 @@
             top: 0; bottom: 0; left: 0;
             z-index: 999;
             transition: transform 0.3s ease, background-color 0.25s ease;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        aside::after {
+            content: "";
+            position: absolute;
+            top: 0; right: -1px; bottom: 0; width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--accent-cyan) 45%, transparent 90%);
+            opacity: 0.35;
         }
 
         .sidebar-header {
             padding: 26px 18px;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary) 65%, var(--accent-cyan) 140%);
             color: white;
             text-align: center;
             position: relative;
             overflow: hidden;
+        }
+        .sidebar-header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1px);
+            background-size: 14px 14px;
+            mask-image: linear-gradient(160deg, rgba(0,0,0,0.9), transparent 70%);
+            -webkit-mask-image: linear-gradient(160deg, rgba(0,0,0,0.9), transparent 70%);
         }
         .sidebar-header::after {
             content: "";
@@ -184,8 +248,9 @@
             margin: 0 auto 10px;
             font-size: 1.15rem;
             position: relative; z-index: 1;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 0 24px rgba(255,255,255,0.25);
         }
-        .sidebar-header h1 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; position: relative; z-index: 1; letter-spacing: 0.2px; }
+        .sidebar-header h1 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; position: relative; z-index: 1; letter-spacing: 0.3px; }
         .sidebar-header p { font-size: 0.72rem; opacity: 0.85; position: relative; z-index: 1; }
 
         .sidebar-menu {
@@ -205,8 +270,10 @@
             margin-top: 16px;
             margin-bottom: 6px;
             padding-left: 10px;
+            padding-bottom: 8px;
             letter-spacing: 0.6px;
             opacity: 0.75;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .btn {
@@ -237,9 +304,9 @@
         .btn:hover { background-color: var(--table-header); transform: translateX(2px); }
         .btn:active { transform: scale(0.97); }
         .btn-tab.aktif {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-sm), var(--glow-primary), inset 2px 0 0 rgba(255,255,255,0.55);
         }
         .btn-tab.aktif:hover { transform: none; }
         .btn-qris { border: 1px solid var(--success); color: var(--success); font-weight: 700; }
@@ -251,11 +318,11 @@
         /* ---- Varian warna tombol (dipakai lewat class, bukan inline style) ---- */
         .btn-auto { width: auto; }
         .btn-primary, .btn-success, .btn-danger, .btn-neutral { justify-content: center; }
-        .btn-primary { background-color: var(--primary); color: #ffffff; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #ffffff; box-shadow: var(--glow-primary); }
         .btn-success { background-color: var(--success); color: #ffffff; }
         .btn-danger { background-color: var(--danger); color: #ffffff; }
         .btn-neutral { background-color: var(--table-header); color: var(--text-main); }
-        .btn-primary:hover { background-color: var(--primary-dark); transform: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--primary-dark), var(--primary-dark)); transform: none; box-shadow: var(--glow-primary), var(--shadow-sm); }
         .btn-success:hover { filter: brightness(0.93); transform: none; }
         .btn-danger:hover { filter: brightness(0.93); transform: none; }
         .btn-neutral:hover { background-color: var(--border-color); transform: none; }
@@ -297,9 +364,10 @@
         }
 
         .mobile-topbar {
-            display: none; background-color: var(--primary-dark); color: white;
+            display: none; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white;
             padding: 14px 16px; align-items: center; justify-content: space-between;
             position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+            box-shadow: var(--shadow-sm), var(--glow-primary);
         }
         .mobile-topbar h2 { font-size: 1rem; display: flex; align-items: center; gap: 8px; }
         .btn-toggle-sidebar { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
@@ -326,7 +394,7 @@
         }
         select:focus, input:focus, textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
+            box-shadow: 0 0 0 3px var(--primary-light), var(--glow-cyan);
         }
 
         .search-box {
@@ -334,7 +402,7 @@
             border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 9px 12px;
             flex: 1; min-width: 160px; max-width: 260px; transition: border-color .15s ease, box-shadow .15s ease;
         }
-        .search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light), var(--glow-cyan); }
         .search-box i { color: var(--text-muted); font-size: 0.82rem; }
         .search-box input { border: none; background: transparent; padding: 0; width: 100%; font-weight: 600; font-size: 0.85rem; }
         .search-box input:focus { box-shadow: none; }
@@ -359,9 +427,10 @@
         .fab-main {
             width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
             background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff;
-            font-size: 1.25rem; box-shadow: var(--shadow-md); display: flex; align-items: center; justify-content: center;
-            transition: transform .25s ease;
+            font-size: 1.25rem; box-shadow: var(--shadow-md), var(--glow-primary); display: flex; align-items: center; justify-content: center;
+            transition: transform .25s ease, box-shadow .25s ease;
         }
+        .fab-main:hover { box-shadow: var(--shadow-lg), var(--glow-primary); }
         .fab-main:active { transform: scale(0.92); }
         .fab-main.aktif { transform: rotate(135deg); }
         .fab-menu {
@@ -388,7 +457,8 @@
             border-radius: var(--radius-lg);
             padding: 26px 28px;
             margin-bottom: 14px;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-md), var(--glow-primary);
+            border: 1px solid rgba(255,255,255,0.1);
             position: relative;
             overflow: hidden;
         }
@@ -407,19 +477,41 @@
             mask-image: linear-gradient(120deg, rgba(0,0,0,0.9), transparent 65%);
             -webkit-mask-image: linear-gradient(120deg, rgba(0,0,0,0.9), transparent 65%);
         }
+        [data-theme="dark"] .saldo-hero-pattern { animation: driftGrid 16s linear infinite; }
+        @keyframes driftGrid { from { background-position: 0 0; } to { background-position: 160px 160px; } }
         .saldo-hero-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
         .saldo-hero-label { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 700; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; }
         .saldo-hero-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-        .saldo-hero-value { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 800; margin-top: 10px; position: relative; z-index: 1; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+        .saldo-hero-value { font-family: var(--font-mono); font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; margin-top: 10px; position: relative; z-index: 1; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+        [data-theme="dark"] .saldo-hero-value { text-shadow: 0 0 26px rgba(255,255,255,0.3); }
         .saldo-hero-sub { font-size: 0.78rem; opacity: 0.8; margin-top: 6px; position: relative; z-index: 1; }
+
+        .live-dot {
+            display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+            background: #4ade80; margin-right: 5px; vertical-align: middle;
+            box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+            animation: livePulse 2s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); }
+            70% { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
 
         .cards-ringkas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
         .card-ringkas {
             background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);
             padding: 16px 18px; display: flex; align-items: center; gap: 14px;
             box-shadow: var(--shadow-xs); transition: transform .18s ease, box-shadow .18s ease;
+            position: relative; overflow: hidden;
         }
-        .card-ringkas:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .card-ringkas::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-cyan), transparent);
+            opacity: 0.7;
+        }
+        .card-ringkas.keluar::before { background: linear-gradient(90deg, var(--danger), var(--accent-cyan), transparent); }
+        .card-ringkas:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm), var(--glow-primary); }
         .card-ringkas-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
         .card-ringkas.masuk .card-ringkas-icon { background: var(--success-light); color: var(--success); }
         .card-ringkas.keluar .card-ringkas-icon { background: var(--danger-light); color: var(--danger); }
@@ -428,7 +520,18 @@
         .total-sisa { color: #ffffff; }
         .total-masuk { color: var(--success); }
         .total-keluar { color: var(--danger); }
+        .total-sisa, .total-masuk, .total-keluar, .wrapper-tabel td b, .riwayat-stat-chip .value, .riwayat-item .nominal, .qris-nominal-chip {
+            font-family: var(--font-mono);
+        }
 
+        .form-box, .form-box-saran {
+            position: relative;
+        }
+        .form-box::before, .form-box-saran::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-cyan), transparent);
+            opacity: 0.6; border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
         .form-box {
             background-color: var(--surface); padding: 18px; border-radius: var(--radius-md);
             border: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: var(--shadow-xs);
@@ -465,7 +568,7 @@
         .editable.aktif:focus { box-shadow: inset 0 0 0 2px var(--primary); outline: none; }
 
         .badge { padding: 5px 11px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
-        .badge-lunas, .badge-sultan { background-color: var(--success-light); color: #15803d; }
+        .badge-lunas, .badge-sultan { background-color: var(--success-light); color: #15803d; box-shadow: 0 0 0 1px rgba(16,185,129,0.18) inset; }
         .badge-nunggak { background-color: var(--danger-light); color: #b91c1c; }
         [data-theme="dark"] .badge-lunas, [data-theme="dark"] .badge-sultan { color: #4ade80; }
         [data-theme="dark"] .badge-nunggak { color: #fca5a5; }
@@ -475,7 +578,17 @@
 
         /* Podiums / Cards */
         .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
-        .card-fitur { background-color: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-xs); }
+        .card-fitur {
+            background-color: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: 16px; box-shadow: var(--shadow-xs); position: relative; overflow: hidden;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .card-fitur::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-cyan), transparent);
+            opacity: 0.6; border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+        .card-fitur:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm), var(--glow-primary); }
         .card-fitur h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.3px; }
         
         .sultan-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--border-color); }
@@ -491,7 +604,7 @@
         .modal-box {
             background-color: var(--surface); color: var(--text-main); padding: 22px; border-radius: var(--radius-lg);
             width: 100%; max-width: 360px; border: 1px solid var(--border-color); text-align: center;
-            box-shadow: var(--shadow-lg); transform: scale(0.94) translateY(8px); opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease;
+            box-shadow: var(--shadow-lg), var(--glow-primary); transform: scale(0.94) translateY(8px); opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease;
         }
         .modal-overlay.show .modal-box { transform: scale(1) translateY(0); opacity: 1; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.45); z-index: 998; }
@@ -658,6 +771,34 @@
         .loading-overlay p { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         @keyframes putarLoading { to { transform: rotate(360deg); } }
         .loading-overlay.loading-selesai { opacity: 0; pointer-events: none; }
+
+        /* ==================== 6. KACA GELAP (GLASSMORPHISM DARK MODE) ==================== */
+        [data-theme="dark"] .form-box,
+        [data-theme="dark"] .form-box-saran,
+        [data-theme="dark"] .card-fitur,
+        [data-theme="dark"] .card-ringkas,
+        [data-theme="dark"] .wrapper-tabel,
+        [data-theme="dark"] .panel-kontrol,
+        [data-theme="dark"] .modal-box,
+        [data-theme="dark"] .toast,
+        [data-theme="dark"] .riwayat-item,
+        [data-theme="dark"] .search-box,
+        [data-theme="dark"] .theme-switch,
+        [data-theme="dark"] .fab-item,
+        [data-theme="dark"] .fc {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* ==================== 7. HORMATI PREFERENSI GERAKAN BERKURANG ==================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
     </style>
 
     <script type="module">
@@ -752,7 +893,7 @@
     <main>
         <div class="halaman-header">
             <h1><i class="fa-solid fa-chart-line"></i> Sistem Monitoring Kas XI RPL 2</h1>
-            <p>Sinkronisasi data transparan &amp; realtime cloud</p>
+            <p><span class="live-dot"></span>Sinkronisasi data transparan &amp; realtime cloud</p>
         </div>
 
         <div class="dashboard-ringkasan">
