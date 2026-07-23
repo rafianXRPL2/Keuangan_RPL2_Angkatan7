@@ -225,6 +225,7 @@
             background-color: transparent;
             color: var(--text-main);
             position: relative;
+            text-decoration: none;
         }
 
         .btn i {
@@ -1007,7 +1008,12 @@
                     <li>Kirim SS bukti ke bendahara kelas biar status diubah ke Lunas di web ini.</li>
                 </ol>
             </div>
-            <button class="btn btn-danger" onclick="tutupQRIS()">Tutup</button>
+            <div class="modal-btn-grup">
+                <a class="btn btn-primary" href="qris.jpeg" download="QRIS-Kas-XI-RPL2.jpeg">
+                    <i class="fa-solid fa-download"></i> Download QRIS
+                </a>
+                <button class="btn btn-danger" onclick="tutupQRIS()">Tutup</button>
+            </div>
         </div>
     </div>
 
