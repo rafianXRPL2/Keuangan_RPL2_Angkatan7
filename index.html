@@ -126,6 +126,20 @@
         .fc-col-header-cell-cushion { color: var(--text-muted) !important; text-decoration: none; font-size: 0.85rem; font-weight: 700; }
         .fc-toolbar-title { font-size: 1.15rem !important; font-weight: 700; color: var(--text-main); }
         .fc-event { border: none !important; padding: 2px 4px; border-radius: 4px; font-size: 0.75rem !important; font-weight: bold; cursor: pointer; }
+        .fc-toolbar { flex-wrap: wrap; row-gap: 10px; }
+        .fc-button { padding: 6px 12px !important; font-size: 0.82rem !important; box-shadow: none !important; }
+        .fc-button:focus { box-shadow: 0 0 0 2px var(--primary-light) !important; }
+        .fc-more-link { color: var(--primary) !important; font-weight: 700; }
+        .fc-popover { background: var(--surface) !important; border-color: var(--border-color) !important; box-shadow: var(--shadow-md) !important; }
+        .fc-popover-header { background: var(--table-header) !important; color: var(--text-main) !important; }
+        .fc-popover-body .fc-event { margin-bottom: 3px; }
+        /* Tampilan Agenda/listWeek biar senada tema */
+        .fc-list, .fc-list-table td { border-color: var(--fc-border-color) !important; }
+        .fc-list-day-cushion { background: var(--table-header) !important; color: var(--text-main) !important; }
+        .fc-list-event:hover td { background: var(--table-header) !important; }
+        .fc-list-event-dot { border-color: var(--primary) !important; }
+        .fc-list-event-time, .fc-list-event-title a { color: var(--text-main) !important; }
+        .fc-list-empty { background: transparent !important; color: var(--text-muted); }
 
         /* ==================== 2. DESAIN SIDEBAR ==================== */
         aside {
@@ -560,6 +574,20 @@
             .wrapper-tabel td.kolom-nama::before { content: none; }
             .wrapper-tabel td.editable.aktif { padding: 8px 10px; }
 
+            /* ---- Kalender lebih nyaman di HP ---- */
+            .fc { padding: 10px 6px; }
+            .fc-toolbar-title { font-size: 1rem !important; }
+            .fc-daygrid-day-number { padding: 6px !important; min-width: 28px; min-height: 28px; display: inline-flex; align-items: center; justify-content: center; }
+            .fc-daygrid-day-frame { min-height: 60px; }
+            .fc-button { padding: 8px 10px !important; }
+            .fc-list-event-title, .fc-list-event-time { padding-top: 10px !important; padding-bottom: 10px !important; }
+
+            /* ---- Form "Tandai Agenda" bisa dilipat di HP biar kalender langsung kelihatan ---- */
+            .kalender-form-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
+            .kalender-form-toggle { color: var(--text-muted); transition: transform .2s ease; flex-shrink: 0; transform: rotate(180deg); }
+            #admin-form-kalender.tertutup .kalender-form-konten { display: none; }
+            #admin-form-kalender.tertutup .kalender-form-toggle { transform: rotate(0deg); }
+
             /* ---- Modal jadi bottom-sheet di HP ---- */
             .modal-overlay { align-items: flex-end; padding: 0; }
             .modal-box {
@@ -840,19 +868,24 @@
 
         <div id="halaman-kalender" class="hidden">
             <div id="admin-form-kalender" class="form-box hidden">
-                <h3><i class="fa-solid fa-calendar-plus"></i> Tandai Kegiatan / Hari Wajib Kas (Bendahara)</h3>
-                <p style="font-size:0.8rem; color: var(--text-muted); margin-bottom: 12px;">Pilih tanggal, lalu masukkan detail agenda atau nominal kas kelas yang harus dibawa hari itu.</p>
-                <div class="form-grid">
-                    <input type="date" id="cal-tanggal">
-                    <input type="text" id="cal-nama" placeholder="Contoh: Bayar Kas Mingguan / Beli Kado Ultah Wali Kelas">
-                    <select id="cal-warna">
-                        <option value="#2563eb">🔵 Kas Mingguan (Biru)</option>
-                        <option value="#ef4444">🔴 Agenda Mendesak (Merah)</option>
-                        <option value="#10b981">🟢 Event Kelas / Iuran Khusus (Hijau)</option>
-                        <option value="#f59e0b">🟡 Pengumuman / Lainnya (Kuning)</option>
-                    </select>
+                <div class="kalender-form-header" onclick="toggleFormKalender()">
+                    <h3 style="margin-bottom:0;"><i class="fa-solid fa-calendar-plus"></i> Tandai Kegiatan / Hari Wajib Kas (Bendahara)</h3>
+                    <i class="fa-solid fa-chevron-down kalender-form-toggle" id="kalender-form-chevron"></i>
                 </div>
-                <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahAgendaKalenderCloud()">Tandai Hari Kalender</button>
+                <div class="kalender-form-konten">
+                    <p style="font-size:0.8rem; color: var(--text-muted); margin:10px 0 12px;">Pilih tanggal, lalu masukkan detail agenda atau nominal kas kelas yang harus dibawa hari itu.</p>
+                    <div class="form-grid">
+                        <input type="date" id="cal-tanggal">
+                        <input type="text" id="cal-nama" placeholder="Contoh: Bayar Kas Mingguan / Beli Kado Ultah Wali Kelas">
+                        <select id="cal-warna">
+                            <option value="#2563eb">🔵 Kas Mingguan (Biru)</option>
+                            <option value="#ef4444">🔴 Agenda Mendesak (Merah)</option>
+                            <option value="#10b981">🟢 Event Kelas / Iuran Khusus (Hijau)</option>
+                            <option value="#f59e0b">🟡 Pengumuman / Lainnya (Kuning)</option>
+                        </select>
+                    </div>
+                    <button class="btn" style="background-color: var(--success); color:white; width:auto;" onclick="tambahAgendaKalenderCloud()">Tandai Hari Kalender</button>
+                </div>
             </div>
             
             <div id="kalender-box" style="margin-bottom: 20px;"></div>
@@ -1354,6 +1387,10 @@
             }
         }
 
+        function toggleFormKalender() {
+            document.getElementById('admin-form-kalender').classList.toggle('tertutup');
+        }
+
         function tambahAgendaKalenderCloud() {
             let tanggal = document.getElementById('cal-tanggal').value;
             let namaKegiatan = document.getElementById('cal-nama').value;
@@ -1380,14 +1417,33 @@
 
         function inisialisasiObjekKalender() {
             const kalenderElemen = document.getElementById('kalender-box');
+
+            // Di HP, form "Tandai Agenda" dilipat dulu secara default biar kalender langsung kelihatan
+            if(window.innerWidth <= 768) {
+                document.getElementById('admin-form-kalender').classList.add('tertutup');
+            }
+
             kalenderInstansi = new FullCalendar.Calendar(kalenderElemen, {
                 locale: 'id',
-                initialView: 'dayGridMonth',
-                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,dayGridWeek' },
+                initialView: window.innerWidth <= 576 ? 'listWeek' : 'dayGridMonth',
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
+                buttonText: { list: 'Agenda' },
                 firstDay: 1,
+                height: 'auto',
+                dayMaxEvents: true,
                 eventClick: aksiKlikEventKalender
             });
             kalenderInstansi.render();
+
+            // Otomatis pindah ke tampilan Agenda (list) di layar kecil, dan balik ke Bulan di layar lebih lebar
+            let breakpointKalenderTerakhir = window.innerWidth <= 576 ? 'kecil' : 'besar';
+            window.addEventListener('resize', () => {
+                let breakpointSekarang = window.innerWidth <= 576 ? 'kecil' : 'besar';
+                if(breakpointSekarang !== breakpointKalenderTerakhir) {
+                    breakpointKalenderTerakhir = breakpointSekarang;
+                    kalenderInstansi.changeView(breakpointSekarang === 'kecil' ? 'listWeek' : 'dayGridMonth');
+                }
+            });
         }
 
         function renderUlangDataKalender() {
