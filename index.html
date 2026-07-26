@@ -332,6 +332,32 @@
             border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.75rem; transition: filter .15s ease;
         }
         .btn-hapus-sm:hover { filter: brightness(0.93); }
+        .btn-hapus-sm.aktifkan { background-color: var(--success); }
+
+        /* ---- Elemen & aksi khusus mode admin ---- */
+        .admin-only-elemen { display: none; }
+        body.admin-aktif .admin-only-elemen { display: flex; }
+        .chip-angka {
+            background: var(--danger); color: #fff; font-size: 0.68rem; font-weight: 800;
+            padding: 1px 7px; border-radius: 20px; margin-left: 2px; font-family: var(--font-mono);
+        }
+        .kolom-aksi-siswa { text-align: center; }
+        .aksi-kosong { color: var(--text-muted); font-size: 0.8rem; }
+        .aksi-tombol { display: none; gap: 6px; align-items: center; justify-content: center; }
+        body.admin-aktif .aksi-kosong { display: none; }
+        body.admin-aktif .aksi-tombol { display: flex; }
+        .btn-aksi-icon {
+            width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border-color);
+            background-color: var(--surface); color: var(--text-muted); cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; font-size: 0.76rem;
+            transition: all .15s ease; flex-shrink: 0;
+        }
+        .btn-aksi-icon.edit:hover { background-color: var(--primary); color: #fff; border-color: var(--primary); }
+        .btn-aksi-icon.hapus:hover { background-color: var(--danger); color: #fff; border-color: var(--danger); }
+
+        /* ---- Penanda visual persisten: mode admin sedang aktif ---- */
+        body.admin-aktif aside { box-shadow: inset -3px 0 0 var(--danger); }
+        body.admin-aktif .mobile-topbar { box-shadow: inset 0 -3px 0 var(--danger), var(--shadow-sm), var(--glow-primary); }
 
         /* ---- Label form tetap (menggantikan pola placeholder-only) ---- */
         .form-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
@@ -360,7 +386,7 @@
             flex-grow: 1;
             margin-left: var(--sidebar-width);
             padding: 24px;
-            max-width: min(1200px, calc(100% - var(--sidebar-width)));
+            max-width: min(1800px, calc(100% - var(--sidebar-width)));
         }
 
         .mobile-topbar {
@@ -933,6 +959,9 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="cari-siswa" placeholder="Cari nama siswa..." aria-label="Cari nama siswa" oninput="filterSiswaBulanan()">
                 </div>
+                <button class="btn btn-neutral btn-auto admin-only-elemen" onclick="bukaModalSiswaNonaktif()" id="btn-buka-nonaktif">
+                    <i class="fa-solid fa-user-slash"></i> Siswa Nonaktif <span class="chip-angka" id="chip-jumlah-nonaktif">0</span>
+                </button>
                 <button class="btn btn-primary btn-auto" onclick="salinTagihanWhatsApp()">
                     <i class="fa-solid fa-bullhorn"></i> Salin Info Tagihan WA
                 </button>
@@ -952,6 +981,7 @@
                             <th style="width: 80px;">M3</th>
                             <th style="width: 80px;">M4</th>
                             <th style="width: 100px;">Status</th>
+                            <th style="width: 90px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="body-tabel-bulanan"></tbody>
@@ -1183,6 +1213,19 @@
         </div>
     </div>
 
+    <div id="modal-siswa-nonaktif" class="modal-overlay">
+        <div class="modal-box" style="max-width: 420px; text-align: left; max-height: 82vh; display: flex; flex-direction: column;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px;">
+                <div>
+                    <h2 style="font-size: 1.1rem; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user-slash" style="color:var(--danger);"></i> Siswa Nonaktif</h2>
+                    <p style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Disembunyikan dari tabel kas bulanan &amp; rekap, tapi data setoran lama tetap aman tersimpan.</p>
+                </div>
+                <button onclick="tutupModalSiswaNonaktif()" style="background:none; border:none; font-size:1.2rem; color:var(--text-muted); cursor:pointer; line-height:1;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="daftar-siswa-nonaktif-box" style="overflow-y:auto; flex-grow:1; display:flex; flex-direction:column; gap:6px; margin-top:14px; padding-right:2px;"></div>
+        </div>
+    </div>
+
     <div id="modal-konfirmasi" class="modal-overlay">
         <div class="modal-box" style="max-width: 340px;">
             <div class="modal-icon-circle danger"><i class="fa-solid fa-trash-can"></i></div>
@@ -1235,6 +1278,8 @@
         
         let masterDataCloud = {};
         let dataPengeluaranCloud = {};
+        let namaSiswaCustomCloud = {};
+        let siswaNonaktifCloud = {};
         let dataAnggaranCloud = {};
         let dataAgendaKalenderCloud = {};
         let dataPemasukanLainCloud = {};
@@ -1257,6 +1302,13 @@
             "Januari 2026", "Februari 2026", "Maret 2026", "April 2026", "Mei 2026", "Juni 2026", "Juli 2026"
         ];
 
+        // Nama tampilan siswa: pakai nama hasil edit bendahara kalau ada, kalau tidak pakai nama default.
+        // idSiswa TIDAK PERNAH berubah/geser walau ada nama diedit atau siswa dinonaktifkan — supaya
+        // riwayat setoran & data cloud lama tetap nyambung ke orang yang benar.
+        function namaTampil(idSiswa) {
+            return (namaSiswaCustomCloud && namaSiswaCustomCloud[idSiswa]) || DAFTAR_SISWA[idSiswa - 1];
+        }
+
         window.initSistem = function() {
             if(!window.aplikasiSiap) return;
 
@@ -1270,6 +1322,11 @@
                 selectBulan.innerHTML += `<option value="${b}">${namaBulanSaja}</option>`; 
             });
             
+            document.getElementById('body-tabel-bulanan').addEventListener('input', (e) => {
+                if(!statusAdmin || !e.target.classList.contains('editable')) return;
+                simpanDataKeCloud();
+            });
+
             bangunStrukturTabel();
             hubungkanKeFirebaseRealtime();
         }
@@ -1320,7 +1377,7 @@
         }
 
         function bukaRiwayatSiswa(idSiswa) {
-            let nama = DAFTAR_SISWA[idSiswa - 1];
+            let nama = namaTampil(idSiswa);
             document.getElementById('riwayat-nama-siswa').innerText = nama;
 
             let totalSetahun = 0;
@@ -1362,6 +1419,71 @@
             document.getElementById('modal-riwayat').classList.add('show');
         }
         function tutupRiwayat() { document.getElementById('modal-riwayat').classList.remove('show'); }
+
+        /* ==================== KELOLA SISWA (EDIT NAMA & NONAKTIFKAN) ==================== */
+        function editNamaSiswa(idSiswa) {
+            if(!statusAdmin) return;
+            let namaSekarang = namaTampil(idSiswa);
+            let namaBaru = prompt("Edit nama siswa:", namaSekarang);
+            if(namaBaru === null) return; // admin batal
+            namaBaru = namaBaru.trim();
+            if(!namaBaru) return tampilkanToast("Nama tidak boleh kosong!", "error");
+            if(namaBaru === DAFTAR_SISWA[idSiswa - 1]) {
+                // Balik ke nama default -> hapus override-nya biar bersih di cloud
+                window.fbSet(window.fbRef(window.fbDatabase, `Nama_Siswa_Custom/${idSiswa}`), null);
+            } else {
+                window.fbSet(window.fbRef(window.fbDatabase, `Nama_Siswa_Custom/${idSiswa}`), namaBaru);
+            }
+            tampilkanToast("Nama siswa berhasil diperbarui!", "success");
+        }
+
+        async function nonaktifkanSiswa(idSiswa) {
+            if(!statusAdmin) return;
+            let nama = namaTampil(idSiswa);
+            let konfirmasi = await tampilkanKonfirmasi(`Nonaktifkan "${nama}" dari daftar kas aktif? Riwayat setoran lama tetap aman & bisa diaktifkan lagi kapan pun.`);
+            if(konfirmasi) {
+                window.fbSet(window.fbRef(window.fbDatabase, `Siswa_Nonaktif/${idSiswa}`), true);
+                tampilkanToast(`${nama} dipindah ke daftar nonaktif.`, "info");
+            }
+        }
+
+        function aktifkanKembaliSiswa(idSiswa) {
+            if(!statusAdmin) return;
+            let nama = namaTampil(idSiswa);
+            window.fbSet(window.fbRef(window.fbDatabase, `Siswa_Nonaktif/${idSiswa}`), null);
+            tampilkanToast(`${nama} diaktifkan kembali.`, "success");
+        }
+
+        function perbaruiChipNonaktif() {
+            const chip = document.getElementById('chip-jumlah-nonaktif');
+            if(!chip) return;
+            let jumlah = Object.keys(siswaNonaktifCloud || {}).filter(id => siswaNonaktifCloud[id]).length;
+            chip.innerText = jumlah;
+        }
+
+        function bukaModalSiswaNonaktif() {
+            if(!statusAdmin) return;
+            perbaruiDaftarSiswaNonaktifModal();
+            document.getElementById('modal-siswa-nonaktif').classList.add('show');
+        }
+        function tutupModalSiswaNonaktif() { document.getElementById('modal-siswa-nonaktif').classList.remove('show'); }
+
+        function perbaruiDaftarSiswaNonaktifModal() {
+            perbaruiChipNonaktif();
+            const box = document.getElementById('daftar-siswa-nonaktif-box');
+            if(!box) return;
+            let idNonaktif = Object.keys(siswaNonaktifCloud || {}).filter(id => siswaNonaktifCloud[id]);
+            if(idNonaktif.length === 0) {
+                box.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:20px 0;">Belum ada siswa yang dinonaktifkan.</p>`;
+                return;
+            }
+            box.innerHTML = idNonaktif.map(id => `
+                <div class="riwayat-item">
+                    <div><div class="bulan" style="font-weight:700;">${namaTampil(id)}</div></div>
+                    <button class="btn-hapus-sm aktifkan" onclick="aktifkanKembaliSiswa(${id})"><i class="fa-solid fa-rotate-left"></i> Aktifkan</button>
+                </div>
+            `).join('');
+        }
 
         function toggleFabMenu() {
             document.getElementById('fab-menu').classList.toggle('buka');
@@ -1426,6 +1548,7 @@
             if (pwInput && btoa(pwInput) === KEY_VALIDASI) {
                 statusAdmin = true;
                 tutupModalLoginAdmin();
+                document.body.classList.add('admin-aktif');
                 document.getElementById('btn-admin-toggle').innerHTML = `<i class="fa-solid fa-lock-open"></i> Keluar Admin`;
                 document.getElementById('btn-admin-toggle').classList.add('aktif');
                 document.getElementById('admin-form-pengeluaran').classList.remove('hidden');
@@ -1445,6 +1568,7 @@
 
         function eksekusiLogoutAdmin() {
             statusAdmin = false;
+            document.body.classList.remove('admin-aktif');
             document.getElementById('btn-admin-toggle').innerHTML = `<i class="fa-solid fa-lock"></i> Mode Bendahara`;
             document.getElementById('btn-admin-toggle').classList.remove('aktif');
             document.getElementById('admin-form-pengeluaran').classList.add('hidden');
@@ -1462,8 +1586,10 @@
         function bangunStrukturTabel() {
             const bodyBulanan = document.getElementById('body-tabel-bulanan');
             bodyBulanan.innerHTML = "";
-            DAFTAR_SISWA.forEach((nama, i) => {
+            DAFTAR_SISWA.forEach((_, i) => {
                 let idSiswa = i + 1;
+                if(siswaNonaktifCloud[idSiswa]) return;
+                let nama = namaTampil(idSiswa);
                 bodyBulanan.innerHTML += `
                     <tr class="row-siswa" id="row-${idSiswa}" data-id="${idSiswa}">
                         <td class="col-no" data-label="No">${idSiswa}</td>
@@ -1473,14 +1599,17 @@
                         <td class="editable m3" data-minggu="m3" data-label="Minggu 3">0</td>
                         <td class="editable m4" data-minggu="m4" data-label="Minggu 4">0</td>
                         <td data-label="Status"><span class="badge" id="badge-${idSiswa}">-</span></td>
+                        <td class="kolom-aksi-siswa" data-label="Aksi">
+                            <span class="aksi-kosong">–</span>
+                            <div class="aksi-tombol">
+                                <button class="btn-aksi-icon edit" onclick="event.stopPropagation(); editNamaSiswa(${idSiswa})" title="Edit nama siswa"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn-aksi-icon hapus" onclick="event.stopPropagation(); nonaktifkanSiswa(${idSiswa})" title="Nonaktifkan siswa"><i class="fa-solid fa-user-slash"></i></button>
+                            </div>
+                        </td>
                     </tr>
                 `;
             });
-
-            bodyBulanan.addEventListener('input', (e) => {
-                if(!statusAdmin || !e.target.classList.contains('editable')) return;
-                simpanDataKeCloud();
-            });
+            perbaruiChipNonaktif();
         }
 
         function sembunyikanLoadingAwal() {
@@ -1499,6 +1628,19 @@
                 hitungKalkulasiKeuanganGlobal();
                 renderSesuaiKonteks();
                 sembunyikanLoadingAwal();
+            });
+
+            window.fbOnValue(window.fbRef(window.fbDatabase, "Nama_Siswa_Custom"), (snapshot) => {
+                namaSiswaCustomCloud = snapshot.val() || {};
+                bangunStrukturTabel();
+                renderSesuaiKonteks();
+            });
+
+            window.fbOnValue(window.fbRef(window.fbDatabase, "Siswa_Nonaktif"), (snapshot) => {
+                siswaNonaktifCloud = snapshot.val() || {};
+                bangunStrukturTabel();
+                renderSesuaiKonteks();
+                perbaruiDaftarSiswaNonaktifModal();
             });
 
             window.fbOnValue(window.fbRef(window.fbDatabase, "Pengeluaran_Kas"), (snapshot) => {
@@ -1858,8 +2000,10 @@
     bodyRekap.innerHTML = "";
     let dataSiswaKolektif = [];
 
-    DAFTAR_SISWA.forEach((nama, i) => {
+    DAFTAR_SISWA.forEach((_, i) => {
         let idSiswa = i + 1;
+        if(siswaNonaktifCloud[idSiswa]) return;
+        let nama = namaTampil(idSiswa);
         let totalSatuTahun = 0;
         let adaBulanBolong = false; 
 
