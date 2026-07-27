@@ -1560,7 +1560,6 @@
                 document.querySelectorAll('.editable').forEach(td => td.contentEditable = "true");
                 tampilkanToast("Akses admin diterima! Mode edit aktif.", "success");
                 renderSesuaiKonteks();
-                hubungkanKeFirebaseRealtime();
             } else {
                 tampilkanToast("Password bendahara salah / ditolak!", "error");
             }
@@ -1580,12 +1579,13 @@
             document.querySelectorAll('.editable').forEach(td => td.contentEditable = "false");
             tampilkanToast("Mode bendahara dinonaktifkan.", "info");
             renderSesuaiKonteks();
-            hubungkanKeFirebaseRealtime();
         }
 
         function bangunStrukturTabel() {
             const bodyBulanan = document.getElementById('body-tabel-bulanan');
             bodyBulanan.innerHTML = "";
+            let kelasEditable = statusAdmin ? 'editable aktif' : 'editable';
+            let atrEditable = statusAdmin ? 'contenteditable="true"' : 'contenteditable="false"';
             DAFTAR_SISWA.forEach((_, i) => {
                 let idSiswa = i + 1;
                 if(siswaNonaktifCloud[idSiswa]) return;
@@ -1594,10 +1594,10 @@
                     <tr class="row-siswa" id="row-${idSiswa}" data-id="${idSiswa}">
                         <td class="col-no" data-label="No">${idSiswa}</td>
                         <td class="kolom-nama nama-klik" data-label="Nama" onclick="bukaRiwayatSiswa(${idSiswa})">${nama} <i class="fa-solid fa-chevron-right nama-klik-icon"></i></td>
-                        <td class="editable m1" data-minggu="m1" data-label="Minggu 1">0</td>
-                        <td class="editable m2" data-minggu="m2" data-label="Minggu 2">0</td>
-                        <td class="editable m3" data-minggu="m3" data-label="Minggu 3">0</td>
-                        <td class="editable m4" data-minggu="m4" data-label="Minggu 4">0</td>
+                        <td class="${kelasEditable} m1" ${atrEditable} data-minggu="m1" data-label="Minggu 1">0</td>
+                        <td class="${kelasEditable} m2" ${atrEditable} data-minggu="m2" data-label="Minggu 2">0</td>
+                        <td class="${kelasEditable} m3" ${atrEditable} data-minggu="m3" data-label="Minggu 3">0</td>
+                        <td class="${kelasEditable} m4" ${atrEditable} data-minggu="m4" data-label="Minggu 4">0</td>
                         <td data-label="Status"><span class="badge" id="badge-${idSiswa}">-</span></td>
                         <td class="kolom-aksi-siswa" data-label="Aksi">
                             <span class="aksi-kosong">–</span>
@@ -1610,6 +1610,7 @@
                 `;
             });
             perbaruiChipNonaktif();
+            if(document.getElementById('cari-siswa') && document.getElementById('cari-siswa').value) filterSiswaBulanan();
         }
 
         function sembunyikanLoadingAwal() {
