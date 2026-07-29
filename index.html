@@ -636,8 +636,23 @@
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.45); z-index: 998; }
 
         /* Link Nota Button */
-        .btn-nota { padding: 5px 10px; font-size: 0.75rem; background-color: var(--table-header); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--primary); font-weight: bold; display: inline-flex; align-items: center; gap: 4px; transition: all .15s ease; }
-        .btn-nota:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
+        .btn-lihat-bukti {
+            padding: 5px 10px; font-size: 0.75rem; background-color: var(--table-header); border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); text-decoration: none; color: var(--primary); font-weight: 700;
+            display: inline-flex; align-items: center; gap: 4px; transition: all .15s ease; cursor: pointer; font-family: inherit;
+        }
+        .btn-lihat-bukti:hover { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: var(--glow-primary); }
+        .btn-lihat-bukti i { font-size: 0.68rem; }
+        input[type="file"] {
+            padding: 8px 10px; border-radius: var(--radius-sm); border: 1px dashed var(--border-color);
+            background-color: var(--table-header); color: var(--text-muted); font-size: 0.8rem; cursor: pointer;
+        }
+        input[type="file"]::file-selector-button {
+            padding: 6px 12px; border-radius: 6px; border: none; background-color: var(--primary); color: #fff;
+            font-weight: 700; font-size: 0.75rem; margin-right: 10px; cursor: pointer; transition: background-color .15s ease;
+        }
+        input[type="file"]::file-selector-button:hover { background-color: var(--primary-dark); }
+        button:disabled, .btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
         /* ---- Toast Notification (pengganti alert()) ---- */
         .toast-container {
@@ -830,6 +845,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCcSM503poiTpJ5222Nihp-PeSaeH1Z2VE",
@@ -843,8 +859,10 @@
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const storage = getStorage(app);
 
         window.fbRef = ref; window.fbSet = set; window.fbOnValue = onValue; window.fbDatabase = database; window.fbPush = push;
+        window.fbStorageRef = storageRef; window.fbUploadBytes = uploadBytes; window.fbGetDownloadURL = getDownloadURL; window.fbStorage = storage;
         window.aplikasiSiap = true;
         if(window.initSistem) window.initSistem();
     </script>
@@ -1029,8 +1047,12 @@
                         <label class="form-label" for="in-nominal">Nominal (Rupiah)</label>
                         <input type="number" id="in-nominal" placeholder="Nominal (Rupiah)">
                     </div>
+                    <div>
+                        <label class="form-label" for="in-bukti">Foto Bukti (Opsional)</label>
+                        <input type="file" id="in-bukti" accept="image/*" capture="environment">
+                    </div>
                 </div>
-                <button class="btn btn-success btn-auto" onclick="tambahPemasukanLainCloud()">Simpan Pemasukan</button>
+                <button class="btn btn-success btn-auto" id="btn-simpan-pemasukan-lain" onclick="tambahPemasukanLainCloud()">Simpan Pemasukan</button>
             </div>
             <div class="wrapper-tabel">
                 <table>
@@ -1039,6 +1061,7 @@
                             <th>Tanggal</th>
                             <th>Sumber / Detail Pemasukan</th>
                             <th>Nominal</th>
+                            <th>Bukti</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -1060,11 +1083,11 @@
                         <input type="number" id="out-nominal" placeholder="Nominal (Rupiah)">
                     </div>
                     <div>
-                        <label class="form-label" for="out-nota">Link Foto Nota (Opsional)</label>
-                        <input type="text" id="out-nota" placeholder="Link Foto Nota (Opsional)">
+                        <label class="form-label" for="out-bukti">Foto Bukti Nota (Opsional)</label>
+                        <input type="file" id="out-bukti" accept="image/*" capture="environment">
                     </div>
                 </div>
-                <button class="btn btn-success btn-auto" onclick="tambahPengeluaranCloud()">Simpan Transaksi</button>
+                <button class="btn btn-success btn-auto" id="btn-simpan-pengeluaran" onclick="tambahPengeluaranCloud()">Simpan Transaksi</button>
             </div>
 
             <div class="wrapper-tabel">
@@ -1074,7 +1097,7 @@
                             <th>Tanggal</th>
                             <th>Keperluan / Alokasi Belanja</th>
                             <th>Nominal</th>
-                            <th>Bukti Nota</th>
+                            <th>Bukti</th>
                         </tr>
                     </thead>
                     <tbody id="body-tabel-pengeluaran"></tbody>
@@ -1196,6 +1219,11 @@
 
     <div id="qris-zoom" class="qris-zoom-overlay" onclick="tutupZoomQRIS()">
         <img src="qris.jpeg" alt="QRIS Kas Kelas (diperbesar)">
+        <p><i class="fa-solid fa-xmark"></i> Ketuk di mana saja untuk menutup</p>
+    </div>
+
+    <div id="modal-lihat-bukti" class="qris-zoom-overlay" onclick="tutupLihatBukti()">
+        <img id="gambar-bukti-zoom" src="" alt="Bukti transaksi (diperbesar)">
         <p><i class="fa-solid fa-xmark"></i> Ketuk di mana saja untuk menutup</p>
     </div>
 
@@ -1728,16 +1756,71 @@
             window.fbSet(window.fbRef(window.fbDatabase, `Kas_XI_RPL2/${bulanAktif}`), dataSatuBulan);
         }
 
-        function tambahPemasukanLainCloud() {
+        /* ==================== UPLOAD FOTO BUKTI TRANSAKSI ==================== */
+        function kompresGambar(file, maxWidth = 1280, kualitas = 0.72) {
+            return new Promise((resolve, reject) => {
+                const gambar = new Image();
+                const urlSementara = URL.createObjectURL(file);
+                gambar.onload = () => {
+                    let { width, height } = gambar;
+                    if (width > maxWidth) {
+                        height = Math.round(height * (maxWidth / width));
+                        width = maxWidth;
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(gambar, 0, 0, width, height);
+                    URL.revokeObjectURL(urlSementara);
+                    canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Gagal memproses gambar")), 'image/jpeg', kualitas);
+                };
+                gambar.onerror = () => reject(new Error("File bukan gambar yang valid"));
+                gambar.src = urlSementara;
+            });
+        }
+
+        async function uploadBuktiTransaksi(file, folder) {
+            if (!file) return "#";
+            const blobKecil = await kompresGambar(file);
+            const namaFile = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.jpg`;
+            const lokasiRef = window.fbStorageRef(window.fbStorage, `bukti/${folder}/${namaFile}`);
+            await window.fbUploadBytes(lokasiRef, blobKecil);
+            return await window.fbGetDownloadURL(lokasiRef);
+        }
+
+        function bukaLihatBukti(url) {
+            document.getElementById('gambar-bukti-zoom').src = url;
+            document.getElementById('modal-lihat-bukti').classList.add('show');
+        }
+        function tutupLihatBukti() { document.getElementById('modal-lihat-bukti').classList.remove('show'); }
+
+        async function tambahPemasukanLainCloud() {
             let sumber = document.getElementById('in-sumber').value;
             let nominal = parseInt(document.getElementById('in-nominal').value);
+            let fileBukti = document.getElementById('in-bukti').files[0];
             if(!sumber || !nominal) return tampilkanToast("Lengkapi form pemasukan dulu ya!", "error");
-            let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
-            let nodeRef = window.fbRef(window.fbDatabase, "Pemasukan_Lain_Kas");
-            window.fbPush(nodeRef, { tanggal: tgl, sumber, nominal });
-            document.getElementById('in-sumber').value = "";
-            document.getElementById('in-nominal').value = "";
-            tampilkanToast("Pemasukan luar berhasil ditambahkan!", "success");
+            let tombol = document.getElementById('btn-simpan-pemasukan-lain');
+            let labelAsli = tombol.innerText;
+            tombol.disabled = true;
+            try {
+                let urlBukti = "#";
+                if (fileBukti) {
+                    tombol.innerText = "Mengupload bukti...";
+                    urlBukti = await uploadBuktiTransaksi(fileBukti, "pemasukan");
+                }
+                let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                let nodeRef = window.fbRef(window.fbDatabase, "Pemasukan_Lain_Kas");
+                window.fbPush(nodeRef, { tanggal: tgl, sumber, nominal, bukti: urlBukti });
+                document.getElementById('in-sumber').value = "";
+                document.getElementById('in-nominal').value = "";
+                document.getElementById('in-bukti').value = "";
+                tampilkanToast("Pemasukan luar berhasil ditambahkan!", "success");
+            } catch(e) {
+                tampilkanToast("Gagal upload foto bukti, coba lagi ya.", "error");
+            } finally {
+                tombol.disabled = false;
+                tombol.innerText = labelAsli;
+            }
         }
 
         async function hapusPemasukanLain(key) {
@@ -1748,18 +1831,33 @@
             }
         }
 
-        function tambahPengeluaranCloud() {
+        async function tambahPengeluaranCloud() {
             let keperluan = document.getElementById('out-keperluan').value;
             let nominal = parseInt(document.getElementById('out-nominal').value);
-            let nota = document.getElementById('out-nota').value || "#";
+            let fileBukti = document.getElementById('out-bukti').files[0];
             if(!keperluan || !nominal) return tampilkanToast("Lengkapi form pengeluaran dulu ya!", "error");
-            let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
-            let nodeRef = window.fbRef(window.fbDatabase, "Pengeluaran_Kas");
-            window.fbPush(nodeRef, { tanggal: tgl, keperluan, nominal, nota });
-            document.getElementById('out-keperluan').value = "";
-            document.getElementById('out-nominal').value = "";
-            document.getElementById('out-nota').value = "";
-            tampilkanToast("Pengeluaran berhasil dicatat!", "success");
+            let tombol = document.getElementById('btn-simpan-pengeluaran');
+            let labelAsli = tombol.innerText;
+            tombol.disabled = true;
+            try {
+                let nota = "#";
+                if (fileBukti) {
+                    tombol.innerText = "Mengupload bukti...";
+                    nota = await uploadBuktiTransaksi(fileBukti, "pengeluaran");
+                }
+                let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                let nodeRef = window.fbRef(window.fbDatabase, "Pengeluaran_Kas");
+                window.fbPush(nodeRef, { tanggal: tgl, keperluan, nominal, nota });
+                document.getElementById('out-keperluan').value = "";
+                document.getElementById('out-nominal').value = "";
+                document.getElementById('out-bukti').value = "";
+                tampilkanToast("Pengeluaran berhasil dicatat!", "success");
+            } catch(e) {
+                tampilkanToast("Gagal upload foto bukti, coba lagi ya.", "error");
+            } finally {
+                tombol.disabled = false;
+                tombol.innerText = labelAsli;
+            }
         }
 
         function tambahAnggaranCloud() {
@@ -2121,16 +2219,18 @@
             Object.keys(dataPemasukanLainCloud).forEach(k => {
                 let item = dataPemasukanLainCloud[k];
                 let btnHapusAction = statusAdmin ? `<button class="btn-hapus-sm" onclick="hapusPemasukanLain('${k}')">Hapus</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">-</span>`;
+                let btnBukti = (item.bukti && item.bukti !== "#") ? `<button class="btn-lihat-bukti" onclick="bukaLihatBukti('${item.bukti}')"><i class="fa-solid fa-chevron-right"></i> Lihat Bukti</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">–</span>`;
                 bodyPemasukanLain.innerHTML += `
                     <tr>
                         <td data-label="Tanggal">${item.tanggal}</td>
                         <td class="kolom-nama" data-label="Sumber">💰 ${item.sumber}</td>
                         <td class="total-masuk" data-label="Nominal" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
+                        <td data-label="Bukti">${btnBukti}</td>
                         <td data-label="Aksi">${btnHapusAction}</td>
                     </tr>
                 `;
             });
-            if(bodyPemasukanLain.innerHTML === "") bodyPemasukanLain.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted);">Belum ada riwayat pemasukan tak terduga luar.</td></tr>`;
+            if(bodyPemasukanLain.innerHTML === "") bodyPemasukanLain.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted);">Belum ada riwayat pemasukan tak terduga luar.</td></tr>`;
         }
 
         function renderHalamanPengeluaran() {
@@ -2138,13 +2238,13 @@
             bodyPengeluaran.innerHTML = "";
             Object.keys(dataPengeluaranCloud).forEach(k => {
                 let item = dataPengeluaranCloud[k];
-                let linkNota = item.nota !== "#" ? `<a href="${item.nota}" target="_blank" class="btn-nota"><i class="fa-solid fa-eye"></i> Nota</a>` : `<span style="color:var(--text-muted); font-size:0.8rem;">Tidak ada</span>`;
+                let linkNota = (item.nota && item.nota !== "#") ? `<button class="btn-lihat-bukti" onclick="bukaLihatBukti('${item.nota}')"><i class="fa-solid fa-chevron-right"></i> Lihat Bukti</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">–</span>`;
                 bodyPengeluaran.innerHTML += `
                     <tr>
                         <td data-label="Tanggal">${item.tanggal}</td>
                         <td class="kolom-nama" data-label="Keperluan">${item.keperluan}</td>
                         <td class="total-keluar" data-label="Nominal" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
-                        <td data-label="Nota">${linkNota}</td>
+                        <td data-label="Bukti">${linkNota}</td>
                     </tr>
                 `;
             });
