@@ -17,29 +17,30 @@
     <style>
         /* ==================== 1. VARIABEL & RESET STYLE ==================== */
         :root {
-            --primary: #4f46e5;
-            --primary-dark: #3730a3;
-            --primary-light: #e0e7ff;
-            --bg-main: #f4f6fb;
+            /* ---- Palet "Midnight Slate & Gold Accent" - mode terang ---- */
+            --primary: #3a4657;
+            --primary-dark: #232c3a;
+            --primary-light: #e9ecf1;
+            --bg-main: #f6f5f1;
             --surface: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --success: #10b981;
-            --success-light: #d1fae5;
-            --danger: #ef4444;
-            --danger-light: #fee2e2;
-            --warning-bg: #fef2f2;
-            --warning: #f59e0b;
-            --warning-light: #fef3c7;
-            --warning-text: #92400e;
-            --border-color: #e6eaf1;
-            --table-header: #f8fafc;
+            --text-main: #1b2030;
+            --text-muted: #6b7280;
+            --success: #157a5f;
+            --success-light: #d9f0e6;
+            --danger: #b3402f;
+            --danger-light: #fbe6e2;
+            --warning-bg: #fbf3e2;
+            --warning: #b8860b;
+            --warning-light: #f3e6bf;
+            --warning-text: #7a5a10;
+            --border-color: #e3e0d6;
+            --table-header: #f8f6f1;
             --sidebar-width: 264px;
 
-            --accent-cyan: #0891b2;
+            --accent-cyan: #b8860b;
             --glow-primary: 0 0 0 rgba(0, 0, 0, 0);
             --glow-cyan: 0 0 0 rgba(0, 0, 0, 0);
-            --grid-line: rgba(15, 23, 42, 0.045);
+            --grid-line: rgba(27, 32, 48, 0.045);
             --font-display: 'Space Grotesk', 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 
@@ -52,27 +53,28 @@
             --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.14);
 
             /* Warna khusus kalender */
-            --fc-border-color: #e2e8f0;
-            --fc-button-bg-color: #4f46e5;
-            --fc-button-border-color: #4f46e5;
-            --fc-button-hover-bg-color: #3730a3;
+            --fc-border-color: #e3e0d6;
+            --fc-button-bg-color: #3a4657;
+            --fc-button-border-color: #3a4657;
+            --fc-button-hover-bg-color: #232c3a;
             --fc-page-bg-color: #ffffff;
         }
 
         [data-theme="dark"] {
-            --bg-main: #04060d;
-            --surface: rgba(19, 25, 43, 0.72);
-            --text-main: #f1f5f9;
-            --text-muted: #8b96ac;
-            --primary: #6d6af8;
-            --primary-dark: #4338ca;
-            --primary-light: #241f4d;
-            --warning-bg: #2d1e1e;
-            --warning: #f59e0b;
-            --warning-light: #3a2a10;
-            --warning-text: #fbbf24;
-            --border-color: #232c4a;
-            --table-header: rgba(26, 34, 59, 0.75);
+            /* ---- Palet "Midnight Slate & Gold Accent" - mode gelap ---- */
+            --bg-main: #05070d;
+            --surface: rgba(18, 23, 37, 0.72);
+            --text-main: #f1efe6;
+            --text-muted: #9aa1b0;
+            --primary: #d4af37;
+            --primary-dark: #a8842a;
+            --primary-light: #3a3018;
+            --warning-bg: #2d2410;
+            --warning: #d4af37;
+            --warning-light: #3a2f14;
+            --warning-text: #f1d488;
+            --border-color: #232838;
+            --table-header: rgba(23, 28, 44, 0.75);
             --success-light: #0f2e24;
             --danger-light: #34161c;
             --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -80,17 +82,17 @@
             --shadow-md: 0 10px 32px rgba(0, 0, 0, 0.5);
             --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.6);
 
-            --accent-cyan: #22d3ee;
-            --glow-primary: 0 0 28px rgba(109, 106, 248, 0.4);
-            --glow-cyan: 0 0 22px rgba(34, 211, 238, 0.35);
-            --grid-line: rgba(148, 163, 255, 0.06);
+            --accent-cyan: #c7cad6;
+            --glow-primary: 0 0 28px rgba(212, 175, 55, 0.35);
+            --glow-cyan: 0 0 22px rgba(199, 202, 214, 0.25);
+            --grid-line: rgba(212, 175, 55, 0.055);
 
             /* Warna khusus kalender dark mode */
-            --fc-border-color: #232c4a;
-            --fc-button-bg-color: #6d6af8;
-            --fc-button-border-color: #6d6af8;
-            --fc-button-hover-bg-color: #4338ca;
-            --fc-page-bg-color: #141b2d;
+            --fc-border-color: #232838;
+            --fc-button-bg-color: #d4af37;
+            --fc-button-border-color: #d4af37;
+            --fc-button-hover-bg-color: #a8842a;
+            --fc-page-bg-color: #10131f;
         }
 
         * {
@@ -129,9 +131,9 @@
             z-index: 0;
             pointer-events: none;
             background:
-                radial-gradient(600px circle at 8% -5%, rgba(109, 106, 248, 0.16), transparent 60%),
-                radial-gradient(500px circle at 100% 15%, rgba(34, 211, 238, 0.10), transparent 55%),
-                radial-gradient(700px circle at 30% 120%, rgba(109, 106, 248, 0.10), transparent 60%);
+                radial-gradient(600px circle at 8% -5%, rgba(212, 175, 55, 0.14), transparent 60%),
+                radial-gradient(500px circle at 100% 15%, rgba(199, 202, 214, 0.08), transparent 55%),
+                radial-gradient(700px circle at 30% 120%, rgba(212, 175, 55, 0.08), transparent 60%);
             opacity: 0;
             transition: opacity 0.4s ease;
         }
@@ -2174,7 +2176,7 @@
         function renderGrafikPemasukan(labels, data) {
             const canvasEl = document.getElementById('chart-pemasukan-bulanan');
             if(!canvasEl || typeof Chart === 'undefined') return;
-            const warnaPrimer = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#4f46e5';
+            const warnaPrimer = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#3a4657';
             const warnaTeks = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#64748b';
             const warnaGrid = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#e6eaf1';
 
