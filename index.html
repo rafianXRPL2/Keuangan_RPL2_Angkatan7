@@ -17,30 +17,38 @@
     <style>
         /* ==================== 1. VARIABEL & RESET STYLE ==================== */
         :root {
-            /* ---- Palet "Midnight Slate & Gold Accent" - mode terang ---- */
-            --primary: #3a4657;
-            --primary-dark: #232c3a;
-            --primary-light: #e9ecf1;
-            --bg-main: #f6f5f1;
+            /* ---- Palet "Midnight Navy & Low-Poly Gold" - mode terang ---- */
+            --primary: #1e293b;
+            --primary-dark: #0f172a;
+            --primary-light: #e7eaf0;
+            --bg-main: #f5f6f8;
             --surface: #ffffff;
-            --text-main: #1b2030;
-            --text-muted: #6b7280;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --success: #157a5f;
             --success-light: #d9f0e6;
             --danger: #b3402f;
             --danger-light: #fbe6e2;
             --warning-bg: #fbf3e2;
-            --warning: #b8860b;
+            --warning: #b45309;
             --warning-light: #f3e6bf;
             --warning-text: #7a5a10;
-            --border-color: #e3e0d6;
-            --table-header: #f8f6f1;
+            --border-color: #e2e5ea;
+            --table-header: #f8f9fb;
             --sidebar-width: 264px;
 
-            --accent-cyan: #b8860b;
+            /* Skala emas metalik untuk aksen & facet low-poly */
+            --gold-1: #fbbf24;
+            --gold-2: #f59e0b;
+            --gold-3: #d97706;
+            --gold-4: #b45309;
+            --navy-obsidian: #0f172a;
+            --navy-slate: #1e293b;
+
+            --accent-cyan: #d97706;
             --glow-primary: 0 0 0 rgba(0, 0, 0, 0);
             --glow-cyan: 0 0 0 rgba(0, 0, 0, 0);
-            --grid-line: rgba(27, 32, 48, 0.045);
+            --grid-line: rgba(15, 23, 42, 0.045);
             --font-display: 'Space Grotesk', 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 
@@ -53,26 +61,26 @@
             --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.14);
 
             /* Warna khusus kalender */
-            --fc-border-color: #e3e0d6;
-            --fc-button-bg-color: #3a4657;
-            --fc-button-border-color: #3a4657;
-            --fc-button-hover-bg-color: #232c3a;
+            --fc-border-color: #e2e5ea;
+            --fc-button-bg-color: #1e293b;
+            --fc-button-border-color: #1e293b;
+            --fc-button-hover-bg-color: #0f172a;
             --fc-page-bg-color: #ffffff;
         }
 
         [data-theme="dark"] {
-            /* ---- Palet "Midnight Slate & Gold Accent" - mode gelap ---- */
+            /* ---- Palet "Midnight Navy & Low-Poly Gold" - mode gelap ---- */
             --bg-main: #05070d;
             --surface: rgba(18, 23, 37, 0.72);
-            --text-main: #f1efe6;
-            --text-muted: #9aa1b0;
-            --primary: #d4af37;
-            --primary-dark: #a8842a;
-            --primary-light: #3a3018;
+            --text-main: #f1f5f9;
+            --text-muted: #94a1b5;
+            --primary: #33415c;
+            --primary-dark: #1e293b;
+            --primary-light: #202c40;
             --warning-bg: #2d2410;
-            --warning: #d4af37;
+            --warning: #f59e0b;
             --warning-light: #3a2f14;
-            --warning-text: #f1d488;
+            --warning-text: #fbbf24;
             --border-color: #232838;
             --table-header: rgba(23, 28, 44, 0.75);
             --success-light: #0f2e24;
@@ -82,16 +90,24 @@
             --shadow-md: 0 10px 32px rgba(0, 0, 0, 0.5);
             --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.6);
 
-            --accent-cyan: #c7cad6;
-            --glow-primary: 0 0 28px rgba(212, 175, 55, 0.35);
-            --glow-cyan: 0 0 22px rgba(199, 202, 214, 0.25);
-            --grid-line: rgba(212, 175, 55, 0.055);
+            /* Skala emas metalik untuk aksen & facet low-poly */
+            --gold-1: #fbbf24;
+            --gold-2: #f59e0b;
+            --gold-3: #d97706;
+            --gold-4: #b45309;
+            --navy-obsidian: #0f172a;
+            --navy-slate: #1e293b;
+
+            --accent-cyan: #f59e0b;
+            --glow-primary: 0 0 28px rgba(245, 158, 11, 0.3);
+            --glow-cyan: 0 0 22px rgba(245, 158, 11, 0.22);
+            --grid-line: rgba(245, 158, 11, 0.05);
 
             /* Warna khusus kalender dark mode */
             --fc-border-color: #232838;
-            --fc-button-bg-color: #d4af37;
-            --fc-button-border-color: #d4af37;
-            --fc-button-hover-bg-color: #a8842a;
+            --fc-button-bg-color: #33415c;
+            --fc-button-border-color: #33415c;
+            --fc-button-hover-bg-color: #1e293b;
             --fc-page-bg-color: #10131f;
         }
 
@@ -131,9 +147,9 @@
             z-index: 0;
             pointer-events: none;
             background:
-                radial-gradient(600px circle at 8% -5%, rgba(212, 175, 55, 0.14), transparent 60%),
-                radial-gradient(500px circle at 100% 15%, rgba(199, 202, 214, 0.08), transparent 55%),
-                radial-gradient(700px circle at 30% 120%, rgba(212, 175, 55, 0.08), transparent 60%);
+                radial-gradient(600px circle at 8% -5%, rgba(245, 158, 11, 0.13), transparent 60%),
+                radial-gradient(500px circle at 100% 15%, rgba(180, 83, 9, 0.08), transparent 55%),
+                radial-gradient(700px circle at 30% 120%, rgba(245, 158, 11, 0.07), transparent 60%);
             opacity: 0;
             transition: opacity 0.4s ease;
         }
@@ -219,38 +235,49 @@
 
         .sidebar-header {
             padding: 26px 18px;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary) 65%, var(--accent-cyan) 140%);
-            color: white;
+            background:
+                radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px) 0 0/14px 14px,
+                linear-gradient(160deg, var(--navy-obsidian) 0%, var(--navy-slate) 100%);
+            color: #f8fafc;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
+        /* ---- Facet emas low-poly #1: bentuk besar sudut kanan-atas ---- */
         .sidebar-header::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1px);
-            background-size: 14px 14px;
-            mask-image: linear-gradient(160deg, rgba(0,0,0,0.9), transparent 70%);
-            -webkit-mask-image: linear-gradient(160deg, rgba(0,0,0,0.9), transparent 70%);
+            top: -30%; right: -22%;
+            width: 88%; height: 165%;
+            background: linear-gradient(135deg, var(--gold-1) 0%, var(--gold-2) 45%, var(--gold-3) 75%, var(--gold-4) 100%);
+            clip-path: polygon(100% 0%, 100% 62%, 58% 100%, 30% 68%, 52% 34%, 20% 18%);
+            opacity: 0.92;
+            filter: drop-shadow(0 4px 14px rgba(180, 83, 9, 0.35));
         }
+        /* ---- Facet emas low-poly #2: pecahan kristal lebih terang, menimpa layer pertama ---- */
         .sidebar-header::after {
             content: "";
             position: absolute;
-            width: 140px; height: 140px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            top: -60px; right: -40px;
+            top: -18%; right: -12%;
+            width: 56%; height: 105%;
+            background:
+                linear-gradient(200deg, rgba(255,255,255,0.45) 0%, transparent 55%),
+                linear-gradient(150deg, var(--gold-4), var(--gold-1) 85%);
+            clip-path: polygon(100% 0%, 100% 38%, 55% 82%, 38% 46%, 68% 8%);
+            opacity: 0.55;
+            mix-blend-mode: overlay;
         }
         .sidebar-header-icon {
             width: 44px; height: 44px;
-            background: rgba(255,255,255,0.16);
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(251, 191, 36, 0.4);
             border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 10px;
             font-size: 1.15rem;
+            color: var(--gold-1);
             position: relative; z-index: 1;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 0 24px rgba(255,255,255,0.25);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 24px rgba(245,158,11,0.25);
         }
         .sidebar-header h1 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; position: relative; z-index: 1; letter-spacing: 0.3px; }
         .sidebar-header p { font-size: 0.72rem; opacity: 0.85; position: relative; z-index: 1; }
@@ -480,38 +507,54 @@
         /* ---- Ringkasan Keuangan: Saldo Hero + Kartu Masuk/Keluar ---- */
         .dashboard-ringkasan { margin-bottom: 20px; }
         .saldo-hero {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            background: linear-gradient(135deg, var(--navy-obsidian), var(--navy-slate));
             color: #ffffff;
             border-radius: var(--radius-lg);
             padding: 26px 28px;
             margin-bottom: 14px;
             box-shadow: var(--shadow-md), var(--glow-primary);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(251, 191, 36, 0.18);
             position: relative;
             overflow: hidden;
         }
+        /* ---- Facet emas low-poly #1: bidang besar sudut kanan ---- */
         .saldo-hero::before {
-            content: ""; position: absolute; width: 220px; height: 220px;
-            background: rgba(255,255,255,0.08); border-radius: 50%; top: -110px; right: -50px;
+            content: "";
+            position: absolute;
+            top: -25%; right: -14%;
+            width: 62%; height: 150%;
+            background: linear-gradient(135deg, var(--gold-1) 0%, var(--gold-2) 40%, var(--gold-3) 70%, var(--gold-4) 100%);
+            clip-path: polygon(100% 0%, 100% 70%, 62% 100%, 40% 62%, 66% 30%, 30% 12%);
+            opacity: 0.85;
+            filter: drop-shadow(0 6px 18px rgba(180, 83, 9, 0.3));
         }
+        /* ---- Facet emas low-poly #2: pecahan kristal terang menimpa layer pertama ---- */
         .saldo-hero::after {
-            content: ""; position: absolute; width: 130px; height: 130px;
-            background: rgba(255,255,255,0.06); border-radius: 50%; bottom: -70px; right: 60px;
+            content: "";
+            position: absolute;
+            top: -12%; right: -6%;
+            width: 42%; height: 95%;
+            background:
+                linear-gradient(200deg, rgba(255,255,255,0.4) 0%, transparent 55%),
+                linear-gradient(150deg, var(--gold-4), var(--gold-1) 85%);
+            clip-path: polygon(100% 0%, 100% 45%, 60% 85%, 42% 48%, 74% 10%);
+            opacity: 0.5;
+            mix-blend-mode: overlay;
         }
         .saldo-hero-pattern {
-            position: absolute; inset: 0; z-index: 0; opacity: 0.5;
-            background-image: radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px);
+            position: absolute; inset: 0; z-index: 0; opacity: 0.35;
+            background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
             background-size: 16px 16px;
-            mask-image: linear-gradient(120deg, rgba(0,0,0,0.9), transparent 65%);
-            -webkit-mask-image: linear-gradient(120deg, rgba(0,0,0,0.9), transparent 65%);
+            mask-image: linear-gradient(115deg, transparent 42%, rgba(0,0,0,0.85) 70%, transparent 100%);
+            -webkit-mask-image: linear-gradient(115deg, transparent 42%, rgba(0,0,0,0.85) 70%, transparent 100%);
         }
         [data-theme="dark"] .saldo-hero-pattern { animation: driftGrid 16s linear infinite; }
         @keyframes driftGrid { from { background-position: 0 0; } to { background-position: 160px 160px; } }
         .saldo-hero-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
         .saldo-hero-label { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 700; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; }
-        .saldo-hero-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .saldo-hero-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.14); border: 1px solid rgba(251,191,36,0.35); color: var(--gold-1); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
         .saldo-hero-value { font-family: var(--font-mono); font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; margin-top: 10px; position: relative; z-index: 1; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
-        [data-theme="dark"] .saldo-hero-value { text-shadow: 0 0 26px rgba(255,255,255,0.3); }
+        [data-theme="dark"] .saldo-hero-value { text-shadow: 0 0 26px rgba(245,158,11,0.25); }
         .saldo-hero-sub { font-size: 0.78rem; opacity: 0.8; margin-top: 6px; position: relative; z-index: 1; }
 
         .live-dot {
@@ -2176,7 +2219,7 @@
         function renderGrafikPemasukan(labels, data) {
             const canvasEl = document.getElementById('chart-pemasukan-bulanan');
             if(!canvasEl || typeof Chart === 'undefined') return;
-            const warnaPrimer = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#3a4657';
+            const warnaPrimer = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#1e293b';
             const warnaTeks = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#64748b';
             const warnaGrid = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#e6eaf1';
 
