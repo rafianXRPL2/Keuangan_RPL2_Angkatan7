@@ -1,0 +1,55 @@
+{
+  "name": "keuangan_rpl2_angkatan7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "upload-bucket": "node scripts/bucket-helper.js",
+    "upload-supabase": "node scripts/supabase-helper.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafianXRPL2/Keuangan_RPL2_Angkatan7.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/rafianXRPL2/Keuangan_RPL2_Angkatan7/issues"
+  },
+  "homepage": "https://github.com/rafianXRPL2/Keuangan_RPL2_Angkatan7#readme",
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.21",
+    "@fullcalendar/daygrid": "^6.1.21",
+    "@fullcalendar/list": "^6.1.21",
+    "@fullcalendar/react": "^7.0.2",
+    "@supabase/supabase-js": "^2.111.0",
+    "chart.js": "^4.5.1",
+    "clsx": "^2.1.1",
+    "firebase": "^12.16.0",
+    "framer-motion": "^12.43.0",
+    "lucide-react": "^1.27.0",
+    "motion": "^12.43.0",
+    "next": "^16.2.12",
+    "react": "^19.2.8",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.8",
+    "sweetalert2": "^11.26.25",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.25",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}

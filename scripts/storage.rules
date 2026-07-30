@@ -1,0 +1,9 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // Izinkan publik membaca dan mengunggah gambar bukti transaksi kas kelas
+      allow read, write: if true;
+    }
+  }
+}

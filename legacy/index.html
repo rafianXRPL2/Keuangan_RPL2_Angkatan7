@@ -876,15 +876,44 @@
             -webkit-backdrop-filter: blur(20px);
         }
 
-        /* ==================== 7. HORMATI PREFERENSI GERAKAN BERKURANG ==================== */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+        /* ==================== 8. PROGRESS BAR TARGET TABUNGAN & STYLING PRINT ==================== */
+        .card-target-item {
+            background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow-xs); transition: transform .18s ease;
         }
+        .card-target-item:hover { transform: translateY(-2px); }
+        .progress-bar-track {
+            width: 100%; height: 10px; background: var(--table-header); border-radius: 10px;
+            overflow: hidden; border: 1px solid var(--border-color); margin-top: 6px;
+        }
+        .progress-bar-fill {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, var(--gold-3), var(--gold-1), var(--success));
+            transition: width 0.4s ease;
+        }
+        .badge-kategori {
+            font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;
+            background: var(--table-header); color: var(--text-muted); border: 1px solid var(--border-color);
+        }
+
+        /* Gaya Khusus Cetak Laporan PDF */
+        @media print {
+            aside, .mobile-topbar, .panel-kontrol, .fab-container, .btn, .search-box, .banner-notif, #theme-switch, .toast-container, .admin-only-elemen, .kalender-form-header, #admin-form-kalender {
+                display: none !important;
+            }
+            main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+            body { background: #fff !important; color: #000 !important; }
+            .wrapper-tabel { border: 1px solid #ccc !important; box-shadow: none !important; }
+            .wrapper-tabel th { background: #f0f0f0 !important; color: #000 !important; border-bottom: 2px solid #000 !important; }
+            .wrapper-tabel td { border-bottom: 1px solid #ddd !important; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px double #000; padding-bottom: 10px; }
+            .print-header h2 { font-size: 1.4rem; font-weight: 800; }
+            .print-header p { font-size: 0.85rem; }
+            .print-footer-ttd { display: flex !important; justify-content: space-between; margin-top: 40px; padding: 0 40px; }
+            .ttd-box { text-align: center; font-size: 0.9rem; }
+            .ttd-garis { margin-top: 60px; font-weight: 700; border-top: 1px solid #000; padding-top: 4px; display: inline-block; min-width: 160px; }
+        }
+        .print-header, .print-footer-ttd { display: none; }
     </style>
 
     <script type="module">
@@ -980,9 +1009,16 @@
     </aside>
 
     <main>
+        <!-- Layout Khusus Cetak PDF -->
+        <div class="print-header">
+            <h2>LAPORAN KEUANGAN KAS XI RPL 2</h2>
+            <p>Sistem Kas Realtime Cloud Monitoring</p>
+            <p style="font-size:0.78rem; margin-top:4px;">Tanggal Cetak: <span id="print-tgl-sekarang"></span></p>
+        </div>
+
         <div class="halaman-header">
             <h1><i class="fa-solid fa-chart-line"></i> Sistem Monitoring Kas XI RPL 2</h1>
-            <p><span class="live-dot"></span>Sinkronisasi data transparan &amp; realtime cloud</p>
+            <p><span class="live-dot"></span>Sinkronisasi data transparan &amp; realtime cloud &bull; <span style="opacity:0.85; font-size:0.78rem;"><i class="fa-solid fa-clock-rotate-left"></i> Terakhir diperbarui: <span id="waktu-log-cloud">Realtime</span></span></p>
         </div>
 
         <div class="dashboard-ringkasan">
@@ -1022,11 +1058,20 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="cari-siswa" placeholder="Cari nama siswa..." aria-label="Cari nama siswa" oninput="filterSiswaBulanan()">
                 </div>
+                <button class="btn btn-neutral btn-auto" onclick="eksporKasExcel()" title="Unduh Spreadsheet Excel">
+                    <i class="fa-solid fa-file-excel" style="color:#10b981;"></i> Ekspor Excel
+                </button>
+                <button class="btn btn-neutral btn-auto" onclick="cetakLaporanPDF()" title="Cetak / Print Laporan">
+                    <i class="fa-solid fa-print" style="color:#3b82f6;"></i> Cetak Laporan
+                </button>
                 <button class="btn btn-neutral btn-auto admin-only-elemen" onclick="bukaModalSiswaNonaktif()" id="btn-buka-nonaktif">
-                    <i class="fa-solid fa-user-slash"></i> Siswa Nonaktif <span class="chip-angka" id="chip-jumlah-nonaktif">0</span>
+                    <i class="fa-solid fa-user-slash"></i> Nonaktif <span class="chip-angka" id="chip-jumlah-nonaktif">0</span>
+                </button>
+                <button class="btn btn-success btn-auto admin-only-elemen" onclick="setorKasBatchLunas()" title="Tandai Lunas M1-M4 untuk siswa yang dicentang">
+                    <i class="fa-solid fa-check-double"></i> Batch Lunas
                 </button>
                 <button class="btn btn-primary btn-auto" onclick="salinTagihanWhatsApp()">
-                    <i class="fa-solid fa-bullhorn"></i> Salin Info Tagihan WA
+                    <i class="fa-solid fa-bullhorn"></i> Broadcast WA
                 </button>
             </div>
             <div id="banner-nunggak" class="banner-notif hidden">
@@ -1037,6 +1082,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 32px;" class="admin-only-elemen"><input type="checkbox" id="cb-pilih-semua" onchange="togglePilihSemuaSiswa(this)" title="Pilih Semua"></th>
                             <th style="width: 40px;">No</th>
                             <th>Nama Siswa</th>
                             <th style="width: 80px;">M1</th>
@@ -1053,10 +1099,18 @@
         </div>
 
         <div id="halaman-rekap" class="hidden">
-            <div class="card-fitur" style="margin-bottom:16px;">
-                <h3><i class="fa-solid fa-chart-column" style="color:var(--primary);"></i> Grafik Kas Masuk per Bulan</h3>
-                <div style="position:relative; height:220px;">
-                    <canvas id="chart-pemasukan-bulanan"></canvas>
+            <div class="cards-container" style="margin-bottom:16px;">
+                <div class="card-fitur">
+                    <h3><i class="fa-solid fa-chart-column" style="color:var(--primary);"></i> Grafik Kas Masuk per Bulan</h3>
+                    <div style="position:relative; height:220px;">
+                        <canvas id="chart-pemasukan-bulanan"></canvas>
+                    </div>
+                </div>
+                <div class="card-fitur">
+                    <h3><i class="fa-solid fa-chart-pie" style="color:var(--warning);"></i> Kategori Pengeluaran Kas</h3>
+                    <div style="position:relative; height:220px; display:flex; align-items:center; justify-content:center;">
+                        <canvas id="chart-kategori-pengeluaran"></canvas>
+                    </div>
                 </div>
             </div>
             <div class="cards-container">
@@ -1124,6 +1178,15 @@
                         <input type="text" id="out-keperluan" placeholder="Contoh: Beli Spidol & Penghapus">
                     </div>
                     <div>
+                        <label class="form-label" for="out-kategori">Kategori Pengeluaran</label>
+                        <select id="out-kategori">
+                            <option value="Operasional Kelas">📚 Operasional Kelas</option>
+                            <option value="Event & Lomba">🏆 Event & Lomba</option>
+                            <option value="Kebersihan & Dekorasi">🧹 Kebersihan & Dekorasi</option>
+                            <option value="Dana Darurat / Lainnya">🆘 Dana Darurat / Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="form-label" for="out-nominal">Nominal (Rupiah)</label>
                         <input type="number" id="out-nominal" placeholder="Nominal (Rupiah)">
                     </div>
@@ -1140,7 +1203,7 @@
                     <thead>
                         <tr>
                             <th>Tanggal</th>
-                            <th>Keperluan / Alokasi Belanja</th>
+                            <th>Keperluan & Kategori</th>
                             <th>Nominal</th>
                             <th>Bukti</th>
                         </tr>
@@ -1151,6 +1214,31 @@
         </div>
 
         <div id="halaman-anggaran" class="hidden">
+            <!-- Target Tabungan Event Kelas -->
+            <div class="card-fitur" style="margin-bottom:16px;">
+                <h3><i class="fa-solid fa-bullseye" style="color:var(--gold-2);"></i> Target Tabungan & Penggalangan Dana Class Event</h3>
+                <div id="container-target-dana" style="margin-top:12px;"></div>
+            </div>
+
+            <div id="admin-form-target-dana" class="form-box hidden" style="margin-bottom:16px;">
+                <h3><i class="fa-solid fa-plus"></i> Tambah Target Tabungan Baru (Bendahara)</h3>
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label" for="target-nama">Nama Target / Event</label>
+                        <input type="text" id="target-nama" placeholder="Contoh: Beli Kipas Angin Dinding">
+                    </div>
+                    <div>
+                        <label class="form-label" for="target-nominal">Target Nominal (Rupiah)</label>
+                        <input type="number" id="target-nominal" placeholder="Nominal Target">
+                    </div>
+                    <div>
+                        <label class="form-label" for="target-terkumpul">Nominal Terkumpul Saat Ini</label>
+                        <input type="number" id="target-terkumpul" placeholder="Nominal Terkumpul awal">
+                    </div>
+                </div>
+                <button class="btn btn-success btn-auto" onclick="tambahTargetDanaCloud()">Simpan Target Tabungan</button>
+            </div>
+
             <div id="admin-form-anggaran" class="form-box hidden">
                 <h3><i class="fa-solid fa-circle-plus"></i> Tambah Rencana Anggaran Kelas</h3>
                 <div class="form-grid">
@@ -1165,6 +1253,7 @@
                 </div>
                 <button class="btn btn-success btn-auto" onclick="tambahAnggaranCloud()">Tambah Rencana</button>
             </div>
+
             <div class="wrapper-tabel">
                 <table>
                     <thead>
@@ -1356,7 +1445,10 @@
         let dataAnggaranCloud = {};
         let dataAgendaKalenderCloud = {};
         let dataPemasukanLainCloud = {};
+        let dataTargetDanaCloud = {};
         let dataAwalDimuat = false;
+        let riwayatIdSiswaAktif = null;
+        let grafikKategoriInstance = null;
 
         const DAFTAR_SISWA = [
             "Aditia Jun Maulana", "Akbar Wijaya", "Alfian Aziz Afrizal", "Alifia Junianty",
@@ -1450,6 +1542,7 @@
         }
 
         function bukaRiwayatSiswa(idSiswa) {
+            riwayatIdSiswaAktif = idSiswa;
             let nama = namaTampil(idSiswa);
             document.getElementById('riwayat-nama-siswa').innerText = nama;
 
@@ -1487,8 +1580,14 @@
                 <div class="riwayat-stat-chip"><div class="label">Total Setor</div><div class="value" style="color:var(--primary);">Rp ${totalSetahun.toLocaleString('id-ID')}</div></div>
                 <div class="riwayat-stat-chip"><div class="label">Bulan Lunas</div><div class="value" style="color:var(--success);">${bulanLunas}/${URUTAN_BULAN.length}</div></div>
             `;
-            document.getElementById('riwayat-list-box').innerHTML = listHtml;
 
+            listHtml += `
+                <button class="btn btn-success" style="margin-top:10px; font-size:0.82rem; justify-content:center;" onclick="kirimWATagihanPersonal(${idSiswa})">
+                    <i class="fa-brands fa-whatsapp"></i> Kirim Tagihan WA Personal
+                </button>
+            `;
+
+            document.getElementById('riwayat-list-box').innerHTML = listHtml;
             document.getElementById('modal-riwayat').classList.add('show');
         }
         function tutupRiwayat() { document.getElementById('modal-riwayat').classList.remove('show'); }
@@ -1629,9 +1728,11 @@
                 document.getElementById('admin-form-kalender').classList.remove('hidden');
                 document.getElementById('admin-view-saran').classList.remove('hidden');
                 document.getElementById('admin-form-pemasukan-lain').classList.remove('hidden');
+                if(document.getElementById('admin-form-target-dana')) document.getElementById('admin-form-target-dana').classList.remove('hidden');
                 document.querySelectorAll('.editable').forEach(td => td.classList.add('aktif'));
                 document.querySelectorAll('.editable').forEach(td => td.contentEditable = "true");
                 tampilkanToast("Akses admin diterima! Mode edit aktif.", "success");
+                bangunStrukturTabel();
                 renderSesuaiKonteks();
             } else {
                 tampilkanToast("Password bendahara salah / ditolak!", "error");
@@ -1648,9 +1749,11 @@
             document.getElementById('admin-form-kalender').classList.add('hidden');
             document.getElementById('admin-view-saran').classList.add('hidden');
             document.getElementById('admin-form-pemasukan-lain').classList.add('hidden');
+            if(document.getElementById('admin-form-target-dana')) document.getElementById('admin-form-target-dana').classList.add('hidden');
             document.querySelectorAll('.editable').forEach(td => td.classList.remove('aktif'));
             document.querySelectorAll('.editable').forEach(td => td.contentEditable = "false");
             tampilkanToast("Mode bendahara dinonaktifkan.", "info");
+            bangunStrukturTabel();
             renderSesuaiKonteks();
         }
 
@@ -1665,6 +1768,7 @@
                 let nama = namaTampil(idSiswa);
                 bodyBulanan.innerHTML += `
                     <tr class="row-siswa" id="row-${idSiswa}" data-id="${idSiswa}">
+                        <td class="admin-only-elemen" style="text-align:center;"><input type="checkbox" class="cb-siswa" data-id="${idSiswa}"></td>
                         <td class="col-no" data-label="No">${idSiswa}</td>
                         <td class="kolom-nama nama-klik" data-label="Nama" onclick="bukaRiwayatSiswa(${idSiswa})">${nama} <i class="fa-solid fa-chevron-right nama-klik-icon"></i></td>
                         <td class="${kelasEditable} m1" ${atrEditable} data-minggu="m1" data-label="Minggu 1">0</td>
@@ -1739,6 +1843,17 @@
                 if(halamanSekarang === 'pemasukan-lain') renderHalamanPemasukanLain();
             });
 
+            window.fbOnValue(window.fbRef(window.fbDatabase, "Target_Dana_Kas"), (snapshot) => {
+                dataTargetDanaCloud = snapshot.val() || {};
+                if(halamanSekarang === 'anggaran') renderTargetDana();
+            });
+
+            window.fbOnValue(window.fbRef(window.fbDatabase, "Terakhir_Diperbarui"), (snapshot) => {
+                let logWaktu = snapshot.val() || "Baru saja";
+                let el = document.getElementById('waktu-log-cloud');
+                if(el) el.innerText = logWaktu;
+            });
+
             window.fbOnValue(window.fbRef(window.fbDatabase, "Saran_Kelas"), (snapshot) => {
                 let dataSaran = snapshot.val() || {};
                 const box = document.getElementById('list-saran-box');
@@ -1784,6 +1899,11 @@
             document.getElementById('saldo-sisa').innerText = "Rp " + sisaSaldoSekarang.toLocaleString('id-ID');
         }
 
+        function catatWaktuLogCloud() {
+            let skrg = new Date().toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            window.fbSet(window.fbRef(window.fbDatabase, "Terakhir_Diperbarui"), skrg);
+        }
+
         function simpanDataKeCloud() {
             if(!statusAdmin) return;
             let bulanAktif = document.getElementById('select-bulan').value;
@@ -1799,6 +1919,7 @@
             });
 
             window.fbSet(window.fbRef(window.fbDatabase, `Kas_XI_RPL2/${bulanAktif}`), dataSatuBulan);
+            catatWaktuLogCloud();
         }
 
         /* ==================== UPLOAD FOTO BUKTI TRANSAKSI ==================== */
@@ -1878,6 +1999,7 @@
 
         async function tambahPengeluaranCloud() {
             let keperluan = document.getElementById('out-keperluan').value;
+            let kategori = document.getElementById('out-kategori') ? document.getElementById('out-kategori').value : "Operasional Kelas";
             let nominal = parseInt(document.getElementById('out-nominal').value);
             let fileBukti = document.getElementById('out-bukti').files[0];
             if(!keperluan || !nominal) return tampilkanToast("Lengkapi form pengeluaran dulu ya!", "error");
@@ -1892,7 +2014,8 @@
                 }
                 let tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
                 let nodeRef = window.fbRef(window.fbDatabase, "Pengeluaran_Kas");
-                window.fbPush(nodeRef, { tanggal: tgl, keperluan, nominal, nota });
+                window.fbPush(nodeRef, { tanggal: tgl, keperluan, kategori, nominal, nota });
+                catatWaktuLogCloud();
                 document.getElementById('out-keperluan').value = "";
                 document.getElementById('out-nominal').value = "";
                 document.getElementById('out-bukti').value = "";
@@ -2214,6 +2337,7 @@
         return totalBulanIni;
     });
     renderGrafikPemasukan(labelBulanChart, dataPerBulan);
+    renderGrafikKategori();
 }
 
         function renderGrafikPemasukan(labels, data) {
@@ -2283,11 +2407,12 @@
             bodyPengeluaran.innerHTML = "";
             Object.keys(dataPengeluaranCloud).forEach(k => {
                 let item = dataPengeluaranCloud[k];
+                let kat = item.kategori || "Operasional Kelas";
                 let linkNota = (item.nota && item.nota !== "#") ? `<button class="btn-lihat-bukti" onclick="bukaLihatBukti('${item.nota}')"><i class="fa-solid fa-chevron-right"></i> Lihat Bukti</button>` : `<span style="color:var(--text-muted); font-size:0.8rem;">–</span>`;
                 bodyPengeluaran.innerHTML += `
                     <tr>
                         <td data-label="Tanggal">${item.tanggal}</td>
-                        <td class="kolom-nama" data-label="Keperluan">${item.keperluan}</td>
+                        <td class="kolom-nama" data-label="Keperluan">${htmlEscape(item.keperluan)} <span class="badge-kategori">${htmlEscape(kat)}</span></td>
                         <td class="total-keluar" data-label="Nominal" style="font-weight:700;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
                         <td data-label="Bukti">${linkNota}</td>
                     </tr>
@@ -2297,6 +2422,7 @@
         }
 
         function renderHalamanAnggaran() {
+            renderTargetDana();
             let bodyAnggaran = document.getElementById('body-tabel-anggaran');
             bodyAnggaran.innerHTML = "";
             Object.keys(dataAnggaranCloud).forEach(k => {
@@ -2311,6 +2437,235 @@
                 `;
             });
             if(bodyAnggaran.innerHTML === "") bodyAnggaran.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted);">Belum ada daftar rancangan anggaran kegiatan kelas.</td></tr>`;
+        }
+
+        /* ==================== FITUR BARU: EKSPOR & CETAK ==================== */
+        function eksporKasExcel() {
+            let bulanAktif = document.getElementById('select-bulan').value;
+            let csvContent = "\uFEFF";
+            csvContent += `LAPORAN KAS REALTIME XI RPL 2 - BULAN ${bulanAktif.toUpperCase()}\n`;
+            csvContent += `Sisa Saldo Kas Kelas: ${document.getElementById('saldo-sisa').innerText}\n\n`;
+            csvContent += `No,Nama Siswa,Minggu 1 (Rp),Minggu 2 (Rp),Minggu 3 (Rp),Minggu 4 (Rp),Total Setor Bulan Ini (Rp),Status\n`;
+
+            let idx = 1;
+            DAFTAR_SISWA.forEach((_, i) => {
+                let idSiswa = i + 1;
+                if(siswaNonaktifCloud[idSiswa]) return;
+                let nama = namaTampil(idSiswa);
+                let dataBulan = (masterDataCloud[bulanAktif] && masterDataCloud[bulanAktif][idSiswa]) || { m1: 0, m2: 0, m3: 0, m4: 0 };
+                let total = (dataBulan.m1||0) + (dataBulan.m2||0) + (dataBulan.m3||0) + (dataBulan.m4||0);
+                let statusStr = total >= WAJIB_BAYAR ? "LUNAS" : "NUNGGAK";
+
+                csvContent += `"${idx}","${nama.replace(/"/g, '""')}","${dataBulan.m1||0}","${dataBulan.m2||0}","${dataBulan.m3||0}","${dataBulan.m4||0}","${total}","${statusStr}"\n`;
+                idx++;
+            });
+
+            let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            let link = document.createElement('a');
+            let url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `Laporan_Kas_XI_RPL2_${bulanAktif.replace(/\s+/g, '_')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            tampilkanToast("Laporan Kas Excel/CSV berhasil diunduh!", "success");
+        }
+
+        function cetakLaporanPDF() {
+            let tglEl = document.getElementById('print-tgl-sekarang');
+            if(tglEl) tglEl.innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            window.print();
+        }
+
+        /* ==================== FITUR BARU: WA DIRECT PERSONAL ==================== */
+        function kirimWATagihanPersonal(idSiswa) {
+            let nama = namaTampil(idSiswa);
+            let bulanTunggakan = [];
+            let totalTunggakan = 0;
+
+            URUTAN_BULAN.forEach(b => {
+                let dataBulan = (masterDataCloud[b] && masterDataCloud[b][idSiswa]) || { m1: 0, m2: 0, m3: 0, m4: 0 };
+                let totalBulan = (dataBulan.m1||0) + (dataBulan.m2||0) + (dataBulan.m3||0) + (dataBulan.m4||0);
+                if (totalBulan < WAJIB_BAYAR) {
+                    let sisaBulan = WAJIB_BAYAR - totalBulan;
+                    totalTunggakan += sisaBulan;
+                    let namaBulanSaja = b.split(" ")[0];
+                    bulanTunggakan.push(`${namaBulanSaja} (kurang Rp ${sisaBulan.toLocaleString('id-ID')})`);
+                }
+            });
+
+            if (bulanTunggakan.length === 0) {
+                return tampilkanToast(`${nama} sudah LUNAS seluruh bulan kas! Tidak ada tunggakan.`, "success");
+            }
+
+            let pesan = `*Assalamu'alaikum Wr. Wb. / Halo ${nama}*\n\n`;
+            pesan += `Ini pengingat resmi kas kelas *XI RPL 2*.\n`;
+            pesan += `Saat ini kamu memiliki sisa tunggakan kas sebesar *Rp ${totalTunggakan.toLocaleString('id-ID')}* untuk rincian:\n`;
+            bulanTunggakan.forEach(item => {
+                pesan += `• ${item}\n`;
+            });
+            pesan += `\nPembayaran dapat langsung di-scan via QRIS Kelas di web:\n`;
+            pesan += `https://rafianxrpl2.github.io/Keuangan_RPL2_Angkatan7/\n\n`;
+            pesan += `Terima kasih atas perhatian dan kerjasamanya! 🙏\n_- Bendahara XI RPL 2_`;
+
+            let urlWA = `https://api.whatsapp.com/send?text=${encodeURIComponent(pesan)}`;
+            window.open(urlWA, '_blank');
+            tampilkanToast(`Membuka WhatsApp untuk tagihan ${nama}...`, "info");
+        }
+
+        /* ==================== FITUR BARU: BATCH ACTION BENDAHARA ==================== */
+        function togglePilihSemuaSiswa(cbUtama) {
+            document.querySelectorAll('.cb-siswa').forEach(cb => {
+                cb.checked = cbUtama.checked;
+            });
+        }
+
+        function dapatkanSiswaTerpilih() {
+            let terpilih = [];
+            document.querySelectorAll('.cb-siswa:checked').forEach(cb => {
+                terpilih.push(parseInt(cb.getAttribute('data-id')));
+            });
+            return terpilih;
+        }
+
+        async function setorKasBatchLunas() {
+            if(!statusAdmin) return;
+            let terpilih = dapatkanSiswaTerpilih();
+            if(terpilih.length === 0) return tampilkanToast("Pilih minimal 1 siswa terlebih dahulu!", "error");
+            
+            let bulanAktif = document.getElementById('select-bulan').value;
+            if(await tampilkanKonfirmasi(`Tandai LUNAS (Rp 20.000) untuk ${terpilih.length} siswa terpilih pada bulan ${bulanAktif}?`)) {
+                let nodeRef = window.fbRef(window.fbDatabase, `Kas_XI_RPL2/${bulanAktif}`);
+                let dataBulanIni = masterDataCloud[bulanAktif] || {};
+                terpilih.forEach(id => {
+                    dataBulanIni[id] = { m1: 5000, m2: 5000, m3: 5000, m4: 5000 };
+                });
+                window.fbSet(nodeRef, dataBulanIni);
+                catatWaktuLogCloud();
+                tampilkanToast(`Berhasil menandai LUNAS ${terpilih.length} siswa!`, "success");
+            }
+        }
+
+        /* ==================== FITUR BARU: TARGET TABUNGAN & EVENT ==================== */
+        function tambahTargetDanaCloud() {
+            let namaTarget = document.getElementById('target-nama').value.trim();
+            let nominalTarget = parseInt(document.getElementById('target-nominal').value) || 0;
+            let nominalTerkumpul = parseInt(document.getElementById('target-terkumpul').value) || 0;
+
+            if(!namaTarget || !nominalTarget) return tampilkanToast("Lengkapi data target dana dulu ya!", "error");
+            let nodeRef = window.fbRef(window.fbDatabase, "Target_Dana_Kas");
+            window.fbPush(nodeRef, { nama: namaTarget, target: nominalTarget, terkumpul: nominalTerkumpul });
+            catatWaktuLogCloud();
+            document.getElementById('target-nama').value = "";
+            document.getElementById('target-nominal').value = "";
+            document.getElementById('target-terkumpul').value = "";
+            tampilkanToast("Target tabungan event berhasil ditambahkan!", "success");
+        }
+
+        async function updateTargetTerkumpul(key, nominalLama) {
+            if(!statusAdmin) return;
+            let nominalBaruStr = prompt("Update nominal terkumpul saat ini (Rupiah):", nominalLama);
+            if(nominalBaruStr === null) return;
+            let nominalBaru = parseInt(nominalBaruStr) || 0;
+            window.fbSet(window.fbRef(window.fbDatabase, `Target_Dana_Kas/${key}/terkumpul`), nominalBaru);
+            catatWaktuLogCloud();
+            tampilkanToast("Progres tabungan diperbarui!", "success");
+        }
+
+        async function hapusTargetDana(key) {
+            if(!statusAdmin) return;
+            if(await tampilkanKonfirmasi("Hapus target tabungan ini?")) {
+                window.fbSet(window.fbRef(window.fbDatabase, `Target_Dana_Kas/${key}`), null);
+                catatWaktuLogCloud();
+                tampilkanToast("Target tabungan dihapus.", "info");
+            }
+        }
+
+        function renderTargetDana() {
+            const container = document.getElementById('container-target-dana');
+            if(!container) return;
+            container.innerHTML = "";
+            let keys = Object.keys(dataTargetDanaCloud);
+            if(keys.length === 0) {
+                container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:12px 0;">Belum ada target tabungan event / penggalangan dana aktif.</p>`;
+                return;
+            }
+
+            keys.forEach(k => {
+                let item = dataTargetDanaCloud[k];
+                let persen = Math.min(100, Math.round((item.terkumpul / item.target) * 100)) || 0;
+                let btnAction = statusAdmin ? `
+                    <button class="btn-aksi-icon edit" onclick="updateTargetTerkumpul('${k}', ${item.terkumpul})" title="Edit Terkumpul"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-aksi-icon hapus" onclick="hapusTargetDana('${k}')" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                ` : '';
+
+                container.innerHTML += `
+                    <div class="card-target-item">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                            <div>
+                                <h4 style="font-size:0.95rem; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+                                    <i class="fa-solid fa-bullseye" style="color:var(--gold-2);"></i> ${htmlEscape(item.nama)}
+                                </h4>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">
+                                    Target: <b>Rp ${item.target.toLocaleString('id-ID')}</b> | Terkumpul: <b style="color:var(--success);">Rp ${item.terkumpul.toLocaleString('id-ID')}</b>
+                                </p>
+                            </div>
+                            <div style="display:flex; gap:4px; align-items:center;">
+                                <span class="chip-angka" style="background:var(--primary); font-size:0.75rem; padding:3px 8px;">${persen}%</span>
+                                ${btnAction}
+                            </div>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: ${persen}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        /* ==================== FITUR BARU: CHART KATEGORI PENGELUARAN ==================== */
+        function renderGrafikKategori() {
+            const canvasEl = document.getElementById('chart-kategori-pengeluaran');
+            if(!canvasEl || typeof Chart === 'undefined') return;
+
+            let kats = { "Operasional Kelas": 0, "Event & Lomba": 0, "Kebersihan & Dekorasi": 0, "Dana Darurat / Lainnya": 0 };
+            Object.keys(dataPengeluaranCloud).forEach(k => {
+                let p = dataPengeluaranCloud[k];
+                let kat = p.kategori || "Operasional Kelas";
+                if(kats[kat] !== undefined) kats[kat] += parseInt(p.nominal) || 0;
+                else kats["Operasional Kelas"] += parseInt(p.nominal) || 0;
+            });
+
+            let labels = Object.keys(kats);
+            let dataValues = Object.values(kats);
+            let warna = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444'];
+
+            if(grafikKategoriInstance) {
+                grafikKategoriInstance.data.labels = labels;
+                grafikKategoriInstance.data.datasets[0].data = dataValues;
+                grafikKategoriInstance.update();
+                return;
+            }
+
+            grafikKategoriInstance = new Chart(canvasEl.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: warna,
+                        borderWidth: 2,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 }, color: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() } }
+                    }
+                }
+            });
         }
 
         function pindahHalaman(target) {
